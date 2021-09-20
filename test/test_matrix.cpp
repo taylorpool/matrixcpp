@@ -25,7 +25,14 @@ TEST_F(MatrixFixture, AssignElement)
         ASSERT_DOUBLE_EQ(vector[0], new_value);
 }
 
-TEST(Vector, GetSize)
+TEST_F(MatrixFixture, GetSize)
 {
-        auto size =  0.0;
+        auto size = vector.getSize(); 
+        ASSERT_EQ(size, 1);
+}
+
+TEST_F(MatrixFixture, GetShape)
+{
+        auto shape = vector.getShape(); 
+        ASSERT_EQ(shape, std::vector<int>({1}));
 }
