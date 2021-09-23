@@ -1,67 +1,48 @@
 #pragma once
-#include <vector>
+#include <array>
 #include <numeric>
-#include <functional>
 
 namespace math
 {
-template<typename T> 
+template <typename T, int ... Shape>
 class Matrix
 {
-    protected:
-        std::vector<int> shape_;
-        std::vector<T> data_;
+    private:
+        int num_dims_{static_cast<int>(sizeof...(Shape))};
+        std::array<int, sizeof...(Shape)> shape_{{Shape...}};
+        T data_[10];
 
     public:
-        Matrix(const std::vector<T>& input_data):
-        shape_({static_cast<int>(input_data.size())}),
-        data_(input_data)
+
+        constexpr Matrix()
         {};
 
-        Matrix(const std::vector<T>& input_data, const std::vector<int>& shape):
-        shape_(shape),
-        data_(input_data)
-        {};
-        Matrix<T> operator*(const Matrix<T>& x)
+        constexpr Matrix Zeros()
         {
-            auto result_data = std::vector<T>();
-            for(int i = 0; i < shape_[0]; ++i)
-            {
-                T sum = 0;
-                for(int j = 0; j < x.getShape()[0]; ++j)
-                {
-                    sum = sum + data_[i*x.getShape()[0]+j]*x[j];
-                }
-                result_data.push_back(sum);
-            } 
-            auto result = Matrix<T>(result_data, {shape_[0]});
-            return result;
+            auto matrix = Matrix();
+            return matrix;
         }
 
-        T operator[](int index) const
+        T operator()()
         {
-            return data_[index];
+            return data_[0];
         }
 
-        T& operator[](int index)
+        template <typename First, typename ... OtherIndices>
+        decltype(auto) operator()(First first, OtherIndices ... other_indices) 
         {
-            return data_[index];
+            return operator()(other_indices...);
         }
 
-        int getSize() const
-        {
-            return std::accumulate(
-                shape_.cbegin(), 
-                shape_.cend(), 
-                1,
-                std::multiplies<int>());
-        }
-
-        std::vector<int> getShape() const
+        std::array<int, sizeof...(Shape)> getShape() const
         {
             return shape_;
         }
 };
 
-using Matrixd = Matrix<double>;
+template <typename T, int Size>
+using Vector = Matrix<T, Size, 1>;
+
+template <int ... Shape>
+using Matrixd = Matrix<double, Shape ... >;
 }
