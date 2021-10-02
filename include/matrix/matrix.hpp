@@ -1,26 +1,36 @@
 #pragma once
-#include <array>
-#include <numeric>
 
 namespace math
 {
+
+constexpr int product()
+{
+    return 1;
+}
+
+template <typename First, typename ... Other>
+constexpr int product(First first, Other ... others)
+{
+    return first * product(others...);
+}
+
 template <typename T, int ... Shape>
 class Matrix
 {
     private:
         int num_dims_{static_cast<int>(sizeof...(Shape))};
-        std::array<int, sizeof...(Shape)> shape_{{Shape...}};
-        T data_[10];
+        int size_ = product(Shape...); 
+        T data_[product(Shape...)];
+
+        Matrix();
 
     public:
-
-        constexpr Matrix()
-        {};
-
-        constexpr Matrix Zeros()
+        Matrix(T initial_value)
         {
-            auto matrix = Matrix();
-            return matrix;
+            for(int i = 0; i < size_; ++i)
+            {
+                data_[i] = initial_value;
+            }
         }
 
         T operator()()
@@ -34,14 +44,19 @@ class Matrix
             return operator()(other_indices...);
         }
 
-        std::array<int, sizeof...(Shape)> getShape() const
+        int getDimension() const
         {
-            return shape_;
+            return num_dims_;
+        }
+
+        int getSize() const
+        {
+            return size_;
         }
 };
 
 template <typename T, int Size>
-using Vector = Matrix<T, Size, 1>;
+using Vector = Matrix<T, Size>;
 
 template <int ... Shape>
 using Matrixd = Matrix<double, Shape ... >;

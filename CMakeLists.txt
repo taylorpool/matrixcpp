@@ -2,8 +2,11 @@ cmake_policy(SET CMP0048 NEW)
 project(math-matrix VERSION 0.1)
 cmake_minimum_required(VERSION 3.21)
 
+set(CMAKE_CXX_STANDARD 17)
+
 add_library(math-matrix INTERFACE)
-target_include_directories(math-matrix INTERFACE include/matrix)
+set_property(TARGET math-matrix PROPERTY CXX_STANDARD 17)
+target_include_directories(math-matrix INTERFACE include)
 
 option(ENABLE_TESTING "Enable Testing" ON)
 if(${ENABLE_TESTING})
@@ -19,9 +22,7 @@ if(${ENABLE_TESTING})
         add_executable(matrix_tests
                         test/test_matrix.cpp)
 
-        target_link_libraries(matrix_tests INTERFACE
-                      math-matrix)
-        target_link_libraries(matrix_tests PRIVATE gtest gtest_main)
+        target_link_libraries(matrix_tests PRIVATE math-matrix gtest gtest_main)
 
         include(GoogleTest)
         gtest_discover_tests(matrix_tests)
