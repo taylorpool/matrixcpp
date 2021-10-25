@@ -14,44 +14,47 @@ constexpr int product(First first, Other ... others)
     return first * product(others...);
 }
 
-template <typename T, int ... Shape>
-class Matrix
+template <typename T, int ... Dims> class Matrix;
+
+template <typename T, int Dim>
+class Matrix<T, Dim>
 {
     private:
-        int num_dims_{static_cast<int>(sizeof...(Shape))};
-        int size_ = product(Shape...); 
-        T data_[product(Shape...)];
-
-        Matrix();
+        T data_[Dim];
 
     public:
-        Matrix(T initial_value)
+        Matrix(T initial_value = static_cast<T>(0))
         {
-            for(int i = 0; i < size_; ++i)
+            for(int i = 0; i < Dim; ++i)
             {
                 data_[i] = initial_value;
             }
         }
 
-        T operator()()
+        T operator()(int index) const
         {
-            return data_[0];
+            return data_[index];
+        }
+};
+
+template <typename T, int FirstDim, int ... OtherDim>
+class Matrix<T, FirstDim, OtherDim...>
+{
+    private:
+        Matrix<T, OtherDim...> data_[FirstDim];
+
+    public:
+        Matrix(T initial_value = static_cast<T>(0))
+        {
+            for(int i = 0; i < FirstDim; ++i)
+            {
+                data_[i] = Matrix<T, OtherDim...>(initial_value);
+            }
         }
 
-        template <typename First, typename ... OtherIndices>
-        decltype(auto) operator()(First first, OtherIndices ... other_indices) 
+        Matrix<T, OtherDim...> operator()(int index) const
         {
-            return operator()(other_indices...);
-        }
-
-        int getDimension() const
-        {
-            return num_dims_;
-        }
-
-        int getSize() const
-        {
-            return size_;
+            return data_[index];
         }
 };
 
@@ -60,4 +63,11 @@ using Vector = Matrix<T, Size>;
 
 template <int ... Shape>
 using Matrixd = Matrix<double, Shape ... >;
+
+// template<typename T, int M, int N>
+// Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
+// {
+//     return Vector<T, M>(static_cast<T>(0));
+// }
+
 }

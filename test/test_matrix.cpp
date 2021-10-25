@@ -13,13 +13,6 @@ TEST(Matrixd, Construct)
         auto matrix = math::Matrixd<2, 2>(0.0);
 }
 
-TEST(Matrix, GetDimension)
-{
-        auto vector = math::Vector<double, 1>(0.0);
-        auto dim = vector.getDimension();
-        ASSERT_EQ(dim, 1);
-}
-
 TEST(Multiply, Multiply1)
 {
         auto result = math::product(1);
@@ -38,21 +31,16 @@ TEST(Multiply, Multiply64)
         ASSERT_EQ(result, 64);
 }
 
-TEST(Vector, GetSize)
-{
-        int desired_size = 10;
-        auto vector = math::Vector<double, 10>(0.0);
-        ASSERT_EQ(desired_size, vector.getSize());
-}
-
-TEST(Matrix, GetSize)
-{
-        auto matrix = math::Matrix<int, 10, 10, 10>(0.0);
-        ASSERT_EQ(1000, matrix.getSize());
-}
-
 TEST(Vector, Zeros)
 {
         auto vector = math::Vector<int, 3>(0);
         ASSERT_EQ(vector(0), 0);
 }
+
+// TEST(Multiply, DISABLED_MatrixVector)
+// {
+//         auto matrix = math::Matrix<int, 2, 2>(1.0);
+//         auto vector = math::Vector<int, 2>(1.0);
+//         auto result = matrix*vector;
+//         ASSERT_EQ(result(0), 2.0);
+// }
