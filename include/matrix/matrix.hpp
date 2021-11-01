@@ -64,6 +64,25 @@ using Vector = Matrix<T, Size>;
 template <int ... Shape>
 using Matrixd = Matrix<double, Shape ... >;
 
+template <typename T, int FirstDim, int ... Shape>
+bool operator==(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, FirstDim, Shape...>& right)
+{
+    for(int index = 0; index < FirstDim; ++index)
+    {
+        if(left(index) != right(index))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+template <typename T, int FirstDim, int ... Shape>
+bool operator!=(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, FirstDim, Shape...>& right)
+{
+    return false == (left == right);
+}
+
 // template<typename T, int M, int N>
 // Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
 // {

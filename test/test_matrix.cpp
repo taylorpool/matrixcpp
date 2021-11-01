@@ -37,6 +37,26 @@ TEST(Vector, Zeros)
         ASSERT_EQ(vector(0), 0);
 }
 
+TEST(Vector, Ones)
+{
+        auto vector = math::Vector<int, 3>(1);
+        ASSERT_EQ(vector(0), 1);
+}
+
+TEST(Matrix, AccessElement)
+{
+        auto matrix = math::Matrix<double, 2, 2>(0.0);
+        auto ans = math::Vector<double, 2>(0.0);
+        ASSERT_EQ(matrix(0), ans);
+}
+
+TEST(Matrix, AccessElement2)
+{
+        auto matrix = math::Matrix<double, 2, 2>(0.0);
+        auto ans = math::Vector<double, 2>(1.0);
+        ASSERT_NE(matrix(0), ans);
+}
+
 // TEST(Multiply, DISABLED_MatrixVector)
 // {
 //         auto matrix = math::Matrix<int, 2, 2>(1.0);
