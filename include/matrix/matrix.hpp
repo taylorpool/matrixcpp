@@ -31,6 +31,11 @@ class Matrix<T, Dim>
             }
         }
 
+        T& operator()(int index)
+        {
+            return data_[index];
+        }
+
         T operator()(int index) const
         {
             return data_[index];
@@ -50,6 +55,11 @@ class Matrix<T, FirstDim, OtherDim...>
             {
                 data_[i] = Matrix<T, OtherDim...>(initial_value);
             }
+        }
+
+        Matrix<T, OtherDim...>& operator()(int index)
+        {
+            return data_[index];
         }
 
         Matrix<T, OtherDim...> operator()(int index) const
@@ -83,10 +93,26 @@ bool operator!=(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, First
     return false == (left == right);
 }
 
-// template<typename T, int M, int N>
-// Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
-// {
-//     return Vector<T, M>(static_cast<T>(0));
-// }
+template <typename T, int M>
+T dot(const Vector<T, M>& left, const Vector<T, M>& right)
+{
+    T dot_product = static_cast<T>(0);
+    for(int index = 0; index < M; ++index)
+    {
+        dot_product += left(index)*right(index);
+    }
+    return dot_product;
+}
+
+template<typename T, int M, int N>
+Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
+{
+    auto answer = Vector<T, M>();
+    for(int index = 0; index < M; ++index)
+    {
+        answer(index) = dot(A(index), x);
+    }
+    return answer;
+}
 
 }

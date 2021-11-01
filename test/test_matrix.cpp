@@ -57,10 +57,10 @@ TEST(Matrix, AccessElement2)
         ASSERT_NE(matrix(0), ans);
 }
 
-// TEST(Multiply, DISABLED_MatrixVector)
-// {
-//         auto matrix = math::Matrix<int, 2, 2>(1.0);
-//         auto vector = math::Vector<int, 2>(1.0);
-//         auto result = matrix*vector;
-//         ASSERT_EQ(result(0), 2.0);
-// }
+TEST(Multiply, MatrixVector)
+{
+        auto matrix = math::Matrix<int, 2, 2>(1.0);
+        auto vector = math::Vector<int, 2>(1.0);
+        auto result = matrix*vector;
+        ASSERT_EQ(result(0), 2.0);
+}
