@@ -1,5 +1,7 @@
 #pragma once
 
+#include <initializer_list>
+
 namespace math
 {
 
@@ -54,6 +56,17 @@ class Matrix<T, FirstDim, OtherDim...>
             for(int i = 0; i < FirstDim; ++i)
             {
                 data_[i] = Matrix<T, OtherDim...>(initial_value);
+            }
+        }
+
+        template <typename V>
+        Matrix(std::initializer_list<V> initializer_list)
+        {
+            int i = 0;
+            for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
+            {
+                data_[i] = Matrix<T, OtherDim...>(*iter);
+                ++i;
             }
         }
 

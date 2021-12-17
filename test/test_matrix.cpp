@@ -73,3 +73,15 @@ TEST(Multiply, MatrixMatrix)
         auto answer = math::Matrix<int, 2, 2>(2.0);
         ASSERT_EQ(result, answer);
 }
+
+TEST(Matrix, CreateMatrix)
+{
+        auto A = math::Matrix<int, 2, 2>({
+                {1, 2},
+                {3, 4}
+        });
+        ASSERT_EQ(A(0)(0), 1);
+        ASSERT_EQ(A(0)(1), 2);
+        ASSERT_EQ(A(0)(0), 1);
+        ASSERT_EQ(A(0)(0), 1);
+}
