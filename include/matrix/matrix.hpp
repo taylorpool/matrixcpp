@@ -16,20 +16,6 @@ constexpr int product(First first, Other ... others)
     return first * product(others...);
 }
 
-template <typename T, int ... Dims> struct InitializerList;
-
-template <typename T, int Dim>
-struct InitializerList<T, Dim>
-{
-    using type = std::initializer_list<T>;
-};
-
-template <typename T, int Dim, int ... OtherDims>
-struct InitializerList<T, Dim, OtherDims...>
-{
-    using type = std::initializer_list< typename InitializerList<T, OtherDims...>::type>;
-};
-
 template <typename T, int ... Dims> class Matrix;
 
 template <typename T, int Dim>
@@ -39,6 +25,8 @@ class Matrix<T, Dim>
         T data_[Dim];
 
     public:
+        using InitializerList = std::initializer_list<T>;
+
         Matrix(T initial_value = static_cast<T>(0))
         {
             for(int i = 0; i < Dim; ++i)
@@ -47,7 +35,7 @@ class Matrix<T, Dim>
             }
         }
 
-        Matrix(std::initializer_list<T> values)
+        Matrix(InitializerList values)
         {
             auto iter = values.begin();
             for(int index = 0; index < values.size(); ++index)
@@ -75,6 +63,8 @@ class Matrix<T, FirstDim, OtherDim...>
         Matrix<T, OtherDim...> data_[FirstDim];
 
     public:
+        using InitializerList = std::initializer_list<typename Matrix<T, OtherDim...>::InitializerList>;
+
         Matrix(T initial_value = static_cast<T>(0))
         {
             for(int i = 0; i < FirstDim; ++i)
@@ -83,7 +73,7 @@ class Matrix<T, FirstDim, OtherDim...>
             }
         }
 
-        Matrix(typename InitializerList<T, FirstDim, OtherDim...>::type initializer_list)
+        Matrix(InitializerList initializer_list)
         {
             int i = 0;
             for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
