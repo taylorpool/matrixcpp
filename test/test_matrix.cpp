@@ -93,3 +93,13 @@ TEST(Matrix, CreateMatrix2)
         math::Matrix<int, 2> first_row = {1,2};
         ASSERT_EQ(A(0), first_row);
 }
+
+TEST(Matrix, AssignElement)
+{
+        math::Matrix<int, 2, 2> A = {
+                {1, 2},
+                {3, 4}
+        };
+        A(0,0) = 6;
+        ASSERT_EQ(A(0,0), 6);
+}

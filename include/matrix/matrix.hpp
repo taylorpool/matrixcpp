@@ -94,7 +94,13 @@ class Matrix<T, FirstDim, OtherDim...>
         }
 
         template <typename FirstIndex, typename ... OtherIndices>
-        T operator()(FirstIndex first, OtherIndices... others)
+        T operator()(FirstIndex first, OtherIndices... others) const
+        {
+            return data_[first](others...);
+        }
+
+        template <typename FirstIndex, typename ... OtherIndices>
+        T& operator()(FirstIndex first, OtherIndices... others)
         {
             return data_[first](others...);
         }
