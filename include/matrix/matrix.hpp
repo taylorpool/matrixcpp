@@ -92,6 +92,12 @@ class Matrix<T, FirstDim, OtherDim...>
         {
             return data_[index];
         }
+
+        template <typename FirstIndex, typename ... OtherIndices>
+        T operator()(FirstIndex first, OtherIndices... others)
+        {
+            return data_[first](others...);
+        }
 };
 
 template <typename T, int Size>

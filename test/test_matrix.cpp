@@ -86,8 +86,10 @@ TEST(Matrix, CreateMatrix2)
         auto A = math::Matrix<int, 2, 2>({
                 {1, 2},
                 {3, 4}});
-        ASSERT_EQ(A(0)(0), 1);
-        ASSERT_EQ(A(0)(1), 2);
-        ASSERT_EQ(A(1)(0), 3);
-        ASSERT_EQ(A(1)(1), 4);
+        ASSERT_EQ(A(0,0), 1);
+        ASSERT_EQ(A(0,1), 2);
+        ASSERT_EQ(A(1,0), 3);
+        ASSERT_EQ(A(1,1), 4);
+        math::Matrix<int, 2> first_row = {1,2};
+        ASSERT_EQ(A(0), first_row);
 }
