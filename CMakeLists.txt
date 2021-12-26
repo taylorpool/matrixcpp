@@ -29,7 +29,8 @@ if(${ENABLE_TESTING})
         target_link_libraries(arithmetic_tests PRIVATE arithmetic gtest gtest_main)
 
         add_executable(matrix_tests
-                        test/test_matrix.cpp)
+                        test/test_base.cpp
+                        test/test_products.cpp)
 
         target_link_libraries(matrix_tests PRIVATE math-matrix gtest gtest_main)
 
