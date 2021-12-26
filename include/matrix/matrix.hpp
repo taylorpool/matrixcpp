@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include <initializer_list>
 
 namespace math
@@ -94,7 +95,7 @@ class Matrix<T, FirstDim, OtherDim...>
         }
 
         template <typename ... OtherIndices>
-        T operator()(int first, OtherIndices... others) const
+        std::conditional<sizeof...(OtherIndices)==sizeof...(OtherDim), T, Matrix<T, OtherDim...>> operator()(int first, OtherIndices... others) const
         {
             return data_[first](others...);
         }
@@ -109,8 +110,17 @@ class Matrix<T, FirstDim, OtherDim...>
 template <typename T, int Size>
 using Vector = Matrix<T, Size>;
 
+template <int Size>
+using Vectord = Vector<double, Size>;
+
+template <int Size>
+using Vectori = Vector<int, Size>;
+
 template <int ... Shape>
 using Matrixd = Matrix<double, Shape ... >;
+
+template <int ... Shape>
+using Matrixi = Matrix<int, Shape ... >;
 
 template <typename T, int FirstDim, int ... Shape>
 bool operator==(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, FirstDim, Shape...>& right)

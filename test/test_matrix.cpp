@@ -1,17 +1,18 @@
 #include "matrix/matrix.hpp"
 #include "gtest/gtest.h"
 
-TEST(Matrix, Construct)
+class ZeroMatricies: public ::testing::Test
 {
-        auto singleton = math::Matrix<double, 1>(0.0);
-        auto column_vector = math::Matrix<double, 2, 1>(0.0);
-        auto matrix = math::Matrix<double, 2, 2>(0.0);
-}
+        protected:
+                ZeroMatricies()
+                {
 
-TEST(Matrixd, Construct)
-{
-        auto matrix = math::Matrixd<2, 2>(0.0);
-}
+                }
+
+                math::Matrixd<1> singleton;
+                math::Vectord<2> vector;
+                math::Matrixd<2,2> matrix;
+};
 
 TEST(Multiply, Multiply1)
 {
@@ -31,10 +32,9 @@ TEST(Multiply, Multiply64)
         ASSERT_EQ(result, 64);
 }
 
-TEST(Vector, Zeros)
+TEST_F(ZeroMatricies, Zeros)
 {
-        auto vector = math::Vector<int, 3>(0);
-        ASSERT_EQ(vector(0), 0);
+        ASSERT_EQ(vector(0), 0.0);
 }
 
 TEST(Vector, Ones)
@@ -43,16 +43,13 @@ TEST(Vector, Ones)
         ASSERT_EQ(vector(0), 1);
 }
 
-TEST(Matrix, AccessElement)
+TEST_F(ZeroMatricies, AccessElement)
 {
-        auto matrix = math::Matrix<double, 2, 2>(0.0);
-        auto ans = math::Vector<double, 2>(0.0);
-        ASSERT_EQ(matrix(0), ans);
+        ASSERT_EQ(matrix(0), vector);
 }
 
-TEST(Matrix, AccessElement2)
+TEST_F(ZeroMatricies, AccessElement2)
 {
-        auto matrix = math::Matrix<double, 2, 2>(0.0);
         auto ans = math::Vector<double, 2>(1.0);
         ASSERT_NE(matrix(0), ans);
 }
@@ -74,32 +71,37 @@ TEST(Multiply, MatrixMatrix)
         ASSERT_EQ(result, answer);
 }
 
-TEST(Matrix, CreateMatrix)
+class MultiDimensional: public ::testing::Test
 {
-        auto A = math::Matrix<int, 2>({1, 2});
-        ASSERT_EQ(A(0), 1);
-        ASSERT_EQ(A(1), 2);
+        protected:
+                MultiDimensional()
+                {
+
+                }
+                math::Vectori<2> vector{{1, 2}};
+                math::Matrixi<2, 2> matrix{{
+                        {1, 2},
+                        {3, 4}
+                }};
+};
+
+TEST_F(MultiDimensional, CreateVector)
+{
+        ASSERT_EQ(vector(0), 1);
+        ASSERT_EQ(vector(1), 2);
 }
 
-TEST(Matrix, CreateMatrix2)
+TEST_F(MultiDimensional, CreateMatrix)
 {
-        auto A = math::Matrix<int, 2, 2>({
-                {1, 2},
-                {3, 4}});
-        ASSERT_EQ(A(0,0), 1);
-        ASSERT_EQ(A(0,1), 2);
-        ASSERT_EQ(A(1,0), 3);
-        ASSERT_EQ(A(1,1), 4);
-        math::Matrix<int, 2> first_row = {1,2};
-        ASSERT_EQ(A(0), first_row);
+        ASSERT_EQ(matrix(0,0), 1);
+        ASSERT_EQ(matrix(0,1), 2);
+        ASSERT_EQ(matrix(1,0), 3);
+        ASSERT_EQ(matrix(1,1), 4);
+        ASSERT_EQ(matrix(0), vector);
 }
 
-TEST(Matrix, AssignElement)
+TEST_F(MultiDimensional, AssignElement)
 {
-        math::Matrix<int, 2, 2> A = {
-                {1, 2},
-                {3, 4}
-        };
-        A(0,0) = 6;
-        ASSERT_EQ(A(0,0), 6);
+        matrix(0,0) = 6;
+        ASSERT_EQ(matrix(0,0), 6);
 }
