@@ -1,6 +1,5 @@
 #pragma once
 
-#include <type_traits>
 #include <initializer_list>
 
 namespace math
