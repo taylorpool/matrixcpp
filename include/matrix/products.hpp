@@ -4,6 +4,7 @@
 
 namespace math
 {
+
 template <typename T, int Size>
 Vector<T, Size> operator*(T value, Vector<T, Size> vector)
 {
@@ -13,6 +14,23 @@ Vector<T, Size> operator*(T value, Vector<T, Size> vector)
         answer(index) = value*vector(index);
     }
     return answer;
+}
+
+template <typename T, int FirstDim, int SecondDim, int ... OtherDims>
+Matrix<T, FirstDim, SecondDim, OtherDims...> operator*(T value, Matrix<T, FirstDim, SecondDim, OtherDims...> matrix)
+{
+    decltype(matrix) answer;
+    for(int index = 0; index < FirstDim; ++index)
+    {
+        answer(index) = value*matrix(index);
+    }
+    return answer;
+}
+
+template <typename T, int ... Shape>
+Matrix<T, Shape...> operator*(Matrix<T, Shape...> matrix, T value)
+{
+    return value*matrix;
 }
 
 template <typename T, int M>

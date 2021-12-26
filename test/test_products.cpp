@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(ScalarProduct, Vector)
+TEST(ScalarProduct, ScalarVector)
 {
     math::Vectori<2> vector = {1,2};
     int factor = 10;
@@ -10,6 +10,41 @@ TEST(ScalarProduct, Vector)
     ASSERT_EQ(factor*vector, answer);
 }
 
+TEST(ScalarProduct, VectorScalar)
+{
+    math::Vectori<2> vector = {1,2};
+    int factor = 10;
+    decltype(vector) answer = {factor*vector(0), factor*vector(1)};
+    ASSERT_EQ(vector*factor, answer);
+}
+
+TEST(ScalarProduct, ScalarMatrix)
+{
+    math::Matrixi<2,2> matrix = {
+        {1, 2},
+        {3, 4}
+    };
+    int factor = 10;
+    decltype(matrix) answer = {
+        {factor*matrix(0,0), factor*matrix(0,1)},
+        {factor*matrix(1,0), factor*matrix(1,1)}
+    };
+    ASSERT_EQ(factor*matrix, answer);
+}
+
+TEST(ScalarProduct, MatrixScalar)
+{
+    math::Matrixi<2,2> matrix = {
+        {1, 2},
+        {3, 4}
+    };
+    int factor = 10;
+    decltype(matrix) answer = {
+        {factor*matrix(0,0), factor*matrix(0,1)},
+        {factor*matrix(1,0), factor*matrix(1,1)}
+    };
+    ASSERT_EQ(matrix*factor, answer);
+}
 TEST(DotProduct, VectorVector)
 {
     math::Vectori<2> vector1 = {1,2};
