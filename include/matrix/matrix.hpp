@@ -84,13 +84,13 @@ class Matrix<T, FirstDim, OtherDim...>
         }
 
         template <typename ... OtherIndices>
-        std::conditional<sizeof...(OtherIndices)==sizeof...(OtherDim), T, Matrix<T, OtherDim...>> operator()(int first, OtherIndices... others) const
+        auto operator()(int first, OtherIndices... others) const
         {
             return data_[first](others...);
         }
 
         template <typename ... OtherIndices>
-        T& operator()(int first, OtherIndices... others)
+        auto& operator()(int first, OtherIndices... others)
         {
             return data_[first](others...);
         }

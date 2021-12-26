@@ -1,4 +1,5 @@
 #include "matrix/matrix.hpp"
+
 #include "gtest/gtest.h"
 
 class ZeroMatricies: public ::testing::Test
@@ -66,6 +67,16 @@ class MultiDimensional: public ::testing::Test
                         {1, 2},
                         {3, 4}
                 }};
+                math::Matrixi<2, 2, 2> tensor{{
+                        {
+                                {1, 2},
+                                {3, 4}
+                        },
+                        {
+                                {5, 6},
+                                {7, 8}
+                        }
+                }};
 };
 
 TEST_F(MultiDimensional, CreateVector)
@@ -87,4 +98,28 @@ TEST_F(MultiDimensional, AssignElement)
 {
         matrix(0,0) = 6;
         ASSERT_EQ(matrix(0,0), 6);
+}
+
+TEST_F(MultiDimensional, AssignTensorElement)
+{
+        tensor(0,0,0) = 0;
+        ASSERT_EQ(tensor(0,0,0), 0);
+}
+
+TEST_F(MultiDimensional, GetFirstTensorMatrix)
+{
+        ASSERT_EQ(tensor(0), matrix);
+}
+
+TEST_F(MultiDimensional, GetFirstTensorVector)
+{
+        ASSERT_EQ(tensor(0,0), vector);
+}
+
+TEST_F(MultiDimensional, SetFirstTensorVector)
+{
+        math::Vectori<2> new_vector = {{100, 101}};
+        ASSERT_NE(tensor(0,0), new_vector);
+        tensor(0,0) = new_vector;
+        ASSERT_EQ(tensor(0,0), new_vector);
 }
