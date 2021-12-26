@@ -5,16 +5,10 @@
 class ZeroMatricies: public ::testing::Test
 {
         protected:
-                ZeroMatricies()
-                {
-
-                }
-
                 math::Matrixd<1> singleton;
                 math::Vectord<2> vector;
                 math::Matrixd<2,2> matrix;
 };
-
 
 TEST_F(ZeroMatricies, Zeros)
 {
@@ -38,14 +32,9 @@ TEST_F(ZeroMatricies, AccessElement2)
         ASSERT_NE(matrix(0), ans);
 }
 
-
 class MultiDimensional: public ::testing::Test
 {
         protected:
-                MultiDimensional()
-                {
-
-                }
                 math::Vectori<2> vector{{1, 2}};
                 math::Matrixi<2, 2> matrix{{
                         {1, 2},
