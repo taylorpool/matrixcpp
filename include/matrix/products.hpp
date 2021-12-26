@@ -58,17 +58,15 @@ Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
 template <typename T, int M, int N, int P>
 Matrix<T, M, P> operator*(const Matrix<T, M, N>& left, const Matrix<T, N, P>& right)
 {
-    auto answer = Matrix<T, M, P>();
+    auto answer = Matrix<T, M, P>(static_cast<T>(0));
     for(int row = 0; row < M; ++row)
     {
         for(int column = 0; column < P; ++ column)
         {
-            T sum = static_cast<T>(0);
             for(int index = 0; index < N; ++index)
             {
-                sum += left(row,index)*right(index,column);
+                answer(row,column) += left(row,index)*right(index,column);
             }
-            answer(row,column) = sum;
         }
     }
     return answer;
