@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.21)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_library(arithmetic INTERFACE)
+set_property(TARGET arithmetic PROPERTY CXX_STANDARD 17)
+target_include_directories(arithmetic INTERFACE include)
+
 add_library(math-matrix INTERFACE)
 set_property(TARGET math-matrix PROPERTY CXX_STANDARD 17)
 target_include_directories(math-matrix INTERFACE include)
@@ -18,6 +22,11 @@ if(${ENABLE_TESTING})
         set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
         FetchContent_MakeAvailable(googletest)
         enable_testing()
+
+        add_executable(arithmetic_tests
+                        test/test_arithmetic.cpp)
+
+        target_link_libraries(arithmetic_tests PRIVATE arithmetic gtest gtest_main)
 
         add_executable(matrix_tests
                         test/test_matrix.cpp)

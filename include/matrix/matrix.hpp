@@ -6,17 +6,6 @@
 namespace math
 {
 
-constexpr int product()
-{
-    return 1;
-}
-
-template <typename First, typename ... Other>
-constexpr int product(First first, Other ... others)
-{
-    return first * product(others...);
-}
-
 template <typename T, int ... Dims> class Matrix;
 
 template <typename T, int Dim>
