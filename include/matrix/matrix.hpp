@@ -1,4 +1,4 @@
 #pragma once
 
-#include "matrix/base.hpp"
-#include "matrix/products.hpp"
+#include "base.hpp"
+#include "products.hpp"

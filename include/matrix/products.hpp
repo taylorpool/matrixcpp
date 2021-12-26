@@ -1,6 +1,6 @@
 #pragma once
 
-#include "matrix/base.hpp"
+#include "base.hpp"
 
 namespace math
 {
@@ -37,9 +37,9 @@ Matrix<T, M, P> operator*(const Matrix<T, M, N>& left, const Matrix<T, N, P>& ri
             T sum = static_cast<T>(0);
             for(int index = 0; index < N; ++index)
             {
-                sum += left(row)(index)*right(index)(column);
+                sum += left(row,index)*right(index,column);
             }
-            answer(row)(column) = sum;
+            answer(row,column) = sum;
         }
     }
     return answer;
