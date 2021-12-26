@@ -2,6 +2,14 @@
 
 #include "gtest/gtest.h"
 
+TEST(ScalarProduct, Vector)
+{
+    math::Vectori<2> vector = {1,2};
+    int factor = 10;
+    decltype(vector) answer = {factor*vector(0), factor*vector(1)};
+    ASSERT_EQ(factor*vector, answer);
+}
+
 TEST(DotProduct, VectorVector)
 {
     math::Vectori<2> vector1 = {1,2};

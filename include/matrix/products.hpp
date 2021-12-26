@@ -4,6 +4,17 @@
 
 namespace math
 {
+template <typename T, int Size>
+Vector<T, Size> operator*(T value, Vector<T, Size> vector)
+{
+    decltype(vector) answer;
+    for(int index = 0; index < Size; ++index)
+    {
+        answer(index) = value*vector(index);
+    }
+    return answer;
+}
+
 template <typename T, int M>
 T dot(const Vector<T, M>& left, const Vector<T, M>& right)
 {
