@@ -5,9 +5,9 @@
 class ZeroMatricies: public ::testing::Test
 {
         protected:
-                math::Matrixd<1> singleton;
+                math::Arrayd<1> singleton;
                 math::Vectord<2> vector;
-                math::Matrixd<2,2> matrix;
+                math::Arrayd<2,2> matrix;
 };
 
 TEST_F(ZeroMatricies, Zeros)
@@ -36,11 +36,11 @@ class MultiDimensional: public ::testing::Test
 {
         protected:
                 math::Vectori<2> vector{{1, 2}};
-                math::Matrixi<2, 2> matrix{{
+                math::Arrayi<2, 2> matrix{{
                         {1, 2},
                         {3, 4}
                 }};
-                math::Matrixi<2, 2, 2> tensor{{
+                math::Arrayi<2, 2, 2> tensor{{
                         {
                                 {1, 2},
                                 {3, 4}
@@ -58,7 +58,7 @@ TEST_F(MultiDimensional, CreateVector)
         ASSERT_EQ(vector(1), 2);
 }
 
-TEST_F(MultiDimensional, CreateMatrix)
+TEST_F(MultiDimensional, CreateArray)
 {
         ASSERT_EQ(matrix(0,0), 1);
         ASSERT_EQ(matrix(0,1), 2);
@@ -79,7 +79,7 @@ TEST_F(MultiDimensional, AssignTensorElement)
         ASSERT_EQ(tensor(0,0,0), 0);
 }
 
-TEST_F(MultiDimensional, GetFirstTensorMatrix)
+TEST_F(MultiDimensional, GetFirstTensorArray)
 {
         ASSERT_EQ(tensor(0), matrix);
 }

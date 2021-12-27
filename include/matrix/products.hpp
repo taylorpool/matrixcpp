@@ -17,7 +17,7 @@ Vector<T, Size> operator*(T value, Vector<T, Size> vector)
 }
 
 template <typename T, int FirstDim, int SecondDim, int ... OtherDims>
-Matrix<T, FirstDim, SecondDim, OtherDims...> operator*(T value, Matrix<T, FirstDim, SecondDim, OtherDims...> matrix)
+Array<T, FirstDim, SecondDim, OtherDims...> operator*(T value, Array<T, FirstDim, SecondDim, OtherDims...> matrix)
 {
     decltype(matrix) answer;
     for(int index = 0; index < FirstDim; ++index)
@@ -28,7 +28,7 @@ Matrix<T, FirstDim, SecondDim, OtherDims...> operator*(T value, Matrix<T, FirstD
 }
 
 template <typename T, int ... Shape>
-Matrix<T, Shape...> operator*(Matrix<T, Shape...> matrix, T value)
+Array<T, Shape...> operator*(Array<T, Shape...> matrix, T value)
 {
     return value*matrix;
 }
@@ -45,7 +45,7 @@ T dot(const Vector<T, M>& left, const Vector<T, M>& right)
 }
 
 template<typename T, int M, int N>
-Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
+Vector<T, M> operator*(const Array<T, M, N>& A, const Vector<T, N>& x)
 {
     auto answer = Vector<T, M>();
     for(int index = 0; index < M; ++index)
@@ -56,9 +56,9 @@ Vector<T, M> operator*(const Matrix<T, M, N>& A, const Vector<T, N>& x)
 }
 
 template <typename T, int M, int N, int P>
-Matrix<T, M, P> operator*(const Matrix<T, M, N>& left, const Matrix<T, N, P>& right)
+Array<T, M, P> operator*(const Array<T, M, N>& left, const Array<T, N, P>& right)
 {
-    auto answer = Matrix<T, M, P>(static_cast<T>(0));
+    auto answer = Array<T, M, P>(static_cast<T>(0));
     for(int row = 0; row < M; ++row)
     {
         for(int column = 0; column < P; ++ column)

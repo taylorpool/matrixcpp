@@ -18,9 +18,9 @@ TEST(ScalarProduct, VectorScalar)
     ASSERT_EQ(vector*factor, answer);
 }
 
-TEST(ScalarProduct, ScalarMatrix)
+TEST(ScalarProduct, ScalarArray)
 {
-    math::Matrixi<2,2> matrix = {
+    math::Arrayi<2,2> matrix = {
         {1, 2},
         {3, 4}
     };
@@ -32,9 +32,9 @@ TEST(ScalarProduct, ScalarMatrix)
     ASSERT_EQ(factor*matrix, answer);
 }
 
-TEST(ScalarProduct, MatrixScalar)
+TEST(ScalarProduct, ArrayScalar)
 {
-    math::Matrixi<2,2> matrix = {
+    math::Arrayi<2,2> matrix = {
         {1, 2},
         {3, 4}
     };
@@ -54,9 +54,9 @@ TEST(DotProduct, VectorVector)
     ASSERT_EQ(result, correct);
 }
 
-TEST(Multiply, MatrixVector)
+TEST(Multiply, ArrayVector)
 {
-        auto matrix = math::Matrix<int, 2, 2>(1);
+        auto matrix = math::Array<int, 2, 2>(1);
         auto vector = math::Vector<int, 2>(1);
         auto result = matrix*vector;
         math::Vectori<2> correct = {
@@ -66,12 +66,12 @@ TEST(Multiply, MatrixVector)
         ASSERT_EQ(result, correct);
 }
 
-TEST(Multiply, MatrixMatrix)
+TEST(Multiply, ArrayArray)
 {
-        auto A = math::Matrix<int, 2, 2>(1.0);
-        auto B = math::Matrix<int, 2, 2>(1.0);
+        auto A = math::Array<int, 2, 2>(1.0);
+        auto B = math::Array<int, 2, 2>(1.0);
         auto result = A*B;
-        math::Matrix<int, 2, 2> answer = {
+        math::Array<int, 2, 2> answer = {
             {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
             {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},
         };

@@ -5,10 +5,10 @@
 namespace math
 {
 
-template <typename T, int ... Dims> class Matrix;
+template <typename T, int ... Dims> class Array;
 
 template <typename T, int Dim>
-class Matrix<T, Dim>
+class Array<T, Dim>
 {
     private:
         T data_[Dim];
@@ -16,7 +16,7 @@ class Matrix<T, Dim>
     public:
         using InitializerList = std::initializer_list<T>;
 
-        Matrix(T initial_value = static_cast<T>(0))
+        Array(T initial_value = static_cast<T>(0))
         {
             for(int i = 0; i < Dim; ++i)
             {
@@ -24,7 +24,7 @@ class Matrix<T, Dim>
             }
         }
 
-        Matrix(InitializerList values)
+        Array(InitializerList values)
         {
             auto iter = values.begin();
             for(int index = 0; index < values.size(); ++index)
@@ -46,38 +46,38 @@ class Matrix<T, Dim>
 };
 
 template <typename T, int FirstDim, int ... OtherDim>
-class Matrix<T, FirstDim, OtherDim...>
+class Array<T, FirstDim, OtherDim...>
 {
     private:
-        Matrix<T, OtherDim...> data_[FirstDim];
+        Array<T, OtherDim...> data_[FirstDim];
 
     public:
-        using InitializerList = std::initializer_list<typename Matrix<T, OtherDim...>::InitializerList>;
+        using InitializerList = std::initializer_list<typename Array<T, OtherDim...>::InitializerList>;
 
-        Matrix(T initial_value = static_cast<T>(0))
+        Array(T initial_value = static_cast<T>(0))
         {
             for(int i = 0; i < FirstDim; ++i)
             {
-                data_[i] = Matrix<T, OtherDim...>(initial_value);
+                data_[i] = Array<T, OtherDim...>(initial_value);
             }
         }
 
-        Matrix(InitializerList initializer_list)
+        Array(InitializerList initializer_list)
         {
             int i = 0;
             for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
             {
-                data_[i] = Matrix<T, OtherDim...>(*iter);
+                data_[i] = Array<T, OtherDim...>(*iter);
                 ++i;
             }
         }
 
-        Matrix<T, OtherDim...>& operator()(int index)
+        Array<T, OtherDim...>& operator()(int index)
         {
             return data_[index];
         }
 
-        Matrix<T, OtherDim...> operator()(int index) const
+        Array<T, OtherDim...> operator()(int index) const
         {
             return data_[index];
         }
@@ -96,7 +96,7 @@ class Matrix<T, FirstDim, OtherDim...>
 };
 
 template <typename T, int Size>
-using Vector = Matrix<T, Size>;
+using Vector = Array<T, Size>;
 
 template <int Size>
 using Vectord = Vector<double, Size>;
@@ -105,13 +105,13 @@ template <int Size>
 using Vectori = Vector<int, Size>;
 
 template <int ... Shape>
-using Matrixd = Matrix<double, Shape ... >;
+using Arrayd = Array<double, Shape ... >;
 
 template <int ... Shape>
-using Matrixi = Matrix<int, Shape ... >;
+using Arrayi = Array<int, Shape ... >;
 
 template <typename T, int FirstDim, int ... Shape>
-bool operator==(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, FirstDim, Shape...>& right)
+bool operator==(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDim, Shape...>& right)
 {
     for(int index = 0; index < FirstDim; ++index)
     {
@@ -124,7 +124,7 @@ bool operator==(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, First
 }
 
 template <typename T, int FirstDim, int ... Shape>
-bool operator!=(const Matrix<T, FirstDim, Shape...>& left, const Matrix<T, FirstDim, Shape...>& right)
+bool operator!=(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDim, Shape...>& right)
 {
     return false == (left == right);
 }
