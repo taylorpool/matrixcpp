@@ -96,3 +96,28 @@ TEST_F(MultiDimensional, SetFirstTensorVector)
         tensor(0,0) = new_vector;
         ASSERT_EQ(tensor(0,0), new_vector);
 }
+
+TEST_F(MultiDimensional, MatrixIncrement)
+{
+        matrix(0,0) += 1;
+        ASSERT_EQ(matrix(0,0), 2);
+}
+
+TEST(Identity, Matrix)
+{
+        auto matrix = math::Identity<int, 2>();
+        decltype(matrix) answer = {
+                {1, 0},
+                {0, 1}
+        };
+        ASSERT_EQ(matrix, answer);
+}
+
+TEST(ARange, Vector)
+{
+        auto range = math::ARange<4>();
+        math::Vectori<4> answer = {
+                0, 1, 2, 3
+        };
+        ASSERT_EQ(range, answer);
+}

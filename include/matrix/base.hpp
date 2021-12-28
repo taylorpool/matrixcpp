@@ -110,6 +110,29 @@ using Arrayd = Array<double, Shape ... >;
 template <int ... Shape>
 using Arrayi = Array<int, Shape ... >;
 
+template <typename T, int N>
+Array<T, N, N> Identity()
+{
+    Array<T, N, N> matrix;
+    T identity_element = static_cast<T>(1);
+    for(int index = 0; index < N; ++index)
+    {
+        matrix(index, index) = identity_element;
+    }
+    return matrix;
+}
+
+template <int N>
+Vectori<N> ARange()
+{
+    Vectori<N> range;
+    for(int index = 0; index < N; ++ index)
+    {
+        range(index) = index;
+    }
+    return range;
+}
+
 template <typename T, int FirstDim, int ... Shape>
 bool operator==(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDim, Shape...>& right)
 {
