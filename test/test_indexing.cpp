@@ -9,6 +9,14 @@ class IndexingFixture: public ::testing::Test
             {1, 2},
             {3, 4}
         };
+        math::Arrayi<3,3> matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+        math::Vectori<5> vector = {
+            0, 1, 2, 3, 4
+        };
 };
 
 TEST_F(IndexingFixture, UpperTriangular)
@@ -35,4 +43,13 @@ TEST_F(IndexingFixture, LowerTriangular)
     B(0,1) = 0;
 
     ASSERT_EQ(B, math::tril(A));
+}
+
+TEST_F(IndexingFixture, SliceVector)
+{
+    auto vector_slice = math::slice<0,3>(vector);
+    math::Vectori<3> answer = {
+        0, 1, 2
+    };
+    ASSERT_EQ(vector_slice, answer);
 }

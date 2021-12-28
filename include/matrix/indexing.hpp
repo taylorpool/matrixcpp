@@ -31,4 +31,15 @@ Array<T, N, N> tril(const Array<T, N, N>& matrix)
     }
     return lower_triangular;
 }
+
+template <int Low, int High, typename T, int N>
+Vector<T, High-Low> slice(const Vector<T, N>& vector)
+{
+    Vector<T, High-Low> sliced;
+    for(int index = Low; index < High; ++index)
+    {
+        sliced(index-Low) = vector(index);
+    }
+    return sliced;
+}
 }
