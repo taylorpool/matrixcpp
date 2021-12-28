@@ -77,3 +77,14 @@ TEST(Multiply, ArrayArray)
         };
         ASSERT_EQ(result, answer);
 }
+
+TEST(OuterProduct, VectorVector)
+{
+    math::Vectori<2> vector1 = {1, 2};
+    math::Vectori<2> vector2 = {3, 4};
+    math::Arrayi<2,2> answer = {
+        {vector1(0)*vector2(0), vector1(0)*vector2(1)},
+        {vector1(1)*vector2(0), vector1(1)*vector2(1)}
+    };
+    ASSERT_EQ(math::outer(vector1, vector2), answer);
+}

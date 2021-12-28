@@ -44,6 +44,20 @@ T dot(const Vector<T, M>& left, const Vector<T, M>& right)
     return dot_product;
 }
 
+template <typename T, int M>
+Array<T, M, M> outer(const Vector<T, M>& left, const Vector<T, M>& right)
+{
+    Array<T, M, M> result;
+    for(int row = 0; row < M; ++row)
+    {
+        for(int column = 0; column < M; ++column)
+        {
+            result(row,column) = left(row)*right(column);
+        }
+    }
+    return result;
+}
+
 template<typename T, int M, int N>
 Vector<T, M> operator*(const Array<T, M, N>& A, const Vector<T, N>& x)
 {
