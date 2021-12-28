@@ -53,3 +53,13 @@ TEST_F(IndexingFixture, SliceVector)
     };
     ASSERT_EQ(vector_slice, answer);
 }
+
+TEST_F(IndexingFixture, SliceMatrix)
+{
+    auto matrix_slice = math::slice<0,2>(matrix);
+    math::Arrayi<2,3> answer = {
+        {matrix(0,0), matrix(0,1), matrix(0,2)},
+        {matrix(1,0), matrix(1,1), matrix(1,2)}
+    };
+    ASSERT_EQ(matrix_slice, answer);
+}
