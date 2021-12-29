@@ -121,3 +121,19 @@ TEST(ARange, Vector)
         };
         ASSERT_EQ(range, answer);
 }
+
+TEST_F(MultiDimensional, IndexingVector)
+{
+        math::Vectori<1> indices = {1};
+        math::Vectori<1> answer = {vector(indices(0))};
+        ASSERT_EQ(answer, vector(indices));
+}
+
+TEST_F(MultiDimensional, IndexingMatrix)
+{
+        math::Vectori<1> indices = {1};
+        math::Arrayi<1,2> answer = {
+                {3, 4}
+        };
+        ASSERT_EQ(answer, matrix(indices));
+}

@@ -43,6 +43,17 @@ class Array<T, Dim>
         {
             return data_[index];
         }
+
+        template <int Size>
+        Array<T, Size> operator()(const Array<int, Size>& indices) const
+        {
+            Array<T, Size> indexed;
+            for(int index = 0; index < Size; ++index)
+            {
+                indexed(index) = data_[indices(index)];
+            }
+            return indexed;
+        }
 };
 
 template <typename T, int FirstDim, int ... OtherDim>
@@ -92,6 +103,17 @@ class Array<T, FirstDim, OtherDim...>
         auto& operator()(int first, OtherIndices... others)
         {
             return data_[first](others...);
+        }
+
+        template <int Size>
+        Array<T, Size, OtherDim...> operator()(const Array<int, Size>& indices) const
+        {
+            Array<T, Size, OtherDim...> indexed;
+            for(int index = 0; index < Size; ++index)
+            {
+                indexed(index) = data_[indices(index)];
+            }
+            return indexed;
         }
 };
 
