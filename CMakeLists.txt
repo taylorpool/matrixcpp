@@ -31,7 +31,8 @@ if(${ENABLE_TESTING})
         add_executable(matrix_tests
                         test/test_base.cpp
                         test/test_indexing.cpp
-                        test/test_products.cpp)
+                        test/test_products.cpp
+                        test/test_decompositions.cpp)
 
         target_link_libraries(matrix_tests PRIVATE math-matrix gtest gtest_main)
 
