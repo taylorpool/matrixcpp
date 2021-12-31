@@ -31,6 +31,31 @@ namespace math
         return U;
     }
 
+    template <typename T, int N>
+    Vector<T, N> cholesky_solve(const Array<T, N, N>& chol, const Vector<T, N>& b)
+    {
+        Vector<T, N> y(b);
+        for(int k = 0; k < N; ++k)
+        {
+            for(int j = 0; j < k; ++j)
+            {
+                y(k) -= chol(j,k)*y(j);
+            }
+            y(k) /= chol(k,k);
+        }
+
+        Vector<T, N> x(y);
+        for(int k = N-1; k >= 0; --k)
+        {
+            for(int j = k+1; j < N; ++j)
+            {
+                x(k) -= chol(k,j)*x(j);
+            }
+            x(k) /= chol(k,k);
+        }
+        return x;
+    }
+
     template <typename T, int M, int N>
     struct LUDecomposition
     {
@@ -114,32 +139,4 @@ namespace math
             }
         }
     };
-
-    template <typename T, int M, int N>
-    Vector<T, N> LUSolve(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, M>& b)
-    {
-        Vector<T, N> solution;
-        Vector<T, M> y;
-        Vector<T, M> Pb = b(lu_decomp.P);
-        // Solve Ly = Pb
-        for(int k = 0; k < M; ++k)
-        {
-            y(k) = Pb(k);
-            for(int j = 0; j < k; ++j)
-            {
-                y(k) -= lu_decomp.L(k,j)*y(j);
-            }
-        }
-        // Solve Ux = y
-        for(int k = 0; k < N; ++k)
-        {
-            solution(k) = y(k);
-            for(int j = k+1; j < N; ++j)
-            {
-                solution(k) -= lu_decomp.U(k,j)*solution(j);
-            }
-            solution(k) /= lu_decomp.U(k,k);
-        }
-        return solution;
-    }
 }
