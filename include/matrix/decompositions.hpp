@@ -8,6 +8,14 @@
 
 namespace math
 {
+    template <typename T>
+    void swap(T& a, T& b)
+    {
+        T temp = a;
+        a = b;
+        b = temp;
+    }
+
     template <typename T, int N>
     struct CholeskyDecomposition
     {
@@ -39,12 +47,13 @@ namespace math
     template <typename T, int M, int N>
     struct LUDecomposition
     {
+        Array<T, M, N> A;
         Array<T, M, M> L;
         Array<T, M, N> U;
         Vectori<N> P;
 
         LUDecomposition(const Array<T, M, N>& A)
-        : U(A), L(Identity<T, M>()), P(ARange<N>())
+        : A(A), U(A), L(Identity<T, M>()), P(ARange<N>())
         {
             for(int k = 0; k < N; ++k)
             {
@@ -62,19 +71,13 @@ namespace math
                 }
                 for(int j = k; j < N; ++j)
                 {
-                    T temp = U(k,j);
-                    U(k,j) = U(i,j);
-                    U(i,j) = temp;
+                    swap(U(k,j), U(i,j));
                 }
                 for(int j = 0; j < k; ++j)
                 {
-                    T temp = L(k,j);
-                    L(k,j) = L(i,j);
-                    L(i,j) = temp;
+                    swap(L(k,j), L(i,j));
                 }
-                int temp = P(k);
-                P(k) = P(i);
-                P(i) = temp;
+                swap(P(k), P(i));
 
                 for(int row = k+1; row < M; ++row)
                 {
@@ -139,4 +142,5 @@ namespace math
         }
         return x;
     }
+
 }

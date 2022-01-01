@@ -45,3 +45,22 @@ TEST(LUDecomposition, Test1)
     auto solution = math::solve(lu, b);
     ASSERT_EQ(A*solution, b);
 }
+
+TEST(SwapElements, Integers)
+{
+    int a = 1;
+    int b = 2;
+    math::swap(a,b);
+    ASSERT_EQ(a,2);
+    ASSERT_EQ(b,1);
+}
+
+TEST(SwapElements, Vector)
+{
+    math::Vectori<2> x = {
+        1, 2
+    };
+    math::swap(x(0), x(1));
+    ASSERT_EQ(x(0), 2);
+    ASSERT_EQ(x(1), 1);
+}
