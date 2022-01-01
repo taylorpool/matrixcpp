@@ -9,52 +9,32 @@
 namespace math
 {
     template <typename T, int N>
-    Array<T, N, N> cholesky(const Array<T, N, N>& A)
+    struct CholeskyDecomposition
     {
-        Array<T, N, N> U = triu(A);
-        for(int i = 0; i < N; ++i)
+        Array<T, N, N> A;
+        Array<T, N, N> cholesky;
+
+        CholeskyDecomposition(const Array<T, N, N>& A)
+        : A(A), cholesky(triu(A))
         {
-            for(int j = i+1; j < N; ++j)
+            for(int i = 0; i < N; ++i)
             {
-                T factor = U(i,j)/U(i,i);
-                for(int k = j; k < N; ++k)
+                for(int j = i+1; j < N; ++j)
                 {
-                    U(j,k) = U(j,k) - U(i,k)*factor;
+                    T factor = cholesky(i,j)/cholesky(i,i);
+                    for(int k = j; k < N; ++k)
+                    {
+                        cholesky(j,k) = cholesky(j,k) - cholesky(i,k)*factor;
+                    }
+                }
+                T sqrt_factor = sqrt(cholesky(i,i));
+                for(int r = i; r < N; ++r)
+                {
+                    cholesky(i,i) = cholesky(i,i)/sqrt_factor;
                 }
             }
-            T sqrt_factor = sqrt(U(i,i));
-            for(int r = i; r < N; ++r)
-            {
-                U(i,i) = U(i,i)/sqrt_factor;
-            }
         }
-        return U;
-    }
-
-    template <typename T, int N>
-    Vector<T, N> cholesky_solve(const Array<T, N, N>& chol, const Vector<T, N>& b)
-    {
-        Vector<T, N> y(b);
-        for(int k = 0; k < N; ++k)
-        {
-            for(int j = 0; j < k; ++j)
-            {
-                y(k) -= chol(j,k)*y(j);
-            }
-            y(k) /= chol(k,k);
-        }
-
-        Vector<T, N> x(y);
-        for(int k = N-1; k >= 0; --k)
-        {
-            for(int j = k+1; j < N; ++j)
-            {
-                x(k) -= chol(k,j)*x(j);
-            }
-            x(k) /= chol(k,k);
-        }
-        return x;
-    }
+    };
 
     template <typename T, int M, int N>
     struct LUDecomposition
@@ -108,35 +88,55 @@ namespace math
         }
     };
 
-    template <typename T, int M, int N>
-    struct LUSolution
+    template <typename T, int N>
+    Vector<T, N> solve(const CholeskyDecomposition<T, N>& cholesky_decomp, const Vector<T, N>& b)
     {
-        Vector<T, N> solution;
-        Vector<T, M> y;
-
-        LUSolution(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, M>& b)
+        Vector<T, N> y(b);
+        for(int k = 0; k < N; ++k)
         {
-
-            Vector<T, M> Pb = b(lu_decomp.P);
-            // Solve Ly = Pb via forward substitution
-            for(int k = 0; k < M; ++k)
+            for(int j = 0; j < k; ++j)
             {
-                y(k) = Pb(k);
-                for(int j = 0; j < k; ++j)
-                {
-                    y(k) -= lu_decomp.L(k,j)*y(j);
-                }
+                y(k) -= cholesky_decomp.cholesky(j,k)*y(j);
             }
-            // Solve Ux = y via backward substitution
-            for(int k = N-1; k >= 0; --k)
+            y(k) /= cholesky_decomp.cholesky(k,k);
+        }
+
+        Vector<T, N> x(y);
+        for(int k = N-1; k >= 0; --k)
+        {
+            for(int j = k+1; j < N; ++j)
             {
-                solution(k) = y(k);
-                for(int j = k+1; j < N; ++j)
-                {
-                    solution(k) -= lu_decomp.U(k,j)*solution(j);
-                }
-                solution(k) /= lu_decomp.U(k,k);
+                x(k) -= cholesky_decomp.cholesky(k,j)*x(j);
+            }
+            x(k) /= cholesky_decomp.cholesky(k,k);
+        }
+        return x;
+    }
+
+    template <typename T, int M, int N>
+    Vector<T, N> solve(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, M>& b)
+    {
+        Vector<T, M> Pb = b(lu_decomp.P);
+        Vector<T, M> y(Pb);
+        // Solve Ly = Pb via forward substitution
+        for(int k = 0; k < M; ++k)
+        {
+            for(int j = 0; j < k; ++j)
+            {
+                y(k) -= lu_decomp.L(k,j)*y(j);
             }
         }
-    };
+        // Solve Ux = y via backward substitution
+        Vector<T, N> x;
+        for(int k = N-1; k >= 0; --k)
+        {
+            x(k) = y(k);
+            for(int j = k+1; j < N; ++j)
+            {
+                x(k) -= lu_decomp.U(k,j)*x(j);
+            }
+            x(k) /= lu_decomp.U(k,k);
+        }
+        return x;
+    }
 }

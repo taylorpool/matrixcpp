@@ -21,9 +21,9 @@ TEST(Cholesky, Test1)
     math::Vectord<2> x_correct = {
         b(0)/A(0,0), b(1)/A(1,1)
     };
-    auto U = math::cholesky(A);
-    ASSERT_EQ(U_correct, U);
-    ASSERT_EQ(x_correct, math::cholesky_solve(U, b));
+    math::CholeskyDecomposition cholesky(A);
+    ASSERT_EQ(U_correct, cholesky.cholesky);
+    ASSERT_EQ(x_correct, math::solve(cholesky, b));
 }
 
 TEST(LUDecomposition, Test1)
@@ -42,11 +42,6 @@ TEST(LUDecomposition, Test1)
 
     math::LUDecomposition lu(A);
     ASSERT_EQ(A(lu.P), lu.L*lu.U);
-    math::LUSolution solution(lu, b);
-    math::Vectord<3> Ax = A*solution.solution;
-    math::Vectord<3> Ly = lu.L*solution.y;
-    math::Vectord<3> Pb = b(lu.P);
-    ASSERT_EQ(Ly, Pb);
-    math::Vectord<3> Ux = lu.U*solution.solution;
-    ASSERT_EQ(A*solution.solution, b);
+    auto solution = math::solve(lu, b);
+    ASSERT_EQ(A*solution, b);
 }
