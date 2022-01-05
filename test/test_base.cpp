@@ -5,10 +5,9 @@
 TEST(ZeroArray, Vector)
 {
         int initial_value = 0;
-        math::Vectori<2> vector(0);
+        math::Vectori<2> vector(initial_value);
         ASSERT_EQ(vector(0), initial_value);
         ASSERT_EQ(vector(1), initial_value);
-
 }
 
 TEST(ZeroArray, Matrix)
@@ -21,12 +20,22 @@ TEST(ZeroArray, Matrix)
         ASSERT_EQ(matrix(1,1), initial_value);
 }
 
-TEST(Vector, Ones)
+TEST(OneArray, Vector)
 {
-        auto vector = math::Vector<int, 3>(1);
+        int initial_value = 1;
+        math::Vectori<2> vector(initial_value);
         ASSERT_EQ(vector(0), 1);
         ASSERT_EQ(vector(1), 1);
-        ASSERT_EQ(vector(2), 1);
+}
+
+TEST(OneArray, Matrix)
+{
+        int initial_value = 1;
+        math::Arrayi<2,2> matrix(initial_value);
+        ASSERT_EQ(matrix(0,0), initial_value);
+        ASSERT_EQ(matrix(0,1), initial_value);
+        ASSERT_EQ(matrix(1,0), initial_value);
+        ASSERT_EQ(matrix(1,1), initial_value);
 }
 
 class ZeroMatricies: public ::testing::Test
