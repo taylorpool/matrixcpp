@@ -45,13 +45,35 @@ TEST(ScalarProduct, ArrayScalar)
     };
     ASSERT_EQ(matrix*factor, answer);
 }
-TEST(DotProduct, VectorVector)
+
+class ProductFixture: public ::testing::Test
 {
-    math::Vectori<2> vector1 = {1,2};
-    math::Vectori<2> vector2 = {3,4};
-    auto result = math::dot(vector1, vector2);
-    auto correct = vector1(0)*vector2(0)+vector1(1)*vector2(1);
-    ASSERT_EQ(result, correct);
+    protected:
+        math::Vectori<3> e1{{1, 0, 0}};
+        math::Vectori<3> e2{{0, 1, 0}};
+        math::Vectori<3> e3{{0, 0, 1}};
+};
+
+TEST_F(ProductFixture, Orthogonal_DotProduct_0)
+{
+    auto result = math::dot(e1, e2);
+    ASSERT_EQ(result, 0);
+}
+
+TEST_F(ProductFixture, SameUnitVector_DotProduct_1)
+{
+    auto result = math::dot(e1, e1);
+    ASSERT_EQ(result, 1);
+}
+
+TEST_F(ProductFixture, E1CrossE2_E3)
+{
+    ASSERT_EQ(math::cross(e1, e2), e3);
+}
+
+TEST_F(ProductFixture, NegE2CrossE1_E3)
+{
+    ASSERT_EQ(math::cross(-e2, e1), e3);
 }
 
 TEST(Multiply, ArrayVector)

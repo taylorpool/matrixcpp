@@ -58,7 +58,7 @@ TEST_F(ZeroMatricies, AccessElement)
 
 TEST_F(ZeroMatricies, AccessElement2)
 {
-        auto ans = math::Vectori<2>(1.0);
+        auto ans = math::Vectori<2>(1);
         ASSERT_NE(matrix(0), ans);
 }
 

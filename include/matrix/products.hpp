@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.hpp"
+#include "operators.hpp"
 
 namespace math
 {
@@ -42,6 +43,16 @@ T dot(const Vector<T, M>& left, const Vector<T, M>& right)
         dot_product += left(index)*right(index);
     }
     return dot_product;
+}
+
+template <typename T>
+Vector<T, 3> cross(const Vector<T, 3>& left, const Vector<T, 3>& right)
+{
+    Vector<T, 3> result;
+    result(0) = left(1)*right(2)-left(2)*right(1);
+    result(1) = left(2)*right(0)-left(0)*right(2);
+    result(2) = left(0)*right(1)-left(1)*right(0);
+    return result;
 }
 
 template <typename T, int M>
