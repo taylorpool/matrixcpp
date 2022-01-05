@@ -20,6 +20,21 @@ TEST(ForwardSubstitution, Test1)
     auto my_answer = math::forward_substitution_solve(A, b);
 }
 
+TEST(BackwardSubstitution, Test1)
+{
+    math::Arrayd<2,2> A = {
+        {2.0, 1.0},
+        {0.0, 1.0}
+    };
+    math::Vectord<2> b = {
+        3.0, 1.0
+    };
+    math::Vectord<2> correct_answer = {
+        1.0, 1.0
+    };
+    math::Vectord<2> my_answer = math::backward_substitution_solve(A, b);
+}
+
 TEST(Cholesky, Test1)
 {
     math::Arrayd<2,2> A = {
