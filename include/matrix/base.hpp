@@ -151,9 +151,13 @@ Array<T, N, N> Identity()
 {
     Array<T, N, N> matrix;
     T identity_element = static_cast<T>(1);
-    for(int index = 0; index < N; ++index)
+    T zero_element = static_cast<T>(0);
+    for(int row = 0; row < N; ++row)
     {
-        matrix(index, index) = identity_element;
+        for(int column = 0; column < N; ++column)
+        {
+            matrix(row,column) = (row==column ? identity_element : zero_element);
+        }
     }
     return matrix;
 }
