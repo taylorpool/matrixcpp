@@ -76,6 +76,13 @@ TEST_F(ProductFixture, NegE2CrossE1_E3)
     ASSERT_EQ(math::cross(-e2, e1), e3);
 }
 
+TEST_F(ProductFixture, DistributiveCrossProduct)
+{
+    auto left = math::cross(e1, math::cross(e2,e3));
+    auto right = math::dot(e1, e3)*e2 - math::dot(e1, e2)*e3;
+    ASSERT_EQ(left, right);
+}
+
 TEST(Multiply, ArrayVector)
 {
         auto matrix = math::Array<int, 2, 2>(1);
