@@ -16,12 +16,11 @@ class Array<T, Dim>
     public:
         using InitializerList = std::initializer_list<T>;
 
-        Array(T initial_value = static_cast<T>(0))
+        Array() {};
+
+        Array(T initial_value)
         {
-            for(int i = 0; i < Dim; ++i)
-            {
-                data_[i] = initial_value;
-            }
+            fill(initial_value);
         }
 
         Array(InitializerList values)
@@ -31,6 +30,14 @@ class Array<T, Dim>
             {
                 data_[index] = *iter;
                 ++iter;
+            }
+        }
+
+        void fill(T value)
+        {
+            for(int i = 0; i < Dim; ++i)
+            {
+                data_[i] = value;
             }
         }
 
@@ -65,12 +72,11 @@ class Array<T, FirstDim, OtherDim...>
     public:
         using InitializerList = std::initializer_list<typename Array<T, OtherDim...>::InitializerList>;
 
-        Array(T initial_value = static_cast<T>(0))
+        Array() {};
+
+        Array(T initial_value)
         {
-            for(int i = 0; i < FirstDim; ++i)
-            {
-                data_[i] = Array<T, OtherDim...>(initial_value);
-            }
+            fill(initial_value);
         }
 
         Array(InitializerList initializer_list)
@@ -80,6 +86,14 @@ class Array<T, FirstDim, OtherDim...>
             {
                 data_[i] = Array<T, OtherDim...>(*iter);
                 ++i;
+            }
+        }
+
+        void fill(T value)
+        {
+            for(int i = 0; i < FirstDim; ++i)
+            {
+                data_[i].fill(value);
             }
         }
 

@@ -68,8 +68,8 @@ TEST(Multiply, ArrayVector)
 
 TEST(Multiply, ArrayArray)
 {
-        auto A = math::Array<int, 2, 2>(1.0);
-        auto B = math::Array<int, 2, 2>(1.0);
+        auto A = math::Array<int, 2, 2>(1);
+        auto B = math::Array<int, 2, 2>(1);
         auto result = A*B;
         math::Array<int, 2, 2> answer = {
             {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
