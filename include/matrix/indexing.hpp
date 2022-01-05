@@ -27,11 +27,16 @@ template <typename T, int N>
 Array<T, N, N> tril(const Array<T, N, N>& matrix)
 {
     Array<T, N, N> lower_triangular;
+    T zero_element = static_cast<T>(0);
     for(int row = 0; row < N; ++row)
     {
         for(int column = 0; column <= row; ++ column)
         {
             lower_triangular(row, column) = matrix(row, column);
+        }
+        for(int column = row+1; column < N; ++column)
+        {
+            lower_triangular(row, column) = zero_element;
         }
     }
     return lower_triangular;

@@ -19,32 +19,37 @@ class IndexingFixture: public ::testing::Test
         };
 };
 
-TEST_F(IndexingFixture, UpperTriangular)
+TEST_F(IndexingFixture, UpperTriangularA)
 {
-    math::Arrayi<2,2> A = {
-        {1, 2},
-        {3, 4}
-    };
-    
-    auto B = A;
+    math::Arrayi<2,2> B(A);
     B(1,0) = 0;
-
     ASSERT_EQ(B, math::triu(A));
+}
+
+TEST_F(IndexingFixture, UpperTriangularMatrix)
+{
+    math::Arrayi<3,3> upper_matrix(matrix);
+    upper_matrix(1,0) = 0;
+    upper_matrix(2,0) = 0;
+    upper_matrix(2,1) = 0;
+    ASSERT_EQ(upper_matrix, math::triu(matrix));
 }
 
 TEST_F(IndexingFixture, LowerTriangular)
 {
-    math::Arrayi<2,2> A = {
-        {1, 2},
-        {3, 4}
-    };
-    
-    auto B = A;
+    math::Arrayi<2,2> B(A);
     B(0,1) = 0;
-
     ASSERT_EQ(B, math::tril(A));
 }
 
+TEST_F(IndexingFixture, LowerTriangularMatrix)
+{
+    math::Arrayi<3,3> lower_matrix(matrix);
+    lower_matrix(0,1) = 0;
+    lower_matrix(0,2) = 0;
+    lower_matrix(1,2) = 0;
+    ASSERT_EQ(lower_matrix, math::tril(matrix));
+}
 TEST_F(IndexingFixture, SliceVector)
 {
     auto vector_slice = math::slice<0,3>(vector);
