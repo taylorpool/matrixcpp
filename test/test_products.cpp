@@ -83,6 +83,20 @@ TEST_F(ProductFixture, DistributiveCrossProduct)
     ASSERT_EQ(left, right);
 }
 
+TEST_F(ProductFixture, DistributiveDotOnCrossProduct1)
+{
+    auto result1 = math::dot(e1, math::cross(e2, e3));
+    auto result2 = math::dot(e3, math::cross(e1, e2));
+    ASSERT_EQ(result1, result2);
+}
+
+TEST_F(ProductFixture, DistributiveDotOnCrossProduct2)
+{
+    auto result2 = math::dot(e3, math::cross(e1, e2));
+    auto result3 = math::dot(e2, math::cross(e3, e1));
+    ASSERT_EQ(result2, result3);
+}
+
 TEST(Multiply, ArrayVector)
 {
         auto matrix = math::Array<int, 2, 2>(1);
