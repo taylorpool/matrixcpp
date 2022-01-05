@@ -5,6 +5,21 @@
 #include <cmath>
 #include <iostream>
 
+TEST(ForwardSubstitution, Test1)
+{
+    math::Arrayd<2,2> A = {
+        {1.0, 0.0},
+        {2.0, 1.0}
+    };
+    math::Arrayd<2> b = {
+        1.0, 4.0
+    };
+    math::Vectord<2> correct_answer = {
+        1.0, 2.0
+    };
+    auto my_answer = math::forward_substitution_solve(A, b);
+}
+
 TEST(Cholesky, Test1)
 {
     math::Arrayd<2,2> A = {
