@@ -1,9 +1,23 @@
 #include "matrix/dynamic.hpp"
 #include <gtest/gtest.h>
 
-TEST(DynamicVector, Size2)
+class DynamicVector: public ::testing::Test
 {
-    int size = 2;
-    math::dynamic::Vectori vector(size);
-    ASSERT_EQ(vector.get_size(), size);
+    protected:
+        int size = 2;
+        math::dynamic::Vectori vectori;
+        DynamicVector()
+        : vectori(size) {};
+};
+
+TEST_F(DynamicVector, Size2)
+{
+    ASSERT_EQ(vectori.size(), size);
+}
+
+TEST_F(DynamicVector, SetElements)
+{
+    int first_value = 1;
+    vectori(0) = first_value;
+    ASSERT_EQ(vectori(0), first_value);
 }

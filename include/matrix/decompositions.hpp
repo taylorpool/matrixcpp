@@ -135,5 +135,4 @@ namespace math
         Vector<T, N> x = backward_substitution_solve(lu_decomp.U, y);
         return x;
     }
-
 }

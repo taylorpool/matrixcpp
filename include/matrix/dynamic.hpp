@@ -28,11 +28,10 @@ struct Array<T, 1>
 {
     private:
         std::vector<T> data_;
-        int size;
 
     public:
         Array(int _size)
-        : size(_size) {}
+        :  data_(_size) {}
 
         T operator()(int index) const
         {
@@ -41,12 +40,12 @@ struct Array<T, 1>
 
         T& operator()(int index)
         {
-            return &data_[index];
+            return data_[index];
         }
 
-        int get_size() const
+        int size() const
         {
-            return size;
+            return data_.size();
         }
 };
 
