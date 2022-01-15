@@ -2,14 +2,14 @@ cmake_policy(SET CMP0048 NEW)
 project(matrixcpp VERSION 0.1)
 cmake_minimum_required(VERSION 3.21)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 add_library(arithmetic INTERFACE)
-set_property(TARGET arithmetic PROPERTY CXX_STANDARD 17)
+set_property(TARGET arithmetic PROPERTY CXX_STANDARD 20)
 target_include_directories(arithmetic INTERFACE include)
 
 add_library(math-matrix INTERFACE)
-set_property(TARGET math-matrix PROPERTY CXX_STANDARD 17)
+set_property(TARGET math-matrix PROPERTY CXX_STANDARD 20)
 target_include_directories(math-matrix INTERFACE include)
 
 option(ENABLE_TESTING "Enable Testing" ON)
@@ -33,7 +33,8 @@ if(${ENABLE_TESTING})
                         test/test_operators.cpp
                         test/test_indexing.cpp
                         test/test_products.cpp
-                        test/test_decompositions.cpp)
+                        test/test_decompositions.cpp
+                        test/test_dynamic.cpp)
 
         target_link_libraries(matrix_tests PRIVATE math-matrix gtest gtest_main)
 
