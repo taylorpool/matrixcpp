@@ -102,4 +102,4 @@ using DynamicVectorf = DynamicVector<float>;
 
 using DynamicVectord = DynamicVector<double>;
     
-} // namespace math::dynamic
+} // namespace math
