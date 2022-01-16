@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 namespace math::dynamic
 {
@@ -8,10 +7,13 @@ template <typename T, int NumDims>
 struct Array
 {
     private:
-        std::vector<Array<T, NumDims-1>> data_;
-        int size;
+        int size_;
+        Array<T, NumDims-1>* data_;
 
     public:
+        Array(int _size)
+        : size_(_size), data_(new Array<T, NumDims-1>[size_]) {}
+
         auto operator()(int index) const
         {
             return data_[index];
@@ -19,7 +21,7 @@ struct Array
 
         auto& operator()(int index)
         {
-            return &data_[index];
+            return data_[index];
         }
 };
 
@@ -27,11 +29,12 @@ template <typename T>
 struct Array<T, 1>
 {
     private:
-        std::vector<T> data_;
+        int size_;
+        T* data_;
 
     public:
         Array(int _size)
-        :  data_(_size) {}
+        : size_(_size), data_(new T[size_]) {}
 
         T operator()(int index) const
         {
@@ -45,7 +48,7 @@ struct Array<T, 1>
 
         int size() const
         {
-            return data_.size();
+            return size_;
         }
 };
 
@@ -53,6 +56,7 @@ template <typename T>
 using Vector = Array<T, 1>;
 
 using Vectori = Vector<int>;
+using Vectord = Vector<double>;
 
     
 } // namespace math::dynamic
