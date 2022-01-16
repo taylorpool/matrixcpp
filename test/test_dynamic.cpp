@@ -49,3 +49,51 @@ TEST_F(DynamicVector, SetElementsTypeBool)
     vectorb(0) = first_value;
     ASSERT_EQ(vectorb(0), first_value);
 }
+
+class DynamicMatrix: public ::testing::Test
+{
+    protected:
+        int size[2] = {2, 2};
+        math::dynamic::Array<int, 2> matrix;
+        int a = 1;
+        int b = 2;
+        int c = 3;
+        int d = 4;
+
+        DynamicMatrix()
+        : matrix(size[0], size[1]) {}
+};
+
+TEST_F(DynamicMatrix, GetSize)
+{
+    ASSERT_EQ(matrix.size(), size[0]);
+}
+
+TEST_F(DynamicMatrix, GetRowSize)
+{
+    ASSERT_EQ(matrix(0).size(), size[1]);
+}
+
+TEST_F(DynamicMatrix, SetElementa)
+{
+    matrix(0,0) = a;
+    ASSERT_EQ(matrix(0,0), a);
+}
+
+TEST_F(DynamicMatrix, SetElementb)
+{
+    matrix(0,1) = b;
+    ASSERT_EQ(matrix(0,1), b);
+}
+
+TEST_F(DynamicMatrix, SetElementc)
+{
+    matrix(1,0) = c;
+    ASSERT_EQ(matrix(1,0), c);
+}
+
+TEST_F(DynamicMatrix, SetElementd)
+{
+    matrix(1,1) = d;
+    ASSERT_EQ(matrix(1,1), d);
+}
