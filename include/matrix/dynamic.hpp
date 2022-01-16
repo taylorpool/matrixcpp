@@ -1,6 +1,6 @@
 #pragma once
 
-namespace math::dynamic
+namespace math::Dynamic
 {
 
 template <typename T, int NumDims>
