@@ -6,11 +6,14 @@ class DynamicVector: public ::testing::Test
     protected:
         int size = 2;
         math::dynamic::Vectori vectori;
+        math::dynamic::Vectorf vectorf;
         math::dynamic::Vectord vectord;
         math::dynamic::Vector<bool> vectorb;
 
         DynamicVector()
-        : vectori(size), vectord(size),
+        : vectori(size),
+          vectorf(size),
+          vectord(size),
           vectorb(size) {};
 };
 
@@ -60,8 +63,13 @@ class DynamicMatrix: public ::testing::Test
         int c = 3;
         int d = 4;
 
+        math::dynamic::Arrayd<2> matrixd;
+        math::dynamic::Arrayf<2> matrixf;
+
         DynamicMatrix()
-        : matrix(size[0], size[1]) {}
+        : matrix(size[0], size[1]),
+          matrixd(size[0], size[1]),
+          matrixf(size[0], size[1]) {}
 };
 
 TEST_F(DynamicMatrix, GetSize)
@@ -102,11 +110,16 @@ class DynamicTensor: public ::testing::Test
 {
     protected:
         int shape[3] = {2, 2, 2};
-        math::dynamic::Array<int, 3> tensor;
+        math::dynamic::Arrayi<3> tensor;
         int a = 99;
 
+        math::dynamic::Arrayf<3> tensorf;
+        math::dynamic::Arrayd<3> tensord;
+
         DynamicTensor()
-        : tensor(shape[0], shape[1], shape[2]) {}
+        : tensor(shape[0], shape[1], shape[2]),
+          tensorf(shape[0], shape[1], shape[2]),
+          tensord(shape[0], shape[1], shape[2]) {}
 };
 
 TEST_F(DynamicTensor, GetSize)

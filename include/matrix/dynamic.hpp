@@ -84,6 +84,16 @@ template <typename T>
 using Vector = Array<T, 1>;
 
 using Vectori = Vector<int>;
+using Vectorf = Vector<float>;
 using Vectord = Vector<double>;
+
+template <int NumDims>
+using Arrayi = Array<int, NumDims>;
+
+template <int NumDims>
+using Arrayf = Array<int, NumDims>;
+
+template <int NumDims>
+using Arrayd = Array<double, NumDims>;
     
 } // namespace math::dynamic
