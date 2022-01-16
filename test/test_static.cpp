@@ -1,4 +1,4 @@
-#include "matrix/base.hpp"
+#include "matrix/static.hpp"
 
 #include "gtest/gtest.h"
 

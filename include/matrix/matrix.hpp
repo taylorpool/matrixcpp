@@ -1,4 +1,4 @@
 #pragma once
 
-#include "base.hpp"
+#include "static.hpp"
 #include "products.hpp"
