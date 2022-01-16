@@ -51,6 +51,11 @@ class Array<T, true, Dim>
             return data_[index];
         }
 
+        Array<int, true, 1> shape() const
+        {
+            return Array<int, true, 1>(Dim);
+        }
+
         template <int Size>
         Array<T, true, Size> operator()(const Array<int, true, Size>& indices) const
         {
@@ -67,6 +72,7 @@ template <typename T, int FirstDim, int ... OtherDim>
 class Array<T, true, FirstDim, OtherDim...>
 {
     private:
+        static constexpr int NumDims = 1+sizeof...(OtherDim);
         Array<T, true, OtherDim...> data_[FirstDim];
 
     public:
@@ -117,6 +123,12 @@ class Array<T, true, FirstDim, OtherDim...>
         auto& operator()(int first, OtherIndices... others)
         {
             return data_[first](others...);
+        }
+
+        Array<int, true, NumDims> shape() const
+        {
+            Array<int, true, NumDims> array_shape;
+            return array_shape;
         }
 
         template <int Size>

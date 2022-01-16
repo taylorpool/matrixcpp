@@ -2,6 +2,17 @@
 
 #include "gtest/gtest.h"
 
+class ZeroStaticArrayFixture: public ::testing::Test
+{
+        protected:
+                math::StaticVectori<2> vector2i;
+                math::StaticArrayi<3> vector3i;
+                math::StaticVectorf<2> vector2f;
+                math::StaticVectorf<3> vector3f;
+                math::StaticVectord<2> vector2d;
+                math::StaticVectord<3> vector3d;
+};
+
 TEST(ZeroArray, Vector)
 {
         int initial_value = 0;
@@ -10,7 +21,50 @@ TEST(ZeroArray, Vector)
         ASSERT_EQ(vector(1), initial_value);
 }
 
-TEST(ZeroArray, Matrix)
+TEST_F(ZeroStaticArrayFixture, Vector2iShape)
+{
+        math::StaticVectori<1> shape = vector2i.shape();
+        ASSERT_EQ(shape(0), 2);
+}
+
+TEST_F(ZeroStaticArrayFixture, Vector3iShape)
+{
+        math::StaticVectori<1> shape = vector3i.shape();
+        ASSERT_EQ(shape(0), 3);
+}
+
+TEST_F(ZeroStaticArrayFixture, Vector2fShape)
+{
+        math::StaticVectori<1> shape = vector2f.shape();
+        ASSERT_EQ(shape(0), 2);
+}
+
+TEST_F(ZeroStaticArrayFixture, Vector3fShape)
+{
+        math::StaticVectori<1> shape = vector3f.shape();
+        ASSERT_EQ(shape(0), 3);
+}
+
+TEST_F(ZeroStaticArrayFixture, Vector2dShape)
+{
+        math::StaticVectori<1> shape = vector2d.shape();
+        ASSERT_EQ(shape(0), 2);
+}
+
+TEST_F(ZeroStaticArrayFixture, Vector3dShape)
+{
+        math::StaticVectori<1> shape = vector3d.shape();
+        ASSERT_EQ(shape(0), 3);
+}
+
+TEST(ZeroArray, Vector3Shape)
+{
+        math::StaticVectori<3> vector;
+        math::StaticVectori<1> shape = vector.shape();
+        ASSERT_EQ(shape(0), 3);
+}
+
+TEST(ZeroArray, Matrix2)
 {
         int initial_value = 0;
         math::StaticArrayi<2,2> matrix(0);
@@ -18,6 +72,12 @@ TEST(ZeroArray, Matrix)
         ASSERT_EQ(matrix(0,1), initial_value);
         ASSERT_EQ(matrix(1,0), initial_value);
         ASSERT_EQ(matrix(1,1), initial_value);
+}
+
+TEST(ZeroArray, Matrix2Shape)
+{
+        math::StaticArrayi<2,2> matrix;
+        math::StaticVectori<2> shape = matrix.shape();
 }
 
 TEST(OneArray, Vector)
