@@ -1,14 +1,14 @@
 #pragma once
 
+#include "base.hpp"
+
 #include <initializer_list>
 
 namespace math
 {
 
-template <typename T, int ... Dims> class Array;
-
 template <typename T, int Dim>
-class Array<T, Dim>
+class Array<T, true, Dim>
 {
     private:
         T data_[Dim];
@@ -16,14 +16,14 @@ class Array<T, Dim>
     public:
         using InitializerList = std::initializer_list<T>;
 
-        Array() {};
+        Array<T, true, Dim>() {};
 
-        Array(T initial_value)
+        Array<T, true, Dim>(T initial_value)
         {
             fill(initial_value);
         }
 
-        Array(InitializerList values)
+        Array<T, true, Dim>(InitializerList values)
         {
             auto iter = values.begin();
             for(int index = 0; index < values.size(); ++index)
@@ -52,9 +52,9 @@ class Array<T, Dim>
         }
 
         template <int Size>
-        Array<T, Size> operator()(const Array<int, Size>& indices) const
+        Array<T, true, Size> operator()(const Array<int, true, Size>& indices) const
         {
-            Array<T, Size> indexed;
+            Array<T, true, Size> indexed;
             for(int index = 0; index < Size; ++index)
             {
                 indexed(index) = data_[indices(index)];
@@ -64,27 +64,27 @@ class Array<T, Dim>
 };
 
 template <typename T, int FirstDim, int ... OtherDim>
-class Array<T, FirstDim, OtherDim...>
+class Array<T, true, FirstDim, OtherDim...>
 {
     private:
-        Array<T, OtherDim...> data_[FirstDim];
+        Array<T, true, OtherDim...> data_[FirstDim];
 
     public:
-        using InitializerList = std::initializer_list<typename Array<T, OtherDim...>::InitializerList>;
+        using InitializerList = std::initializer_list<typename Array<T, true, OtherDim...>::InitializerList>;
 
-        Array() {};
+        Array<T, true, FirstDim, OtherDim...>() {};
 
-        Array(T initial_value)
+        Array<T, true, FirstDim, OtherDim...>(T initial_value)
         {
             fill(initial_value);
         }
 
-        Array(InitializerList initializer_list)
+        Array<T, true, FirstDim, OtherDim...>(InitializerList initializer_list)
         {
             int i = 0;
             for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
             {
-                data_[i] = Array<T, OtherDim...>(*iter);
+                data_[i] = Array<T, true, OtherDim...>(*iter);
                 ++i;
             }
         }
@@ -97,12 +97,12 @@ class Array<T, FirstDim, OtherDim...>
             }
         }
 
-        Array<T, OtherDim...>& operator()(int index)
+        Array<T, true, OtherDim...>& operator()(int index)
         {
             return data_[index];
         }
 
-        Array<T, OtherDim...> operator()(int index) const
+        Array<T, true, OtherDim...> operator()(int index) const
         {
             return data_[index];
         }
@@ -120,9 +120,9 @@ class Array<T, FirstDim, OtherDim...>
         }
 
         template <int Size>
-        Array<T, Size, OtherDim...> operator()(const Array<int, Size>& indices) const
+        Array<T, true, Size, OtherDim...> operator()(const Array<int, true, Size>& indices) const
         {
-            Array<T, Size, OtherDim...> indexed;
+            Array<T, true, Size, OtherDim...> indexed;
             for(int index = 0; index < Size; ++index)
             {
                 indexed(index) = data_[indices(index)];
@@ -131,25 +131,34 @@ class Array<T, FirstDim, OtherDim...>
         }
 };
 
+template <typename T, int ... Shape>
+using StaticArray = Array<T, true, Shape...>;
+
+template <int ... Shape>
+using StaticArrayi = StaticArray<int, Shape...>;
+
+template <int ... Shape>
+using StaticArrayf = StaticArray<float, Shape...>;
+
+template <int ... Shape>
+using StaticArrayd = StaticArray<double, Shape...>;
+
 template <typename T, int Size>
-using Vector = Array<T, Size>;
+using StaticVector = StaticArray<T, Size>;
 
 template <int Size>
-using Vectord = Vector<double, Size>;
+using StaticVectori = StaticVector<int, Size>;
 
 template <int Size>
-using Vectori = Vector<int, Size>;
+using StaticVectorf = StaticVector<float, Size>;
 
-template <int ... Shape>
-using Arrayd = Array<double, Shape ... >;
-
-template <int ... Shape>
-using Arrayi = Array<int, Shape ... >;
+template <int Size>
+using StaticVectord = StaticVector<double, Size>;
 
 template <typename T, int N>
-Array<T, N, N> Identity()
+StaticArray<T, N, N> Identity()
 {
-    Array<T, N, N> matrix;
+    StaticArray<T, N, N> matrix;
     T identity_element = static_cast<T>(1);
     T zero_element = static_cast<T>(0);
     for(int row = 0; row < N; ++row)
@@ -163,9 +172,9 @@ Array<T, N, N> Identity()
 }
 
 template <int N>
-Vectori<N> ARange()
+Vectori<true, N> ARange()
 {
-    Vectori<N> range;
+    Vectori<true, N> range;
     for(int index = 0; index < N; ++ index)
     {
         range(index) = index;
@@ -174,7 +183,7 @@ Vectori<N> ARange()
 }
 
 template <typename T, int FirstDim, int ... Shape>
-bool operator==(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDim, Shape...>& right)
+bool operator==(const StaticArray<T, FirstDim, Shape...>& left, const StaticArray<T, FirstDim, Shape...>& right)
 {
     for(int index = 0; index < FirstDim; ++index)
     {
@@ -187,7 +196,7 @@ bool operator==(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDi
 }
 
 template <typename T, int FirstDim, int ... Shape>
-bool operator!=(const Array<T, FirstDim, Shape...>& left, const Array<T, FirstDim, Shape...>& right)
+bool operator!=(const StaticArray<T, FirstDim, Shape...>& left, const StaticArray<T, FirstDim, Shape...>& right)
 {
     return false == (left == right);
 }

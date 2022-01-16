@@ -4,7 +4,7 @@
 
 TEST(ScalarProduct, ScalarVector)
 {
-    math::Vectori<2> vector = {1,2};
+    math::StaticVectori<2> vector = {1,2};
     int factor = 10;
     decltype(vector) answer = {factor*vector(0), factor*vector(1)};
     ASSERT_EQ(factor*vector, answer);
@@ -12,7 +12,7 @@ TEST(ScalarProduct, ScalarVector)
 
 TEST(ScalarProduct, VectorScalar)
 {
-    math::Vectori<2> vector = {1,2};
+    math::StaticVectori<2> vector = {1,2};
     int factor = 10;
     decltype(vector) answer = {factor*vector(0), factor*vector(1)};
     ASSERT_EQ(vector*factor, answer);
@@ -20,7 +20,7 @@ TEST(ScalarProduct, VectorScalar)
 
 TEST(ScalarProduct, ScalarArray)
 {
-    math::Arrayi<2,2> matrix = {
+    math::StaticArrayi<2,2> matrix = {
         {1, 2},
         {3, 4}
     };
@@ -34,7 +34,7 @@ TEST(ScalarProduct, ScalarArray)
 
 TEST(ScalarProduct, ArrayScalar)
 {
-    math::Arrayi<2,2> matrix = {
+    math::StaticArrayi<2,2> matrix = {
         {1, 2},
         {3, 4}
     };
@@ -49,9 +49,9 @@ TEST(ScalarProduct, ArrayScalar)
 class ProductFixture: public ::testing::Test
 {
     protected:
-        math::Vectori<3> e1{{1, 0, 0}};
-        math::Vectori<3> e2{{0, 1, 0}};
-        math::Vectori<3> e3{{0, 0, 1}};
+        math::StaticVectori<3> e1{{1, 0, 0}};
+        math::StaticVectori<3> e2{{0, 1, 0}};
+        math::StaticVectori<3> e3{{0, 0, 1}};
 };
 
 TEST_F(ProductFixture, Orthogonal_DotProduct_0)
@@ -99,10 +99,10 @@ TEST_F(ProductFixture, DistributiveDotOnCrossProduct2)
 
 TEST(Multiply, ArrayVector)
 {
-        auto matrix = math::Array<int, 2, 2>(1);
-        auto vector = math::Vector<int, 2>(1);
+        auto matrix = math::StaticArray<int, 2, 2>(1);
+        auto vector = math::StaticVector<int, 2>(1);
         auto result = matrix*vector;
-        math::Vectori<2> correct = {
+        math::StaticVectori<2> correct = {
             matrix(0,0)*vector(0)+matrix(0,1)*vector(1),
             matrix(1,0)*vector(0)+matrix(1,1)*vector(1)
         };
@@ -111,10 +111,10 @@ TEST(Multiply, ArrayVector)
 
 TEST(Multiply, ArrayArray)
 {
-        auto A = math::Array<int, 2, 2>(1);
-        auto B = math::Array<int, 2, 2>(1);
+        auto A = math::StaticArray<int, 2, 2>(1);
+        auto B = math::StaticArray<int, 2, 2>(1);
         auto result = A*B;
-        math::Array<int, 2, 2> answer = {
+        math::StaticArray<int, 2, 2> answer = {
             {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
             {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},
         };
@@ -123,9 +123,9 @@ TEST(Multiply, ArrayArray)
 
 TEST(OuterProduct, VectorVector)
 {
-    math::Vectori<2> vector1 = {1, 2};
-    math::Vectori<2> vector2 = {3, 4};
-    math::Arrayi<2,2> answer = {
+    math::StaticVectori<2> vector1 = {1, 2};
+    math::StaticVectori<2> vector2 = {3, 4};
+    math::StaticArrayi<2,2> answer = {
         {vector1(0)*vector2(0), vector1(0)*vector2(1)},
         {vector1(1)*vector2(0), vector1(1)*vector2(1)}
     };

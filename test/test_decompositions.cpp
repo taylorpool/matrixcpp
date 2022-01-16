@@ -7,14 +7,14 @@
 
 TEST(ForwardSubstitution, Test1)
 {
-    math::Arrayd<2,2> A = {
+    math::StaticArrayd<2,2> A = {
         {1.0, 0.0},
         {2.0, 1.0}
     };
-    math::Arrayd<2> b = {
+    math::StaticArrayd<2> b = {
         1.0, 4.0
     };
-    math::Vectord<2> correct_answer = {
+    math::StaticVectord<2> correct_answer = {
         1.0, 2.0
     };
     auto my_answer = math::forward_substitution_solve(A, b);
@@ -22,33 +22,33 @@ TEST(ForwardSubstitution, Test1)
 
 TEST(BackwardSubstitution, Test1)
 {
-    math::Arrayd<2,2> A = {
+    math::StaticArrayd<2,2> A = {
         {2.0, 1.0},
         {0.0, 1.0}
     };
-    math::Vectord<2> b = {
+    math::StaticVectord<2> b = {
         3.0, 1.0
     };
-    math::Vectord<2> correct_answer = {
+    math::StaticVectord<2> correct_answer = {
         1.0, 1.0
     };
-    math::Vectord<2> my_answer = math::backward_substitution_solve(A, b);
+    math::StaticVectord<2> my_answer = math::backward_substitution_solve(A, b);
 }
 
 TEST(Cholesky, Test1)
 {
-    math::Arrayd<2,2> A = {
+    math::StaticArrayd<2,2> A = {
         {1.0, 0.0},
         {0.0, 4.0}
     };
-    math::Arrayd<2,2> U_correct = {
+    math::StaticArrayd<2,2> U_correct = {
         {sqrt(A(0,0)), 0.0},
         {0.0, sqrt(A(1,1))}
     };
-    math::Vectord<2> b = {
+    math::StaticVectord<2> b = {
         1.0, 4.0
     };
-    math::Vectord<2> x_correct = {
+    math::StaticVectord<2> x_correct = {
         b(0)/A(0,0), b(1)/A(1,1)
     };
     math::CholeskyDecomposition cholesky(A);
@@ -58,13 +58,13 @@ TEST(Cholesky, Test1)
 
 TEST(LUDecomposition, Test1)
 {
-    math::Arrayd<3,3> A = {
+    math::StaticArrayd<3,3> A = {
         {1.0, 1.0, 1.0},
         {1.0, 4.0, 2.0},
         {4.0, 7.0, 8.0}
     };
 
-    math::Vectord<3> b = {
+    math::StaticVectord<3> b = {
         1.0,
         3.0,
         9.0
@@ -87,7 +87,7 @@ TEST(SwapElements, Integers)
 
 TEST(SwapElements, Vector)
 {
-    math::Vectori<2> x = {
+    math::StaticVectori<2> x = {
         1, 2
     };
     math::swap(x(0), x(1));

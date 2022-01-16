@@ -1,34 +1,35 @@
 #pragma once
+#include "base.hpp"
 
-namespace math::Dynamic
+namespace math
 {
 
 template <typename T, int NumDims>
-struct Array
+struct Array<T, false, NumDims>
 {
     private:
         int size_;
-        Array<T, NumDims-1>* data_;
+        Array<T, false, NumDims-1>* data_;
 
     public:
-        Array() {}
+        Array<T, false, NumDims>() {}
 
         template <typename ... OtherDims>
-        Array(int _size, OtherDims... others)
-        : size_(_size), data_(new Array<T, NumDims-1>[size_]) 
+        Array<T, false, NumDims>(int _size, OtherDims... others)
+        : size_(_size), data_(new Array<T, false, NumDims-1>[size_]) 
         {
             for(int index = 0; index < size_; ++index)
             {
-                data_[index] = Array<T, NumDims-1>(others...);
+                data_[index] = Array<T, false, NumDims-1>(others...);
             }
         }
 
-        Array<T, NumDims-1> operator()(int index) const
+        Array<T, false, NumDims-1> operator()(int index) const
         {
             return data_[index];
         }
 
-        Array<T, NumDims-1>& operator()(int index)
+        Array<T, false, NumDims-1>& operator()(int index)
         {
             return data_[index];
         }
@@ -52,16 +53,16 @@ struct Array
 };
 
 template <typename T>
-struct Array<T, 1>
+struct Array<T, false, 1>
 {
     private:
         int size_;
         T* data_;
 
     public:
-        Array() {}
+        Array<T, false, 1>() {}
 
-        Array(int _size)
+        Array<T, false, 1>(int _size)
         : size_(_size), data_(new T[size_]) {}
 
         T operator()(int index) const
@@ -80,20 +81,25 @@ struct Array<T, 1>
         }
 };
 
+template <typename T, int NumDims>
+using DynamicArray = Array<T, false, NumDims>;
+
+template <int NumDims>
+using DynamicArrayi = DynamicArray<int, NumDims>;
+
+template <int NumDims>
+using DynamicArrayf = DynamicArray<int, NumDims>;
+
+template <int NumDims>
+using DynamicArrayd = DynamicArray<double, NumDims>;
+
 template <typename T>
-using Vector = Array<T, 1>;
+using DynamicVector = DynamicArray<T, 1>;
 
-using Vectori = Vector<int>;
-using Vectorf = Vector<float>;
-using Vectord = Vector<double>;
+using DynamicVectori = DynamicVector<int>;
 
-template <int NumDims>
-using Arrayi = Array<int, NumDims>;
+using DynamicVectorf = DynamicVector<float>;
 
-template <int NumDims>
-using Arrayf = Array<int, NumDims>;
-
-template <int NumDims>
-using Arrayd = Array<double, NumDims>;
+using DynamicVectord = DynamicVector<double>;
     
 } // namespace math::dynamic

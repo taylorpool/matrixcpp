@@ -5,9 +5,9 @@
 namespace math
 {
 template <typename T, int N>
-Array<T, N, N> triu(const Array<T, N, N>& matrix)
+Array<T, true, N, N> triu(const Array<T, true, N, N>& matrix)
 {
-    Array<T, N, N> upper_triangular;
+    Array<T, true, N, N> upper_triangular;
     auto zero_element = static_cast<T>(0);
     for(int row = 0; row < N; ++row)
     {
@@ -24,9 +24,9 @@ Array<T, N, N> triu(const Array<T, N, N>& matrix)
 }
 
 template <typename T, int N>
-Array<T, N, N> tril(const Array<T, N, N>& matrix)
+Array<T, true, N, N> tril(const Array<T, true, N, N>& matrix)
 {
-    Array<T, N, N> lower_triangular;
+    Array<T, true, N, N> lower_triangular;
     T zero_element = static_cast<T>(0);
     for(int row = 0; row < N; ++row)
     {
@@ -43,9 +43,9 @@ Array<T, N, N> tril(const Array<T, N, N>& matrix)
 }
 
 template <int Low, int High, typename T, int FirstDim, int ... OtherDims>
-Array<T, High-Low, OtherDims...> slice(const Array<T, FirstDim, OtherDims...>& array)
+Array<T, true, High-Low, OtherDims...> slice(const Array<T, true, FirstDim, OtherDims...>& array)
 {
-    Array<T, High-Low, OtherDims...> sliced;
+    Array<T, true, High-Low, OtherDims...> sliced;
     for(int index = Low; index < High; ++index)
     {
         sliced(index-Low) = array(index);

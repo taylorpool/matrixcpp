@@ -19,9 +19,9 @@ namespace math
     template <typename T, int N>
     struct CholeskyDecomposition
     {
-        Array<T, N, N> cholesky;
+        Array<T, true, N, N> cholesky;
 
-        CholeskyDecomposition(const Array<T, N, N>& A)
+        CholeskyDecomposition(const Array<T, true, N, N>& A)
         : cholesky(triu(A))
         {
             for(int i = 0; i < N; ++i)
@@ -46,11 +46,11 @@ namespace math
     template <typename T, int M, int N>
     struct LUDecomposition
     {
-        Array<T, M, M> L;
-        Array<T, M, N> U;
-        Vectori<N> P;
+        Array<T, true, M, M> L;
+        Array<T, true, M, N> U;
+        Vectori<true, N> P;
 
-        LUDecomposition(const Array<T, M, N>& A)
+        LUDecomposition(const Array<T, true, M, N>& A)
         : U(A), L(Identity<T, M>()), P(ARange<N>())
         {
             for(int k = 0; k < N; ++k)
@@ -90,9 +90,9 @@ namespace math
     };
 
     template <typename T, int N>
-    Vector<T, N> forward_substitution_solve(const Array<T, N, N>& A, const Vector<T, N>& b)
+    Vector<T, true, N> forward_substitution_solve(const Array<T, true, N, N>& A, const Vector<T, true, N>& b)
     {
-        Vector<T, N> x(b);
+        Vector<T, true, N> x(b);
         for(int index = 0; index < N; ++index)
         {
             for(int column = 0; column < index; ++column)
@@ -105,9 +105,9 @@ namespace math
     }
 
     template <typename T, int N>
-    Vector<T, N> backward_substitution_solve(const Array<T, N, N>& A, const Vector<T, N>& b)
+    Vector<T, true, N> backward_substitution_solve(const Array<T, true, N, N>& A, const Vector<T, true, N>& b)
     {
-        Vector<T, N> x(b);
+        Vector<T, true, N> x(b);
         for(int index = N-1; index >= 0; --index)
         {
             for(int column = index+1; column < N; ++column)
@@ -120,19 +120,19 @@ namespace math
     }
 
     template <typename T, int N>
-    Vector<T, N> solve(const CholeskyDecomposition<T, N>& cholesky_decomp, const Vector<T, N>& b)
+    Vector<T, true, N> solve(const CholeskyDecomposition<T, N>& cholesky_decomp, const Vector<T, true, N>& b)
     {
-        Vector<T, N> y = forward_substitution_solve(cholesky_decomp.cholesky, b);
-        Vector<T, N> x = backward_substitution_solve(cholesky_decomp.cholesky, y);
+        Vector<T, true, N> y = forward_substitution_solve(cholesky_decomp.cholesky, b);
+        Vector<T, true, N> x = backward_substitution_solve(cholesky_decomp.cholesky, y);
         return x;
     }
 
     template <typename T, int M, int N>
-    Vector<T, N> solve(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, M>& b)
+    Vector<T, true, N> solve(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, true, M>& b)
     {
-        Vector<T, M> Pb = b(lu_decomp.P);
-        Vector<T, M> y = forward_substitution_solve(lu_decomp.L, Pb);
-        Vector<T, N> x = backward_substitution_solve(lu_decomp.U, y);
+        Vector<T, true, M> Pb = b(lu_decomp.P);
+        Vector<T, true, M> y = forward_substitution_solve(lu_decomp.L, Pb);
+        Vector<T, true, N> x = backward_substitution_solve(lu_decomp.U, y);
         return x;
     }
 }

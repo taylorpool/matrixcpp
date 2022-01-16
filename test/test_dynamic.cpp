@@ -5,10 +5,10 @@ class DynamicVectorFixture: public ::testing::Test
 {
     protected:
         int size = 2;
-        math::Dynamic::Vectori vectori;
-        math::Dynamic::Vectorf vectorf;
-        math::Dynamic::Vectord vectord;
-        math::Dynamic::Vector<bool> vectorb;
+        math::DynamicVectori vectori;
+        math::DynamicVectorf vectorf;
+        math::DynamicVectord vectord;
+        math::DynamicVector<bool> vectorb;
 
         DynamicVectorFixture()
         : vectori(size),
@@ -62,14 +62,14 @@ class DynamicMatrixFixture: public ::testing::Test
 {
     protected:
         int size[2] = {2, 2};
-        math::Dynamic::Array<int, 2> matrix;
+        math::DynamicArray<int, 2> matrix;
         int a = 1;
         int b = 2;
         int c = 3;
         int d = 4;
 
-        math::Dynamic::Arrayd<2> matrixd;
-        math::Dynamic::Arrayf<2> matrixf;
+        math::DynamicArrayd<2> matrixd;
+        math::DynamicArrayf<2> matrixf;
 
         DynamicMatrixFixture()
         : matrix(size[0], size[1]),
@@ -115,11 +115,11 @@ class DynamicTensorFixture: public ::testing::Test
 {
     protected:
         int shape[3] = {2, 2, 2};
-        math::Dynamic::Arrayi<3> tensor;
+        math::DynamicArrayi<3> tensor;
         int a = 99;
 
-        math::Dynamic::Arrayf<3> tensorf;
-        math::Dynamic::Arrayd<3> tensord;
+        math::DynamicArrayf<3> tensorf;
+        math::DynamicArrayd<3> tensord;
 
         DynamicTensorFixture()
         : tensor(shape[0], shape[1], shape[2]),

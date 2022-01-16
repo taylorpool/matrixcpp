@@ -5,9 +5,9 @@
 namespace math
 {
 template <typename T, int FirstDim, int ... OtherDims>
-Array<T, FirstDim, OtherDims...> operator-(const Array<T, FirstDim, OtherDims...>& array)
+Array<T, true, FirstDim, OtherDims...> operator-(const Array<T, true, FirstDim, OtherDims...>& array)
 {
-    Array<T, FirstDim, OtherDims...> negative_array;
+    Array<T, true, FirstDim, OtherDims...> negative_array;
     for(int index = 0; index < FirstDim; ++index)
     {
         negative_array(index) = -array(index);
@@ -16,9 +16,9 @@ Array<T, FirstDim, OtherDims...> operator-(const Array<T, FirstDim, OtherDims...
 }
 
 template <typename T, int FirstDim, int ... OtherDims>
-Array<T, FirstDim, OtherDims...> operator+(const Array<T, FirstDim, OtherDims...>& left, const Array<T, FirstDim, OtherDims...>& right)
+Array<T, true, FirstDim, OtherDims...> operator+(const Array<T, true, FirstDim, OtherDims...>& left, const Array<T, true, FirstDim, OtherDims...>& right)
 {
-    Array<T, FirstDim, OtherDims...> summed;
+    Array<T, true, FirstDim, OtherDims...> summed;
     for(int index = 0; index < FirstDim; ++index)
     {
         summed(index) = left(index) + right(index);
@@ -27,7 +27,7 @@ Array<T, FirstDim, OtherDims...> operator+(const Array<T, FirstDim, OtherDims...
 }
 
 template <typename T, int FirstDim, int ... OtherDims>
-Array<T, FirstDim, OtherDims...> operator-(const Array<T, FirstDim, OtherDims...>& left, const Array<T, FirstDim, OtherDims...>& right)
+Array<T, true, FirstDim, OtherDims...> operator-(const Array<T, true, FirstDim, OtherDims...>& left, const Array<T, true, FirstDim, OtherDims...>& right)
 {
     return left + (-right);
 }
