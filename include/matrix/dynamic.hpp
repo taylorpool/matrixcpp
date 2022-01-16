@@ -88,7 +88,7 @@ template <int NumDims>
 using DynamicArrayi = DynamicArray<int, NumDims>;
 
 template <int NumDims>
-using DynamicArrayf = DynamicArray<int, NumDims>;
+using DynamicArrayf = DynamicArray<float, NumDims>;
 
 template <int NumDims>
 using DynamicArrayd = DynamicArray<double, NumDims>;
