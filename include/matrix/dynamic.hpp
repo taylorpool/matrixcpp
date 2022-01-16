@@ -11,6 +11,8 @@ struct Array
         Array<T, NumDims-1>* data_;
 
     public:
+        Array() {}
+
         template <typename ... OtherDims>
         Array(int _size, OtherDims... others)
         : size_(_size), data_(new Array<T, NumDims-1>[size_]) 
@@ -26,6 +28,11 @@ struct Array
             return data_[index];
         }
 
+        Array<T, NumDims-1>& operator()(int index)
+        {
+            return data_[index];
+        }
+
         template <typename ... OtherIndices>
         auto operator()(int index0, int index1, OtherIndices... others) const
         {
@@ -37,7 +44,6 @@ struct Array
         {
             return data_[index0](index1, others...);
         }
-
 
         int size() const
         {
@@ -79,6 +85,5 @@ using Vector = Array<T, 1>;
 
 using Vectori = Vector<int>;
 using Vectord = Vector<double>;
-
     
 } // namespace math::dynamic

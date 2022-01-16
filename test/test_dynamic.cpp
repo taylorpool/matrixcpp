@@ -97,3 +97,45 @@ TEST_F(DynamicMatrix, SetElementd)
     matrix(1,1) = d;
     ASSERT_EQ(matrix(1,1), d);
 }
+
+class DynamicTensor: public ::testing::Test
+{
+    protected:
+        int shape[3] = {2, 2, 2};
+        math::dynamic::Array<int, 3> tensor;
+        int a = 99;
+
+        DynamicTensor()
+        : tensor(shape[0], shape[1], shape[2]) {}
+};
+
+TEST_F(DynamicTensor, GetSize)
+{
+    ASSERT_EQ(tensor.size(), shape[0]);
+}
+
+TEST_F(DynamicTensor, GetMatrix0Size)
+{
+    ASSERT_EQ(tensor(0).size(), shape[1]);
+}
+
+TEST_F(DynamicTensor, GetMatrix1Size)
+{
+    ASSERT_EQ(tensor(1).size(), shape[1]);
+}
+
+TEST_F(DynamicTensor, GetMatrix2Size)
+{
+    ASSERT_EQ(tensor(2).size(), shape[1]);
+}
+
+TEST_F(DynamicTensor, GetVectorSize)
+{
+    ASSERT_EQ(tensor(0,0).size(), shape[2]);
+}
+
+TEST_F(DynamicTensor, SetElement)
+{
+    tensor(0,0,0) = a;
+    ASSERT_EQ(tensor(0,0,0), a);
+}
