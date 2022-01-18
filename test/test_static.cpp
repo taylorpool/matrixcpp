@@ -21,47 +21,40 @@ TEST(ZeroArray, Vector)
         ASSERT_EQ(vector(1), initial_value);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector2iShape)
+TEST_F(ZeroStaticArrayFixture, Vector2iLength)
 {
-        math::StaticVectori<1> shape = vector2i.shape();
-        ASSERT_EQ(shape(0), 2);
+        int length = vector2i.length();
+        ASSERT_EQ(length, 2);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector3iShape)
+TEST_F(ZeroStaticArrayFixture, Vector3iLength)
 {
-        math::StaticVectori<1> shape = vector3i.shape();
-        ASSERT_EQ(shape(0), 3);
+        int length = vector3i.length();
+        ASSERT_EQ(length, 3);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector2fShape)
+TEST_F(ZeroStaticArrayFixture, Vector2fLength)
 {
-        math::StaticVectori<1> shape = vector2f.shape();
-        ASSERT_EQ(shape(0), 2);
+        int length = vector2f.length();
+        ASSERT_EQ(length, 2);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector3fShape)
+TEST_F(ZeroStaticArrayFixture, Vector3fLength)
 {
-        math::StaticVectori<1> shape = vector3f.shape();
-        ASSERT_EQ(shape(0), 3);
+        int length = vector3f.length();
+        ASSERT_EQ(length, 3);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector2dShape)
+TEST_F(ZeroStaticArrayFixture, Vector2dLength)
 {
-        math::StaticVectori<1> shape = vector2d.shape();
-        ASSERT_EQ(shape(0), 2);
+        int length = vector2d.length();
+        ASSERT_EQ(length, 2);
 }
 
-TEST_F(ZeroStaticArrayFixture, Vector3dShape)
+TEST_F(ZeroStaticArrayFixture, Vector3dLength)
 {
-        math::StaticVectori<1> shape = vector3d.shape();
-        ASSERT_EQ(shape(0), 3);
-}
-
-TEST(ZeroArray, Vector3Shape)
-{
-        math::StaticVectori<3> vector;
-        math::StaticVectori<1> shape = vector.shape();
-        ASSERT_EQ(shape(0), 3);
+        int length = vector3d.length();
+        ASSERT_EQ(length, 3);
 }
 
 TEST(ZeroArray, Matrix2)
@@ -74,10 +67,11 @@ TEST(ZeroArray, Matrix2)
         ASSERT_EQ(matrix(1,1), initial_value);
 }
 
-TEST(ZeroArray, Matrix2Shape)
+TEST(ZeroArray, Matrix2Length)
 {
         math::StaticArrayi<2,2> matrix;
-        math::StaticVectori<2> shape = matrix.shape();
+        int length = matrix.length();
+        ASSERT_EQ(length, 2);
 }
 
 TEST(OneArray, Vector)

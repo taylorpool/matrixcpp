@@ -4,22 +4,22 @@
 class DynamicVectorFixture: public ::testing::Test
 {
     protected:
-        int size = 2;
+        int length = 2;
         math::DynamicVectori vectori;
         math::DynamicVectorf vectorf;
         math::DynamicVectord vectord;
         math::DynamicVector<bool> vectorb;
 
         DynamicVectorFixture()
-        : vectori(size),
-          vectorf(size),
-          vectord(size),
-          vectorb(size) {};
+        : vectori(length),
+          vectorf(length),
+          vectord(length),
+          vectorb(length) {};
 };
 
 TEST_F(DynamicVectorFixture, Size2TypeInt)
 {
-    ASSERT_EQ(vectori.size(), size);
+    ASSERT_EQ(vectori.length(), length);
 }
 
 TEST_F(DynamicVectorFixture, SetElementsTypeInt)
@@ -31,7 +31,7 @@ TEST_F(DynamicVectorFixture, SetElementsTypeInt)
 
 TEST_F(DynamicVectorFixture, Size2TypeDouble)
 {
-    ASSERT_EQ(vectord.size(), size);
+    ASSERT_EQ(vectord.length(), length);
 }
 
 TEST_F(DynamicVectorFixture, SetElementsTypeDouble)
@@ -43,7 +43,7 @@ TEST_F(DynamicVectorFixture, SetElementsTypeDouble)
 
 TEST_F(DynamicVectorFixture, Size2TypeBool)
 {
-    ASSERT_EQ(vectorb.size(), size);
+    ASSERT_EQ(vectorb.length(), length);
 }
 
 TEST_F(DynamicVectorFixture, SetElementsTypeBool)
@@ -61,7 +61,7 @@ TEST_F(DynamicVectorFixture, GetShape)
 class DynamicMatrixFixture: public ::testing::Test
 {
     protected:
-        int size[2] = {2, 2};
+        int length[2] = {2, 2};
         math::DynamicArray<int, 2> matrix;
         int a = 1;
         int b = 2;
@@ -72,19 +72,19 @@ class DynamicMatrixFixture: public ::testing::Test
         math::DynamicArrayf<2> matrixf;
 
         DynamicMatrixFixture()
-        : matrix(size[0], size[1]),
-          matrixd(size[0], size[1]),
-          matrixf(size[0], size[1]) {}
+        : matrix(length[0], length[1]),
+          matrixd(length[0], length[1]),
+          matrixf(length[0], length[1]) {}
 };
 
 TEST_F(DynamicMatrixFixture, GetSize)
 {
-    ASSERT_EQ(matrix.size(), size[0]);
+    ASSERT_EQ(matrix.length(), length[0]);
 }
 
 TEST_F(DynamicMatrixFixture, GetRowSize)
 {
-    ASSERT_EQ(matrix(0).size(), size[1]);
+    ASSERT_EQ(matrix(0).length(), length[1]);
 }
 
 TEST_F(DynamicMatrixFixture, SetElementa)
@@ -129,27 +129,27 @@ class DynamicTensorFixture: public ::testing::Test
 
 TEST_F(DynamicTensorFixture, GetSize)
 {
-    ASSERT_EQ(tensor.size(), shape[0]);
+    ASSERT_EQ(tensor.length(), shape[0]);
 }
 
 TEST_F(DynamicTensorFixture, GetMatrix0Size)
 {
-    ASSERT_EQ(tensor(0).size(), shape[1]);
+    ASSERT_EQ(tensor(0).length(), shape[1]);
 }
 
 TEST_F(DynamicTensorFixture, GetMatrix1Size)
 {
-    ASSERT_EQ(tensor(1).size(), shape[1]);
+    ASSERT_EQ(tensor(1).length(), shape[1]);
 }
 
 TEST_F(DynamicTensorFixture, GetMatrix2Size)
 {
-    ASSERT_EQ(tensor(2).size(), shape[1]);
+    ASSERT_EQ(tensor(2).length(), shape[1]);
 }
 
 TEST_F(DynamicTensorFixture, GetVectorSize)
 {
-    ASSERT_EQ(tensor(0,0).size(), shape[2]);
+    ASSERT_EQ(tensor(0,0).length(), shape[2]);
 }
 
 TEST_F(DynamicTensorFixture, SetElement)

@@ -51,11 +51,6 @@ class Array<T, true, Dim>
             return data_[index];
         }
 
-        Array<int, true, 1> shape() const
-        {
-            return Array<int, true, 1>(Dim);
-        }
-
         template <int Size>
         Array<T, true, Size> operator()(const Array<int, true, Size>& indices) const
         {
@@ -65,6 +60,11 @@ class Array<T, true, Dim>
                 indexed(index) = data_[indices(index)];
             }
             return indexed;
+        }
+
+        int length() const
+        {
+            return Dim;
         }
 };
 
@@ -125,12 +125,6 @@ class Array<T, true, FirstDim, OtherDim...>
             return data_[first](others...);
         }
 
-        Array<int, true, NumDims> shape() const
-        {
-            Array<int, true, NumDims> array_shape;
-            return array_shape;
-        }
-
         template <int Size>
         Array<T, true, Size, OtherDim...> operator()(const Array<int, true, Size>& indices) const
         {
@@ -140,6 +134,11 @@ class Array<T, true, FirstDim, OtherDim...>
                 indexed(index) = data_[indices(index)];
             }
             return indexed;
+        }
+
+        int length() const
+        {
+            return FirstDim;
         }
 };
 

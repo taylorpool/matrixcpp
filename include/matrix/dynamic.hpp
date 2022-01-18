@@ -8,17 +8,17 @@ template <typename T, int NumDims>
 struct Array<T, false, NumDims>
 {
     private:
-        int size_;
+        int length_;
         Array<T, false, NumDims-1>* data_;
 
     public:
         Array<T, false, NumDims>() {}
 
         template <typename ... OtherDims>
-        Array<T, false, NumDims>(int _size, OtherDims... others)
-        : size_(_size), data_(new Array<T, false, NumDims-1>[size_]) 
+        Array<T, false, NumDims>(int _length, OtherDims... others)
+        : length_(_length), data_(new Array<T, false, NumDims-1>[length_]) 
         {
-            for(int index = 0; index < size_; ++index)
+            for(int index = 0; index < length_; ++index)
             {
                 data_[index] = Array<T, false, NumDims-1>(others...);
             }
@@ -46,9 +46,9 @@ struct Array<T, false, NumDims>
             return data_[index0](index1, others...);
         }
 
-        int size() const
+        int length() const
         {
-            return size_;
+            return length_;
         }
 };
 
@@ -56,14 +56,14 @@ template <typename T>
 struct Array<T, false, 1>
 {
     private:
-        int size_;
+        int length_;
         T* data_;
 
     public:
         Array<T, false, 1>() {}
 
-        Array<T, false, 1>(int _size)
-        : size_(_size), data_(new T[size_]) {}
+        Array<T, false, 1>(int _length)
+        : length_(_length), data_(new T[length_]) {}
 
         T operator()(int index) const
         {
@@ -75,9 +75,9 @@ struct Array<T, false, 1>
             return data_[index];
         }
 
-        int size() const
+        int length() const
         {
-            return size_;
+            return length_;
         }
 };
 
