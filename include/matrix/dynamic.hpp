@@ -1,6 +1,8 @@
 #pragma once
 #include "base.hpp"
 
+#include <initializer_list>
+
 namespace math
 {
 
@@ -40,6 +42,11 @@ class Array<T, false, NumDims>
             {
                 delete [] data_;
             }
+        }
+
+        ~Array<T, false, NumDims>()
+        {
+            delete[] data_;
         }
 
         Array<T, false, NumDims-1> operator()(int index) const

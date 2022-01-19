@@ -246,23 +246,4 @@ Vectori<true, N> ARange()
     }
     return range;
 }
-
-template <typename T, int FirstDim, int ... Shape>
-bool operator==(const StaticArray<T, FirstDim, Shape...>& left, const StaticArray<T, FirstDim, Shape...>& right)
-{
-    for(int index = 0; index < FirstDim; ++index)
-    {
-        if(left(index) != right(index))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-template <typename T, int FirstDim, int ... Shape>
-bool operator!=(const StaticArray<T, FirstDim, Shape...>& left, const StaticArray<T, FirstDim, Shape...>& right)
-{
-    return false == (left == right);
-}
 }

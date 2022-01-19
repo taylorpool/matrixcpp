@@ -1,4 +1,5 @@
 #include "matrix/static.hpp"
+#include "matrix/operators.hpp"
 
 #include "gtest/gtest.h"
 
