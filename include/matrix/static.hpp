@@ -13,6 +13,24 @@ class Array<T, true, Dim>
     private:
         T data_[Dim];
 
+        void check_input(int index) const
+        {
+            if(index >= Dim || index < 0)
+            {
+                throw OutOfRange(index, Dim);
+            }
+        }
+
+        int transform_index(int index) const
+        {
+            int transformed_index = index;
+            while(transformed_index < 0)
+            {
+                transformed_index += Dim;
+            }
+            return transformed_index;
+        }
+
     public:
         using InitializerList = std::initializer_list<T>;
 
@@ -43,11 +61,15 @@ class Array<T, true, Dim>
 
         T& operator()(int index)
         {
+            index = transform_index(index);
+            check_input(index);
             return data_[index];
         }
 
         T operator()(int index) const
         {
+            index = transform_index(index);
+            check_input(index);
             return data_[index];
         }
 
@@ -74,6 +96,24 @@ class Array<T, true, FirstDim, OtherDim...>
     private:
         static constexpr int NumDims = 1+sizeof...(OtherDim);
         Array<T, true, OtherDim...> data_[FirstDim];
+
+        void check_input(int index) const
+        {
+            if(index >= FirstDim || index < 0)
+            {
+                throw OutOfRange(index, FirstDim);
+            }
+        }
+
+        int transform_index(int index) const
+        {
+            int transformed_index = index;
+            while(transformed_index < 0)
+            {
+                transformed_index += FirstDim;
+            }
+            return transformed_index;
+        }
 
     public:
         using InitializerList = std::initializer_list<typename Array<T, true, OtherDim...>::InitializerList>;
@@ -105,23 +145,31 @@ class Array<T, true, FirstDim, OtherDim...>
 
         Array<T, true, OtherDim...>& operator()(int index)
         {
+            index = transform_index(index);
+            check_input(index);
             return data_[index];
         }
 
         Array<T, true, OtherDim...> operator()(int index) const
         {
+            index = transform_index(index);
+            check_input(index);
             return data_[index];
         }
 
         template <typename ... OtherIndices>
         auto operator()(int first, OtherIndices... others) const
         {
+            first = transform_index(first);
+            check_input(first);
             return data_[first](others...);
         }
 
         template <typename ... OtherIndices>
         auto& operator()(int first, OtherIndices... others)
         {
+            first = transform_index(first);
+            check_input(first);
             return data_[first](others...);
         }
 
@@ -131,7 +179,9 @@ class Array<T, true, FirstDim, OtherDim...>
             Array<T, true, Size, OtherDim...> indexed;
             for(int index = 0; index < Size; ++index)
             {
-                indexed(index) = data_[indices(index)];
+                int transformed_index = transform_index(indices(index));
+                check_input(transformed_index);
+                indexed(index) = data_[transformed_index];
             }
             return indexed;
         }

@@ -13,14 +13,6 @@ class ZeroStaticArrayFixture: public ::testing::Test
                 math::StaticVectord<3> vector3d;
 };
 
-TEST(ZeroArray, Vector)
-{
-        int initial_value = 0;
-        math::StaticVectori<2> vector(initial_value);
-        ASSERT_EQ(vector(0), initial_value);
-        ASSERT_EQ(vector(1), initial_value);
-}
-
 TEST_F(ZeroStaticArrayFixture, Vector2iLength)
 {
         int length = vector2i.length();
@@ -110,6 +102,28 @@ TEST_F(ZeroMatricies, AccessElement)
         ASSERT_EQ(matrix(0), vector);
 }
 
+TEST_F(ZeroMatricies, AccessVectorElementOutOfRange)
+{
+        ASSERT_THROW(vector(2), math::OutOfRange);
+}
+
+TEST_F(ZeroMatricies, AccessLastElement)
+{
+        int value = 1;
+        vector(1) = value;
+        ASSERT_EQ(vector(-1), value);
+}
+
+TEST_F(ZeroMatricies, AccessMatrixElementOutOfRange)
+{
+        ASSERT_THROW(matrix(0,2), math::OutOfRange);
+}
+
+TEST_F(ZeroMatricies, AccessMatrixRowOutOfRange)
+{
+        ASSERT_THROW(matrix(2), math::OutOfRange);
+}
+
 TEST_F(ZeroMatricies, AccessElement2)
 {
         auto ans = math::StaticVectori<2>(1);
@@ -157,10 +171,20 @@ TEST_F(MultiDimensional, AssignElement)
         ASSERT_EQ(matrix(0,0), 6);
 }
 
+TEST_F(MultiDimensional, AssignElementOutOfRange)
+{
+        ASSERT_THROW(matrix(2,0) = 6, math::OutOfRange);
+}
+
 TEST_F(MultiDimensional, AssignTensorElement)
 {
         tensor(0,0,0) = 0;
         ASSERT_EQ(tensor(0,0,0), 0);
+}
+
+TEST_F(MultiDimensional, AssignTemsorElementOutofRange)
+{
+        ASSERT_THROW(tensor(0,2,0) = 0, math::OutOfRange);
 }
 
 TEST_F(MultiDimensional, GetFirstTensorArray)

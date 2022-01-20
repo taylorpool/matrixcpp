@@ -1,5 +1,7 @@
 #pragma once
 
+#include <exception>
+
 namespace math
 {
 
@@ -26,5 +28,22 @@ using Vectorf = Vector<float, IsStatic, Size>;
 template <bool IsStatic, int Size>
 using Vectord = Vector<double, IsStatic, Size>;
 
+class OutOfRange: public std::exception
+{
+    private:
+        int index_;
+        int size_;
 
+    public:
+        OutOfRange(int index, int size)
+        : index_(index), size_(size) {};
+
+        ~OutOfRange() override {};
+
+        const char* what() const noexcept override 
+        {
+            return "index invalid for size";
+        }
+
+};
 }
