@@ -51,6 +51,14 @@ struct Array<T, false, NumDims>
         {
             return length_;
         }
+
+        void fill(T value)
+        {
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index].fill(value);
+            }
+        }
 };
 
 template <typename T>

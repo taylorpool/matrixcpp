@@ -170,6 +170,35 @@ TEST_F(DynamicMatrixFixture, SetElementd)
     ASSERT_EQ(matrix(1,1), d);
 }
 
+TEST_F(DynamicMatrixFixture, Filla)
+{
+    matrix.fill(a);
+    ASSERT_EQ(matrix(0,0), a);
+    ASSERT_EQ(matrix(0,1), a);
+    ASSERT_EQ(matrix(1,0), a);
+    ASSERT_EQ(matrix(1,1), a);
+}
+
+TEST_F(DynamicMatrixFixture, FillFloat)
+{
+    float value = 3.14f;
+    matrixf.fill(value);
+    ASSERT_EQ(matrixf(0,0), value);
+    ASSERT_EQ(matrixf(0,1), value);
+    ASSERT_EQ(matrixf(1,0), value);
+    ASSERT_EQ(matrixf(1,1), value);
+}
+
+TEST_F(DynamicMatrixFixture, FillDouble)
+{
+    double value = 3.14;
+    matrixd.fill(value);
+    ASSERT_EQ(matrixd(0,0), value);
+    ASSERT_EQ(matrixd(0,1), value);
+    ASSERT_EQ(matrixd(1,0), value);
+    ASSERT_EQ(matrixd(1,1), value);
+}
+
 class DynamicTensorFixture: public ::testing::Test
 {
     protected:
