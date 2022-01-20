@@ -1,6 +1,33 @@
 #include "matrix/dynamic.hpp"
 #include <gtest/gtest.h>
 
+class UninitializedDynamicVectorFixture: public ::testing::Test
+{
+    protected:
+        math::DynamicVectori vectori;
+        math::DynamicVectorf vectorf;
+};
+
+TEST_F(UninitializedDynamicVectorFixture, VectoriLength0)
+{
+    ASSERT_EQ(vectori.length(), 0);
+}
+
+TEST_F(UninitializedDynamicVectorFixture, VectoriOutOfRangeIndex)
+{
+    ASSERT_THROW(vectori(0), math::OutOfRange);
+}
+
+TEST_F(UninitializedDynamicVectorFixture, VectorfLength0)
+{
+    ASSERT_EQ(vectorf.length(), 0);
+}
+
+TEST_F(UninitializedDynamicVectorFixture, VectorfOutOfRangeIndex)
+{
+    ASSERT_THROW(vectorf(0), math::OutOfRange);
+}
+
 class DynamicVectorFixture: public ::testing::Test
 {
     protected:

@@ -60,7 +60,8 @@ struct Array<T, false, 1>
         T* data_;
 
     public:
-        Array<T, false, 1>() {}
+        Array<T, false, 1>()
+        : length_(0) {}
 
         Array<T, false, 1>(int _length)
         : length_(_length), data_(new T[length_]) {}
