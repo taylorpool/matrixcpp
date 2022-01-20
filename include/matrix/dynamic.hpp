@@ -5,6 +5,7 @@ namespace math
 {
 
 template <typename T, int NumDims>
+requires(NumDims > 1)
 struct Array<T, false, NumDims>
 {
     private:
