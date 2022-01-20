@@ -8,6 +8,7 @@ namespace math
 {
 
 template <typename T, int Dim>
+requires(Dim > 0)
 class Array<T, true, Dim>
 {
     private:
@@ -91,6 +92,7 @@ class Array<T, true, Dim>
 };
 
 template <typename T, int FirstDim, int ... OtherDim>
+requires(FirstDim > 0)
 class Array<T, true, FirstDim, OtherDim...>
 {
     private:
