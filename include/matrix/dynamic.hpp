@@ -65,19 +65,37 @@ struct Array<T, false, 1>
         Array<T, false, 1>(int _length)
         : length_(_length), data_(new T[length_]) {}
 
+        void check_input(int index) const
+        {
+            if(index >= length_ || index < 0)
+            {
+                throw OutOfRange(index, length_);
+            }
+        }
+
         T operator()(int index) const
         {
+            check_input(index);
             return data_[index];
         }
 
         T& operator()(int index)
         {
+            check_input(index);
             return data_[index];
         }
 
         int length() const
         {
             return length_;
+        }
+
+        void fill(T value)
+        {
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index] = value;
+            }
         }
 };
 

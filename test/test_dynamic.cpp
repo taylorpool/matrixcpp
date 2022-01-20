@@ -53,9 +53,41 @@ TEST_F(DynamicVectorFixture, SetElementsTypeBool)
     ASSERT_EQ(vectorb(0), first_value);
 }
 
-TEST_F(DynamicVectorFixture, GetShape)
+TEST_F(DynamicVectorFixture, FillBool)
 {
+    bool value = true;
+    vectorb.fill(value);
+    ASSERT_EQ(vectorb(0), value);
+    ASSERT_EQ(vectorb(1), value);
+}
 
+TEST_F(DynamicVectorFixture, FillDouble)
+{
+    double value = 1.0;
+    vectord.fill(value);
+    ASSERT_EQ(vectord(0), value);
+    ASSERT_EQ(vectord(1), value);
+}
+
+TEST_F(DynamicVectorFixture, FillFloat)
+{
+    float value = 1.0f;
+    vectorf.fill(value);
+    ASSERT_EQ(vectorf(0), value);
+    ASSERT_EQ(vectorf(1), value);
+}
+
+TEST_F(DynamicVectorFixture, FillInt)
+{
+    int value = 1;
+    vectori.fill(value);
+    ASSERT_EQ(vectori(0), value);
+    ASSERT_EQ(vectori(1), value);
+}
+
+TEST_F(DynamicVectorFixture, IntIndexOutOfRange)
+{
+    ASSERT_THROW(vectori(length), math::OutOfRange);
 }
 
 class DynamicMatrixFixture: public ::testing::Test
