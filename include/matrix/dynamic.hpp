@@ -13,7 +13,8 @@ class Array<T, false, NumDims>
         Array<T, false, NumDims-1>* data_;
 
     public:
-        Array() {}
+        Array()
+        : length_(0) {}
 
         template <typename ... OtherDims>
         Array(int _length, OtherDims... others)
@@ -21,7 +22,15 @@ class Array<T, false, NumDims>
         {
             for(int index = 0; index < length_; ++index)
             {
-                data_[index] = Array<T, false, NumDims-1>(others...);
+                data_[index].allocate(others...);
+            }
+        }
+
+        ~Array()
+        {
+            if(length_ > 0)
+            {
+                delete [] data_;
             }
         }
 
@@ -59,6 +68,21 @@ class Array<T, false, NumDims>
                 data_[index].fill(value);
             }
         }
+
+        template <typename ... OtherLengths>
+        void allocate(int _length, OtherLengths... others)
+        {
+            if(length_ > 0)
+            {
+                delete [] data_;
+            }
+            data_ = new Array<T, false, NumDims-1>[_length];
+            for(int index = 0; index < _length; ++index)
+            {
+                data_[index].allocate(others...);
+            }
+            length_ = _length;
+        }
 };
 
 template <typename T>
@@ -74,6 +98,16 @@ class Array<T, false, 1>
 
         Array(int _length)
         : length_(_length), data_(new T[length_]) {}
+
+        void allocate(int _length)
+        {
+            if(length_ > 0)
+            {
+                delete [] data_;
+            }
+            data_ = new T[_length];
+            length_ = _length;
+        }
 
         ~Array()
         {
