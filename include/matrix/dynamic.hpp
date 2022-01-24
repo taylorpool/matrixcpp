@@ -6,17 +6,17 @@ namespace math
 
 template <typename T, int NumDims>
 requires(NumDims > 1)
-struct Array<T, false, NumDims>
+class Array<T, false, NumDims>
 {
     private:
         int length_;
         Array<T, false, NumDims-1>* data_;
 
     public:
-        Array<T, false, NumDims>() {}
+        Array() {}
 
         template <typename ... OtherDims>
-        Array<T, false, NumDims>(int _length, OtherDims... others)
+        Array(int _length, OtherDims... others)
         : length_(_length), data_(new Array<T, false, NumDims-1>[length_]) 
         {
             for(int index = 0; index < length_; ++index)
@@ -62,18 +62,26 @@ struct Array<T, false, NumDims>
 };
 
 template <typename T>
-struct Array<T, false, 1>
+class Array<T, false, 1>
 {
     private:
         int length_;
         T* data_;
 
     public:
-        Array<T, false, 1>()
+        Array()
         : length_(0) {}
 
-        Array<T, false, 1>(int _length)
+        Array(int _length)
         : length_(_length), data_(new T[length_]) {}
+
+        ~Array()
+        {
+            if(length_ > 0)
+            {
+                delete [] data_;
+            }
+        }
 
         void check_input(int index) const
         {

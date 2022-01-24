@@ -35,14 +35,16 @@ class Array<T, true, Dim>
     public:
         using InitializerList = std::initializer_list<T>;
 
-        Array<T, true, Dim>() {};
+        Array()
+        {
+        };
 
-        Array<T, true, Dim>(T initial_value)
+        Array(T initial_value)
         {
             fill(initial_value);
         }
 
-        Array<T, true, Dim>(InitializerList values)
+        Array(InitializerList values)
         {
             auto iter = values.begin();
             for(int index = 0; index < values.size(); ++index)
@@ -120,14 +122,14 @@ class Array<T, true, FirstDim, OtherDim...>
     public:
         using InitializerList = std::initializer_list<typename Array<T, true, OtherDim...>::InitializerList>;
 
-        Array<T, true, FirstDim, OtherDim...>() {};
+        Array() {};
 
-        Array<T, true, FirstDim, OtherDim...>(T initial_value)
+        Array(T initial_value)
         {
             fill(initial_value);
         }
 
-        Array<T, true, FirstDim, OtherDim...>(InitializerList initializer_list)
+        Array(InitializerList initializer_list)
         {
             int i = 0;
             for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
