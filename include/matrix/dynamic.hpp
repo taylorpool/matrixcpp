@@ -44,11 +44,6 @@ class Array<T, false, NumDims>
             }
         }
 
-        ~Array<T, false, NumDims>()
-        {
-            delete[] data_;
-        }
-
         Array<T, false, NumDims-1> operator()(int index) const
         {
             check_input(index);
@@ -190,5 +185,23 @@ using DynamicVectori = DynamicVector<int>;
 using DynamicVectorf = DynamicVector<float>;
 
 using DynamicVectord = DynamicVector<double>;
+
+template <typename T>
+DynamicVector<T> empty_like(const DynamicVector<T>& vector)
+{
+    DynamicVector<T> empty_vector(vector.length());
+    return empty_vector;
+}
+
+template <typename T, int NumDims>
+DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims>& array)
+{
+    DynamicArray<T, NumDims> empty_array(array.length());
+    for(int index = 0; index < empty_array.length(); ++index)
+    {
+        empty_array(index) = empty_like(array(index));
+    }
+    return empty_array;
+}
     
 } // namespace math

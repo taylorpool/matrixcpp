@@ -27,8 +27,8 @@ bool operator!=(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStat
 template <typename T, bool IsStatic, int ... Shape>
 Array<T, IsStatic, Shape ...> operator-(const Array<T, IsStatic, Shape ...>& array)
 {
-    Array<T, IsStatic, Shape ...> negative_array;
-    for(int index = 0; index < array.length(); ++index)
+    auto negative_array = empty_like(array);
+    for(int index = 0; index < negative_array.length(); ++index)
     {
         negative_array(index) = -array(index);
     }
@@ -38,7 +38,7 @@ Array<T, IsStatic, Shape ...> operator-(const Array<T, IsStatic, Shape ...>& arr
 template <typename T, bool IsStatic, int ... Shape>
 Array<T, IsStatic, Shape ...> operator+(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
 {
-    Array<T, IsStatic, Shape ...> summed;
+    auto summed = empty_like(left);
     for(int index = 0; index < summed.length(); ++index)
     {
         summed(index) = left(index) + right(index);
@@ -49,7 +49,7 @@ Array<T, IsStatic, Shape ...> operator+(const Array<T, IsStatic, Shape ...>& lef
 template <typename T, bool IsStatic, int ... Shape>
 Array<T, IsStatic, Shape ...> operator-(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
 {
-    Array<T, IsStatic, Shape ...> summed;
+    auto summed = empty_like(left);
     for(int index = 0; index < summed.length(); ++index)
     {
         summed(index) = left(index) - right(index);

@@ -220,6 +220,12 @@ using StaticVectorf = StaticVector<float, Size>;
 template <int Size>
 using StaticVectord = StaticVector<double, Size>;
 
+template <typename T, int ... Shape>
+StaticArray<T, Shape...> empty_like(const StaticArray<T, Shape...>& array)
+{
+    return StaticArray<T, Shape...>();
+}
+
 template <typename T, int N>
 StaticArray<T, N, N> Identity()
 {
