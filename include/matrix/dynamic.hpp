@@ -194,6 +194,7 @@ DynamicVector<T> empty_like(const DynamicVector<T>& vector)
 }
 
 template <typename T, int NumDims>
+requires(NumDims > 1)
 DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims>& array)
 {
     DynamicArray<T, NumDims> empty_array(array.length());
