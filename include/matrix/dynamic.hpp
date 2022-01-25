@@ -12,6 +12,14 @@ class Array<T, false, NumDims>
         int length_;
         Array<T, false, NumDims-1>* data_;
 
+        void check_input(int index) const
+        {
+            if(index >= length_ || index < 0)
+            {
+                throw OutOfRange(index, length_);
+            }
+        }
+
     public:
         Array()
         : length_(0) {}
@@ -36,23 +44,27 @@ class Array<T, false, NumDims>
 
         Array<T, false, NumDims-1> operator()(int index) const
         {
+            check_input(index);
             return data_[index];
         }
 
         Array<T, false, NumDims-1>& operator()(int index)
         {
+            check_input(index);
             return data_[index];
         }
 
         template <typename ... OtherIndices>
         auto operator()(int index0, int index1, OtherIndices... others) const
         {
+            check_input(index0);
             return data_[index0](index1, others...);
         }
 
         template <typename ... OtherIndices>
         auto& operator()(int index0, int index1, OtherIndices... others)
         {
+            check_input(index0);
             return data_[index0](index1, others...);
         }
 
@@ -92,6 +104,14 @@ class Array<T, false, 1>
         int length_;
         T* data_;
 
+        void check_input(int index) const
+        {
+            if(index >= length_ || index < 0)
+            {
+                throw OutOfRange(index, length_);
+            }
+        }
+
     public:
         Array()
         : length_(0) {}
@@ -114,14 +134,6 @@ class Array<T, false, 1>
             if(length_ > 0)
             {
                 delete [] data_;
-            }
-        }
-
-        void check_input(int index) const
-        {
-            if(index >= length_ || index < 0)
-            {
-                throw OutOfRange(index, length_);
             }
         }
 

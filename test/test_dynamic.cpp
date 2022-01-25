@@ -170,6 +170,21 @@ TEST_F(DynamicMatrixFixture, SetElementd)
     ASSERT_EQ(matrix(1,1), d);
 }
 
+TEST_F(DynamicMatrixFixture, RowIndexOutOfRange)
+{
+    ASSERT_THROW(matrix(2), math::OutOfRange);
+}
+
+TEST_F(DynamicMatrixFixture, ElementIndexOutOfRange)
+{
+    ASSERT_THROW(matrix(0,2), math::OutOfRange);
+}
+
+TEST_F(DynamicMatrixFixture, RowIndexOutOfRangeElementOk)
+{
+    ASSERT_THROW(matrix(2,0), math::OutOfRange);
+}
+
 TEST_F(DynamicMatrixFixture, Filla)
 {
     matrix.fill(a);
