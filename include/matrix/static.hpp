@@ -226,6 +226,33 @@ StaticArray<V, Shape...> empty_like(const StaticArray<T, Shape...>& array)
     return StaticArray<V, Shape...>();
 }
 
+template <typename T, int Length>
+bool all_equal(const StaticVector<T, Length>& left, const StaticVector<T, Length>& right)
+{
+    for(int index = 0; index < left.length(); ++index)
+    {
+        if(left(index) != right(index))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+template <typename T, int ... Lengths>
+requires(sizeof...(Lengths) > 1)
+bool all_equal(const StaticArray<T, Lengths ...>& left, const StaticArray<T, Lengths ...>& right)
+{
+    for(int index = 0; index < left.length(); ++index)
+    {
+        if(!all_equal(left(index), right(index)))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 template <int Length>
 bool all(const StaticVector<bool, Length>& vector)
 {
