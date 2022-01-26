@@ -29,12 +29,12 @@ if(${ENABLE_TESTING})
         target_link_libraries(arithmetic_tests PRIVATE arithmetic gtest gtest_main)
 
         add_executable(matrix_tests
-                        test/test_static.cpp
-                        test/test_operators.cpp
-                        test/test_indexing.cpp
-                        test/test_products.cpp
-                        test/test_decompositions.cpp
-                        test/test_dynamic.cpp)
+                        test/test_static.cpp)
+                        # test/test_operators.cpp
+                        # test/test_indexing.cpp
+                        # test/test_products.cpp
+                        # test/test_decompositions.cpp
+                        # test/test_dynamic.cpp)
 
         target_link_libraries(matrix_tests PRIVATE math-matrix gtest gtest_main)
 

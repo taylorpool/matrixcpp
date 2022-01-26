@@ -6,22 +6,31 @@ namespace math
 {
 
 template <typename T, bool IsStatic, int ... Shape>
-bool operator==(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
+Array<bool, IsStatic, Shape ...> operator==(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
 {
-    for(int index = 0; index < left.length(); ++index)
+    Array<bool, IsStatic, Shape ... > result = empty_like<T, bool>(left);
+    for(int index = 0; index < result.length(); ++index)
     {
-        if(left(index) != right(index))
-        {
-            return false;
-        }
+        result(index) = (left(index) == right(index));
     }
-    return true;
+    return result;
+}
+
+template <bool IsStatic, int ... Shape>
+Array<bool, IsStatic, Shape ...> operator!(const Array<bool, IsStatic, Shape ...>& array)
+{
+    Array<bool, IsStatic, Shape ... > result = empty_like(array);
+    for(int index = 0; index < result.length(); ++index)
+    {
+        result(index) = !array(index);
+    }
+    return result;
 }
 
 template <typename T, bool IsStatic, int ... Shape>
-bool operator!=(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
+Array<bool, IsStatic, Shape ...> operator!=(const Array<T, IsStatic, Shape ...>& left, const Array<T, IsStatic, Shape ...>& right)
 {
-    return false == (left == right);
+    return !(left==right);
 }
 
 template <typename T, bool IsStatic, int ... Shape>

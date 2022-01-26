@@ -10,7 +10,53 @@ class StaticOperatorFixture: public ::testing::Test
         math::StaticVectori<3> e1{{1, 0, 0}};
         math::StaticVectori<3> e2{{0, 1, 0}};
         math::StaticVectori<3> e3{{0, 0, 1}};
+        math::StaticArrayi<3,3> matrixi1{{
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        }};
+        math::StaticArrayi<3,3> matrixi2{{
+            {10, 11, 12},
+            {13, 14, 15},
+            {16, 17, 18}
+        }};
+        math::StaticArrayi<3,3> matrixi3{{
+            {19, 20, 21},
+            {22, 23, 24},
+            {25, 26, 27}
+        }};
 };
+
+TEST_F(StaticOperatorFixture, E1EqualsE1)
+{
+    math::Vector<bool,3> result = (e1 == e1);
+}
+
+TEST_F(StaticOperatorFixture, UnaryMinusMatrix2)
+{
+    math::StaticArrayi<3,3> negative_matrixi2;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            negative_matrixi2(row, col) = -matrixi2(row, col);
+        }
+    }
+    ASSERT_EQ(negative_matrixi2, -matrixi2);
+}
+
+TEST_F(StaticOperatorFixture, UnaryMinusMatrix1)
+{
+    math::StaticArrayi<3,3> negative_matrixi1;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            negative_matrixi1(row, col) = -matrixi1(row, col);
+        }
+    }
+    ASSERT_EQ(negative_matrixi1, -matrixi1);
+}
 
 TEST_F(StaticOperatorFixture, UnaryMinusE1)
 {
@@ -20,6 +66,36 @@ TEST_F(StaticOperatorFixture, UnaryMinusE1)
         negative_e1(index) = -e1(index);
     }
     ASSERT_EQ(-e1, negative_e1);
+}
+
+TEST_F(StaticOperatorFixture, BinaryPlusMatrix1Matrix2)
+{
+    math::StaticArrayi<3,3> matrix_sum = matrixi1 + matrixi2;
+    math::StaticArrayi<3,3> correct_sum;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            correct_sum(row,col) = matrixi1(row,col)+matrixi2(row,col);
+        }
+    }
+    ASSERT_EQ(matrix_sum, correct_sum);
+}
+
+TEST_F(StaticOperatorFixture, BinaryPlusMatrix1Matrix2Matrix3)
+{
+    math::StaticArrayi<3,3> matrix_sum = matrixi1 + matrixi2 + matrixi3;
+    math::StaticArrayi<3,3> correct_sum;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            correct_sum(row,col) = matrixi1(row,col)
+                + matrixi2(row,col)
+                + matrixi3(row,col);
+        }
+    }
+    ASSERT_EQ(matrix_sum, correct_sum);
 }
 
 TEST_F(StaticOperatorFixture, BinaryPlusE1E2)
@@ -42,6 +118,36 @@ TEST_F(StaticOperatorFixture, BinaryPlusE1E2E3)
         correct_sum(index) = e1(index) + e2(index) + e3(index);
     }
     ASSERT_EQ(my_sum, correct_sum);
+}
+
+TEST_F(StaticOperatorFixture, BinaryMinusMatrix1Matrix2)
+{
+    math::StaticArrayi<3,3> matrix_diff = matrixi1 - matrixi2;
+    math::StaticArrayi<3,3> correct_diff;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            correct_diff(row,col) = matrixi1(row,col) - matrixi2(row,col);
+        }
+    }
+    ASSERT_EQ(matrix_diff, correct_diff);
+}
+
+TEST_F(StaticOperatorFixture, BinaryMinusMatrix1Matrix2Matrix3)
+{
+    math::StaticArrayi<3,3> matrix_diff = matrixi1 - matrixi2 - matrixi3;
+    math::StaticArrayi<3,3> correct_diff;
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
+        {
+            correct_diff(row,col) = matrixi1(row,col) 
+                - matrixi2(row,col)
+                - matrixi3(row,col);
+        }
+    }
+    ASSERT_EQ(matrix_diff, correct_diff);
 }
 
 TEST_F(StaticOperatorFixture, BinaryMinusE1E2)

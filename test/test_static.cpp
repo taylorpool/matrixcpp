@@ -141,7 +141,7 @@ TEST_F(ZeroStaticArrayFixture, Zeros)
 
 TEST_F(ZeroStaticArrayFixture, AccessElement)
 {
-        ASSERT_EQ(matrix(0), vector);
+        ASSERT_TRUE(math::all(matrix(0) == vector));
 }
 
 TEST_F(ZeroStaticArrayFixture, AccessVectorElementOutOfRange)
@@ -169,7 +169,7 @@ TEST_F(ZeroStaticArrayFixture, AccessMatrixRowOutOfRange)
 TEST_F(ZeroStaticArrayFixture, AccessElement2)
 {
         auto ans = math::StaticVectori<2>(1);
-        ASSERT_NE(matrix(0), ans);
+        ASSERT_TRUE(math::all(matrix(0)!=ans));
 }
 
 class MultiDimensional: public ::testing::Test
@@ -204,7 +204,7 @@ TEST_F(MultiDimensional, CreateArray)
         ASSERT_EQ(matrix(0,1), 2);
         ASSERT_EQ(matrix(1,0), 3);
         ASSERT_EQ(matrix(1,1), 4);
-        ASSERT_EQ(matrix(0), vector);
+        ASSERT_TRUE(math::all(matrix(0)==vector));
 }
 
 TEST_F(MultiDimensional, AssignElement)
@@ -231,20 +231,20 @@ TEST_F(MultiDimensional, AssignTemsorElementOutofRange)
 
 TEST_F(MultiDimensional, GetFirstTensorArray)
 {
-        ASSERT_EQ(tensor(0), matrix);
+        ASSERT_TRUE(math::all(tensor(0)==matrix));
 }
 
 TEST_F(MultiDimensional, GetFirstTensorVector)
 {
-        ASSERT_EQ(tensor(0,0), vector);
+        ASSERT_TRUE(math::all(tensor(0,0)==vector));
 }
 
 TEST_F(MultiDimensional, SetFirstTensorVector)
 {
         math::StaticVectori<2> new_vector = {{100, 101}};
-        ASSERT_NE(tensor(0,0), new_vector);
+        ASSERT_TRUE(math::all(tensor(0,0)!=new_vector));
         tensor(0,0) = new_vector;
-        ASSERT_EQ(tensor(0,0), new_vector);
+        ASSERT_TRUE(math::all(tensor(0,0)==new_vector));
 }
 
 TEST_F(MultiDimensional, MatrixIncrement)
@@ -260,7 +260,7 @@ TEST(Identity, Matrix)
                 {1, 0},
                 {0, 1}
         };
-        ASSERT_EQ(matrix, answer);
+        ASSERT_TRUE(math::all(matrix==answer));
 }
 
 TEST(ARange, Vector)
@@ -269,14 +269,14 @@ TEST(ARange, Vector)
         math::StaticVectori<4> answer = {
                 0, 1, 2, 3
         };
-        ASSERT_EQ(range, answer);
+        ASSERT_TRUE(math::all(range==answer));
 }
 
 TEST_F(MultiDimensional, IndexingVector)
 {
         math::StaticVectori<1> indices = {1};
         math::StaticVectori<1> answer = {vector(indices(0))};
-        ASSERT_EQ(answer, vector(indices));
+        ASSERT_TRUE(math::all(answer==vector(indices)));
 }
 
 TEST_F(MultiDimensional, IndexingMatrix)
@@ -285,5 +285,5 @@ TEST_F(MultiDimensional, IndexingMatrix)
         math::StaticArrayi<1,2> answer = {
                 {3, 4}
         };
-        ASSERT_EQ(answer, matrix(indices));
+        ASSERT_TRUE(math::all(answer==matrix(indices)));
 }

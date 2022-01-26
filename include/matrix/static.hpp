@@ -220,10 +220,36 @@ using StaticVectorf = StaticVector<float, Size>;
 template <int Size>
 using StaticVectord = StaticVector<double, Size>;
 
-template <typename T, int ... Shape>
-StaticArray<T, Shape...> empty_like(const StaticArray<T, Shape...>& array)
+template <typename T, typename V=T, int ... Shape>
+StaticArray<V, Shape...> empty_like(const StaticArray<T, Shape...>& array)
 {
-    return StaticArray<T, Shape...>();
+    return StaticArray<V, Shape...>();
+}
+
+template <int Length>
+bool all(const StaticVector<bool, Length>& vector)
+{
+    for(int index = 0; index < vector.length(); ++index)
+    {
+        if(!vector(index))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+template <int FirstLength, int SecondLength, int ... Shape>
+bool all(const StaticArray<bool, FirstLength, SecondLength, Shape ...>& array)
+{
+    for(int index = 0; index < array.length(); ++index)
+    {
+        if(!all(array(index)))
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 template <typename T, int N>
