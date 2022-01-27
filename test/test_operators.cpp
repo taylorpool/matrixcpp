@@ -221,20 +221,3 @@ TEST_F(DynamicOperatorFixture, BinaryMinus)
     }
     ASSERT_TRUE(math::all_equal(vectori-vectori2, answer));
 }
-
-// TEST(UnaryMinus, Matrix)
-// {
-//     math::StaticArrayi<2,2> matrix = {
-//         {1, 2},
-//         {3, 4}
-//     };
-//     math::StaticArrayi<2,2> negative_matrix;
-//     for(int row = 0; row < 2; ++row)
-//     {
-//         for(int column = 0; column < 2; ++column)
-//         {
-//             negative_matrix(row,column) = -matrix(row,column);
-//         }
-//     }
-//     ASSERT_EQ(-matrix, negative_matrix);
-// }
