@@ -52,8 +52,8 @@ TEST(Cholesky, Test1)
         b(0)/A(0,0), b(1)/A(1,1)
     };
     math::CholeskyDecomposition cholesky(A);
-    ASSERT_EQ(U_correct, cholesky.cholesky);
-    ASSERT_EQ(x_correct, math::solve(cholesky, b));
+    ASSERT_TRUE(math::all_equal(U_correct, cholesky.cholesky));
+    ASSERT_TRUE(math::all_equal(x_correct, math::solve(cholesky, b)));
 }
 
 TEST(LUDecomposition, Test1)
@@ -71,9 +71,9 @@ TEST(LUDecomposition, Test1)
     };
 
     math::LUDecomposition lu(A);
-    ASSERT_EQ(A(lu.P), lu.L*lu.U);
+    ASSERT_TRUE(math::all_equal(A(lu.P), lu.L*lu.U));
     auto solution = math::solve(lu, b);
-    ASSERT_EQ(A*solution, b);
+    ASSERT_TRUE(math::all_equal(A*solution, b));
 }
 
 TEST(SwapElements, Integers)

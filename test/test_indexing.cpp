@@ -24,7 +24,7 @@ TEST_F(IndexingFixture, UpperTriangularA)
 {
     math::StaticArrayi<2,2> B(A);
     B(1,0) = 0;
-    ASSERT_EQ(B, math::triu(A));
+    ASSERT_TRUE(math::all_equal(B, math::triu(A)));
 }
 
 TEST_F(IndexingFixture, UpperTriangularMatrix)
@@ -33,14 +33,14 @@ TEST_F(IndexingFixture, UpperTriangularMatrix)
     upper_matrix(1,0) = 0;
     upper_matrix(2,0) = 0;
     upper_matrix(2,1) = 0;
-    ASSERT_EQ(upper_matrix, math::triu(matrix));
+    ASSERT_TRUE(math::all_equal(upper_matrix, math::triu(matrix)));
 }
 
 TEST_F(IndexingFixture, LowerTriangular)
 {
     math::StaticArrayi<2,2> B(A);
     B(0,1) = 0;
-    ASSERT_EQ(B, math::tril(A));
+    ASSERT_TRUE(math::all_equal(B, math::tril(A)));
 }
 
 TEST_F(IndexingFixture, LowerTriangularMatrix)
@@ -49,7 +49,7 @@ TEST_F(IndexingFixture, LowerTriangularMatrix)
     lower_matrix(0,1) = 0;
     lower_matrix(0,2) = 0;
     lower_matrix(1,2) = 0;
-    ASSERT_EQ(lower_matrix, math::tril(matrix));
+    ASSERT_TRUE(math::all_equal(lower_matrix, math::tril(matrix)));
 }
 TEST_F(IndexingFixture, SliceVector)
 {
@@ -57,7 +57,7 @@ TEST_F(IndexingFixture, SliceVector)
     math::StaticVectori<3> answer = {
         0, 1, 2
     };
-    ASSERT_EQ(vector_slice, answer);
+    ASSERT_TRUE(math::all_equal(vector_slice, answer));
 }
 
 TEST_F(IndexingFixture, SliceMatrix)
@@ -67,5 +67,5 @@ TEST_F(IndexingFixture, SliceMatrix)
         {matrix(0,0), matrix(0,1), matrix(0,2)},
         {matrix(1,0), matrix(1,1), matrix(1,2)}
     };
-    ASSERT_EQ(matrix_slice, answer);
+    ASSERT_TRUE(math::all_equal(matrix_slice, answer));
 }

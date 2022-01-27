@@ -7,7 +7,7 @@ TEST(ScalarProduct, ScalarVector)
     math::StaticVectori<2> vector = {1,2};
     int factor = 10;
     decltype(vector) answer = {factor*vector(0), factor*vector(1)};
-    ASSERT_EQ(factor*vector, answer);
+    ASSERT_TRUE(math::all_equal(factor*vector, answer));
 }
 
 TEST(ScalarProduct, VectorScalar)
@@ -15,7 +15,7 @@ TEST(ScalarProduct, VectorScalar)
     math::StaticVectori<2> vector = {1,2};
     int factor = 10;
     decltype(vector) answer = {factor*vector(0), factor*vector(1)};
-    ASSERT_EQ(vector*factor, answer);
+    ASSERT_TRUE(math::all_equal(vector*factor, answer));
 }
 
 TEST(ScalarProduct, ScalarArray)
@@ -29,7 +29,7 @@ TEST(ScalarProduct, ScalarArray)
         {factor*matrix(0,0), factor*matrix(0,1)},
         {factor*matrix(1,0), factor*matrix(1,1)}
     };
-    ASSERT_EQ(factor*matrix, answer);
+    ASSERT_TRUE(math::all_equal(factor*matrix, answer));
 }
 
 TEST(ScalarProduct, ArrayScalar)
@@ -43,7 +43,7 @@ TEST(ScalarProduct, ArrayScalar)
         {factor*matrix(0,0), factor*matrix(0,1)},
         {factor*matrix(1,0), factor*matrix(1,1)}
     };
-    ASSERT_EQ(matrix*factor, answer);
+    ASSERT_TRUE(math::all_equal(matrix*factor, answer));
 }
 
 class ProductFixture: public ::testing::Test
@@ -68,19 +68,19 @@ TEST_F(ProductFixture, SameUnitVector_DotProduct_1)
 
 TEST_F(ProductFixture, E1CrossE2_E3)
 {
-    ASSERT_EQ(math::cross(e1, e2), e3);
+    ASSERT_TRUE(math::all_equal(math::cross(e1, e2), e3));
 }
 
 TEST_F(ProductFixture, NegE2CrossE1_E3)
 {
-    ASSERT_EQ(math::cross(-e2, e1), e3);
+    ASSERT_TRUE(math::all_equal(math::cross(-e2, e1), e3));
 }
 
 TEST_F(ProductFixture, DistributiveCrossProduct)
 {
     auto left = math::cross(e1, math::cross(e2,e3));
     auto right = math::dot(e1, e3)*e2 - math::dot(e1, e2)*e3;
-    ASSERT_EQ(left, right);
+    ASSERT_TRUE(math::all_equal(left, right));
 }
 
 TEST_F(ProductFixture, DistributiveDotOnCrossProduct1)
@@ -106,7 +106,7 @@ TEST(Multiply, ArrayVector)
             matrix(0,0)*vector(0)+matrix(0,1)*vector(1),
             matrix(1,0)*vector(0)+matrix(1,1)*vector(1)
         };
-        ASSERT_EQ(result, correct);
+        ASSERT_TRUE(math::all_equal(result, correct));
 }
 
 TEST(Multiply, ArrayArray)
@@ -118,7 +118,7 @@ TEST(Multiply, ArrayArray)
             {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
             {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},
         };
-        ASSERT_EQ(result, answer);
+        ASSERT_TRUE(math::all_equal(result, answer));
 }
 
 TEST(OuterProduct, VectorVector)
@@ -129,5 +129,5 @@ TEST(OuterProduct, VectorVector)
         {vector1(0)*vector2(0), vector1(0)*vector2(1)},
         {vector1(1)*vector2(0), vector1(1)*vector2(1)}
     };
-    ASSERT_EQ(math::outer(vector1, vector2), answer);
+    ASSERT_TRUE(math::all_equal(math::outer(vector1, vector2), answer));
 }
