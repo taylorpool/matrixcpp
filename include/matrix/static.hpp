@@ -94,12 +94,13 @@ class Array<T, true, Dim>
 };
 
 template <typename T, int FirstDim, int ... OtherDim>
-requires(FirstDim > 0)
+requires(FirstDim > 0 && sizeof...(OtherDim) > 0)
 class Array<T, true, FirstDim, OtherDim...>
 {
     private:
+        using SubArray = Array<T, true, OtherDim...>;
         static constexpr int NumDims = 1+sizeof...(OtherDim);
-        Array<T, true, OtherDim...> data_[FirstDim];
+        SubArray data_[FirstDim];
 
         void check_input(int index) const
         {
@@ -120,7 +121,7 @@ class Array<T, true, FirstDim, OtherDim...>
         }
 
     public:
-        using InitializerList = std::initializer_list<typename Array<T, true, OtherDim...>::InitializerList>;
+        using InitializerList = std::initializer_list<typename SubArray::InitializerList>;
 
         Array() {};
 
@@ -134,7 +135,7 @@ class Array<T, true, FirstDim, OtherDim...>
             int i = 0;
             for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
             {
-                data_[i] = Array<T, true, OtherDim...>(*iter);
+                data_[i] = SubArray(*iter);
                 ++i;
             }
         }
@@ -147,14 +148,14 @@ class Array<T, true, FirstDim, OtherDim...>
             }
         }
 
-        Array<T, true, OtherDim...>& operator()(int index)
+        SubArray& operator()(int index)
         {
             index = transform_index(index);
             check_input(index);
             return data_[index];
         }
 
-        Array<T, true, OtherDim...> operator()(int index) const
+        SubArray operator()(int index) const
         {
             index = transform_index(index);
             check_input(index);
@@ -162,6 +163,7 @@ class Array<T, true, FirstDim, OtherDim...>
         }
 
         template <typename ... OtherIndices>
+        requires(sizeof...(OtherIndices) > 0)
         auto operator()(int first, OtherIndices... others) const
         {
             first = transform_index(first);
@@ -170,6 +172,7 @@ class Array<T, true, FirstDim, OtherDim...>
         }
 
         template <typename ... OtherIndices>
+        requires(sizeof...(OtherIndices) > 0)
         auto& operator()(int first, OtherIndices... others)
         {
             first = transform_index(first);
