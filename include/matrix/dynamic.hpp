@@ -2,7 +2,6 @@
 #include "base.hpp"
 
 #include <initializer_list>
-#include <iostream>
 
 namespace math
 {
@@ -94,7 +93,6 @@ class Array<T, false, NumDims>
             }
             else if(length_ != array.length())
             {
-                std::cout << length_ << " " << array.length() << std::endl;
                 throw MismatchedLength(length_, array.length());
             }
             for(int index = 0; index < length_; ++index)
