@@ -142,6 +142,15 @@ class Array<T, false, 1>
         Array(int _length)
         : length_(_length), data_(new T[length_]) {}
 
+        Array(const Array& array)
+        : length_(array.length()), data_(new T[length_])
+        {
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index] = array(index);
+            }
+        }
+
         void allocate(int _length)
         {
             if(length_ > 0)
@@ -234,6 +243,19 @@ DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims>& array)
         empty_array(index) = empty_like(array(index));
     }
     return empty_array;
+}
+
+template <typename T>
+bool all_equal(const DynamicVector<T>& left, const DynamicVector<T>& right)
+{
+    for(int index = 0; index < left.length(); ++index)
+    {
+        if(left(index) != right(index))
+        {
+            return false;
+        }
+    }
+    return true;
 }
     
 } // namespace math

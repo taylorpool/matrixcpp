@@ -20,10 +20,10 @@ TEST(ADD, Add10)
     ASSERT_EQ(result, 10);
 }
 
-TEST(ADD, AddDouble)
+TEST(ADD, AddFloat)
 {
-    double values[] = {10.5, -3.0, 2.0};
-    auto result = math::sum(values[0], values[1], values[2]);
+    float values[] = {10.5f, -3.0f, 2.0f};
+    float result = math::sum(values[0], values[1], values[2]);
     ASSERT_FLOAT_EQ(result, values[0]+values[1]+values[2]);
 }
 

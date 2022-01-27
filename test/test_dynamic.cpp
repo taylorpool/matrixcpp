@@ -92,6 +92,14 @@ TEST_F(DynamicVectorFixture, FillElementsInt)
     ASSERT_EQ(vectori(1), b);
 }
 
+TEST_F(DynamicVectorFixture, ArrayiAllEqual)
+{
+    vectori(0) = 1;
+    vectori(1) = 2;
+    math::DynamicVectori new_vectori = vectori;
+    ASSERT_TRUE(math::all_equal(vectori, new_vectori));
+}
+
 TEST_F(DynamicVectorFixture, Size2TypeInt)
 {
     ASSERT_EQ(vectori.length(), length);
