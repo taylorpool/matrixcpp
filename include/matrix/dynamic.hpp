@@ -2,9 +2,28 @@
 #include "base.hpp"
 
 #include <initializer_list>
+#include <iostream>
 
 namespace math
 {
+
+class MismatchedLength: public std::exception
+{
+    private:
+        int left_length_;
+        int right_length_;
+
+    public:
+        MismatchedLength(int left_length, int right_length)
+        : left_length_(left_length), right_length_(right_length) {}
+
+        ~MismatchedLength() override {};
+
+        const char* what() const noexcept override
+        {
+            return "mismatched lengths";
+        }
+};
 
 template <typename T, int NumDims>
 requires(NumDims > 1)
@@ -25,6 +44,14 @@ class Array<T, false, NumDims>
             }
         }
 
+        void check_length_matches(const Array& array) const
+        {
+            if(length_ != array.length())
+            {
+                throw MismatchedLength(length_, array.length());
+            }
+        }
+
     public:
         using InitializerList = std::initializer_list<typename SubArray::InitializerList>;
 
@@ -32,7 +59,7 @@ class Array<T, false, NumDims>
         : length_(0) {}
 
         template <typename ... OtherDims>
-        requires(sizeof...(OtherDims) == NumDims-1)
+        requires(sizeof...(OtherDims) == (NumDims-1))
         Array(int _length, OtherDims... others)
         : length_(_length), data_(new SubArray[length_]) 
         {
@@ -42,11 +69,37 @@ class Array<T, false, NumDims>
             }
         }
 
+        Array(const Array& array)
+        : length_(array.length()), data_(new SubArray[length_])
+        {
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index].fill(array(index));
+            }
+        }
+
         ~Array()
         {
             if(length_ > 0)
             {
                 delete [] data_;
+            }
+        }
+
+        void fill(const Array& array)
+        {
+            if(length_ == 0)
+            {
+                allocate(array.length());
+            }
+            else if(length_ != array.length())
+            {
+                std::cout << length_ << " " << array.length() << std::endl;
+                throw MismatchedLength(length_, array.length());
+            }
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index].fill(array(index));
             }
         }
 
@@ -101,20 +154,25 @@ class Array<T, false, NumDims>
             }
         } 
 
-        template <typename ... OtherLengths>
-        requires(sizeof...(OtherLengths) == NumDims-1)
-        void allocate(int _length, OtherLengths... others)
+        void allocate(int _length)
         {
             if(length_ > 0)
             {
                 delete [] data_;
             }
             data_ = new SubArray[_length];
-            for(int index = 0; index < _length; ++index)
+            length_ = _length;
+        }
+
+        template <typename ... OtherLengths>
+        requires(sizeof...(OtherLengths) == (NumDims-1))
+        void allocate(int _length, OtherLengths... others)
+        {
+            allocate(_length);
+            for(int index = 0; index < length_; ++index)
             {
                 data_[index].allocate(others...);
             }
-            length_ = _length;
         }
 };
 
@@ -133,6 +191,14 @@ class Array<T, false, 1>
             }
         }
 
+        void check_length_matches(const Array& array) const
+        {
+            if(length_ != array.length())
+            {
+                throw MismatchedLength(length_, array.length());
+            }
+        }
+
     public:
         using InitializerList = std::initializer_list<T>;
 
@@ -145,10 +211,7 @@ class Array<T, false, 1>
         Array(const Array& array)
         : length_(array.length()), data_(new T[length_])
         {
-            for(int index = 0; index < length_; ++index)
-            {
-                data_[index] = array(index);
-            }
+            fill(array);
         }
 
         void allocate(int _length)
@@ -203,6 +266,19 @@ class Array<T, false, 1>
                 data_[index] = value;
             }
         }
+
+        void fill(const Array& vector)
+        {
+            if(length_ == 0)
+            {
+                allocate(vector.length());
+            }
+            check_length_matches(vector);
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index] = vector(index);
+            }
+        }
 };
 
 template <typename T, int NumDims>
@@ -248,6 +324,11 @@ DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims>& array)
 template <typename T>
 bool all_equal(const DynamicVector<T>& left, const DynamicVector<T>& right)
 {
+    if(left.length() != right.length())
+    {
+        throw MismatchedLength(left.length(), right.length());
+    }
+
     for(int index = 0; index < left.length(); ++index)
     {
         if(left(index) != right(index))
@@ -255,6 +336,25 @@ bool all_equal(const DynamicVector<T>& left, const DynamicVector<T>& right)
             return false;
         }
     }
+    return true;
+}
+
+template <typename T, int NumDims>
+requires(NumDims > 1)
+bool all_equal(const DynamicArray<T, NumDims>& left, const DynamicArray<T, NumDims>& right)
+{
+    if(left.length()!=right.length())
+    {
+        throw MismatchedLength(left.length(), right.length());
+    }
+
+    for(int index = 0; index < left.length(); ++index)
+    {
+        if(!all_equal(left(index), right(index)))
+        {
+            return false;
+        }
+    } 
     return true;
 }
     

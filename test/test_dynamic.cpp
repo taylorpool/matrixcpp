@@ -238,6 +238,16 @@ TEST_F(DynamicMatrixFixture, FillElementsFloat)
     ASSERT_EQ(matrixf(1,1), h);
 }
 
+TEST_F(DynamicMatrixFixture, MatrixIAllEqual)
+{
+    matrix(0,0) = a;
+    matrix(0,1) = b;
+    matrix(1,0) = c;
+    matrix(1,1) = d;
+    math::DynamicArrayi<2> new_matrixi = matrix;
+    ASSERT_TRUE(math::all_equal(new_matrixi, matrix));
+}
+
 TEST_F(DynamicMatrixFixture, GetSize)
 {
     ASSERT_EQ(matrix.length(), length[0]);
@@ -321,7 +331,7 @@ class DynamicTensorFixture: public ::testing::Test
     protected:
         int shape[3] = {2, 2, 2};
         math::DynamicArrayi<3> tensor;
-        int a = 99;
+        int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 
         DynamicTensorFixture()
         : tensor(shape[0], shape[1], shape[2]) {};
@@ -329,6 +339,7 @@ class DynamicTensorFixture: public ::testing::Test
 
 TEST_F(DynamicTensorFixture, FillElementsInt)
 {
+    int a = 0;
     int b = 1;
     int c = 2;
     int d = 3;
@@ -357,6 +368,20 @@ TEST_F(DynamicTensorFixture, FillElementsInt)
     ASSERT_EQ(tensor(1,1,1), h);
 }
 
+TEST_F(DynamicTensorFixture, AllEqualTensorInt)
+{
+    tensor(0,0,0) = values[0];
+    tensor(0,0,1) = values[1];
+    tensor(0,1,0) = values[2];
+    tensor(0,1,1) = values[3];
+    tensor(1,0,0) = values[4];
+    tensor(1,0,1) = values[5];
+    tensor(1,1,0) = values[6];
+    tensor(1,1,1) = values[7];
+    math::DynamicArrayi<3> new_tensori = tensor;
+    ASSERT_TRUE(math::all_equal(new_tensori, tensor));
+}
+
 TEST_F(DynamicTensorFixture, GetSize)
 {
     ASSERT_EQ(tensor.length(), shape[0]);
@@ -379,6 +404,6 @@ TEST_F(DynamicTensorFixture, GetVectorSize)
 
 TEST_F(DynamicTensorFixture, SetElement)
 {
-    tensor(0,0,0) = a;
-    ASSERT_EQ(tensor(0,0,0), a);
+    tensor(0,0,0) = values[0];
+    ASSERT_EQ(tensor(0,0,0), values[0]);
 }

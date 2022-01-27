@@ -44,6 +44,5 @@ class OutOfRange: public std::exception
         {
             return "index invalid for size";
         }
-
 };
 }
