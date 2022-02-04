@@ -55,7 +55,27 @@ class InitializerListDynamicMatrix: public ::testing::Test
 
 TEST_F(InitializerListDynamicMatrix, CorrectSize)
 {
-    // ASSERT_EQ(matrix.length(), 2);
+    ASSERT_EQ(matrix.length(), 2);
+}
+
+TEST_F(InitializerListDynamicMatrix, Element00)
+{
+    ASSERT_EQ(matrix(0,0), values[0]);
+}
+
+TEST_F(InitializerListDynamicMatrix, Element01)
+{
+    ASSERT_EQ(matrix(0,1), values[1]);
+}
+
+TEST_F(InitializerListDynamicMatrix, Element10)
+{
+    ASSERT_EQ(matrix(1,0), values[2]);
+}
+
+TEST_F(InitializerListDynamicMatrix, Element11)
+{
+    ASSERT_EQ(matrix(1,1), values[3]);
 }
 
 class UninitializedDynamicVectorFixture: public ::testing::Test
