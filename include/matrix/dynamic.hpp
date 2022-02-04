@@ -10,9 +10,12 @@ template <typename T, int NumDims>
 requires(NumDims > 1)
 class Array<T, false, NumDims>
 {
+    public:
+        using SubArray = Array<T, false, NumDims-1>;
+
     private:
         int length_;
-        Array<T, false, NumDims-1>* data_;
+        SubArray* data_;
 
         void check_input(int index) const
         {
@@ -23,12 +26,15 @@ class Array<T, false, NumDims>
         }
 
     public:
+        using InitializerList = std::initializer_list<typename SubArray::InitializerList>;
+
         Array()
         : length_(0) {}
 
         template <typename ... OtherDims>
+        requires(sizeof...(OtherDims) == NumDims-1)
         Array(int _length, OtherDims... others)
-        : length_(_length), data_(new Array<T, false, NumDims-1>[length_]) 
+        : length_(_length), data_(new SubArray[length_]) 
         {
             for(int index = 0; index < length_; ++index)
             {
@@ -44,30 +50,32 @@ class Array<T, false, NumDims>
             }
         }
 
-        Array<T, false, NumDims-1> operator()(int index) const
+        SubArray operator()(int index) const
         {
             check_input(index);
             return data_[index];
         }
 
-        Array<T, false, NumDims-1>& operator()(int index)
+        SubArray& operator()(int index)
         {
             check_input(index);
             return data_[index];
         }
 
         template <typename ... OtherIndices>
-        auto operator()(int index0, int index1, OtherIndices... others) const
+        requires(sizeof...(OtherIndices) > 0)
+        auto operator()(int index, OtherIndices... others) const
         {
-            check_input(index0);
-            return data_[index0](index1, others...);
+            check_input(index);
+            return data_[index](others...);
         }
 
         template <typename ... OtherIndices>
-        auto& operator()(int index0, int index1, OtherIndices... others)
+        requires(sizeof...(OtherIndices) > 0)
+        auto& operator()(int index, OtherIndices... others)
         {
-            check_input(index0);
-            return data_[index0](index1, others...);
+            check_input(index);
+            return data_[index](others...);
         }
 
         int length() const
@@ -83,14 +91,25 @@ class Array<T, false, NumDims>
             }
         }
 
+        void fill(const InitializerList& values)
+        {
+            int index = 0;
+            for(typename SubArray::InitializerList value : values)
+            {
+                data_[index].fill(value);
+                ++index;
+            }
+        } 
+
         template <typename ... OtherLengths>
+        requires(sizeof...(OtherLengths) == NumDims-1)
         void allocate(int _length, OtherLengths... others)
         {
             if(length_ > 0)
             {
                 delete [] data_;
             }
-            data_ = new Array<T, false, NumDims-1>[_length];
+            data_ = new SubArray[_length];
             for(int index = 0; index < _length; ++index)
             {
                 data_[index].allocate(others...);
@@ -115,6 +134,8 @@ class Array<T, false, 1>
         }
 
     public:
+        using InitializerList = std::initializer_list<T>;
+
         Array()
         : length_(0) {}
 
@@ -154,6 +175,16 @@ class Array<T, false, 1>
         int length() const
         {
             return length_;
+        }
+
+        void fill(const InitializerList& values)
+        {
+            int index = 0;
+            for(T value : values)
+            {
+                data_[index] = value;
+                ++index;
+            }
         }
 
         void fill(T value)

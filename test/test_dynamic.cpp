@@ -44,6 +44,54 @@ class DynamicVectorFixture: public ::testing::Test
           vectorb(length) {};
 };
 
+TEST_F(DynamicVectorFixture, FillElementsBool)
+{
+    bool a = false;
+    bool b = true;
+    vectorb.fill({
+        a,
+        b
+    });
+    ASSERT_EQ(vectorb(0), a);
+    ASSERT_EQ(vectorb(1), b);
+}
+
+TEST_F(DynamicVectorFixture, FillElementsDouble)
+{
+    double a = 0.0;
+    double b = 1.0;
+    vectord.fill({
+        a,
+        b
+    });
+    ASSERT_EQ(vectord(0), a);
+    ASSERT_EQ(vectord(1), b);
+}
+
+TEST_F(DynamicVectorFixture, FillElementsFloat)
+{
+    float a = 0.0;
+    float b = 1.0;
+    vectorf.fill({
+        a,
+        b
+    });
+    ASSERT_EQ(vectorf(0), a);
+    ASSERT_EQ(vectorf(1), b);
+}
+
+TEST_F(DynamicVectorFixture, FillElementsInt)
+{
+    int a = 0;
+    int b = 1;
+    vectori.fill({
+        a,
+        b
+    });
+    ASSERT_EQ(vectori(0), a);
+    ASSERT_EQ(vectori(1), b);
+}
+
 TEST_F(DynamicVectorFixture, Size2TypeInt)
 {
     ASSERT_EQ(vectori.length(), length);
@@ -136,6 +184,52 @@ class DynamicMatrixFixture: public ::testing::Test
           matrixf(length[0], length[1]) {}
 };
 
+TEST_F(DynamicMatrixFixture, FillElementsInt)
+{
+    matrix.fill({
+        {a, b},
+        {c, d}
+    });
+    ASSERT_EQ(matrix(0,0), a);
+    ASSERT_EQ(matrix(0,1), b);
+    ASSERT_EQ(matrix(1,0), c);
+    ASSERT_EQ(matrix(1,1), d);
+}
+
+TEST_F(DynamicMatrixFixture, FillElementsDouble)
+{
+    double e = 1.0;
+    double f = 2.0;
+    double g = 3.0;
+    double h = 4.0;
+
+    matrixd.fill({
+        {e, f},
+        {g, h}
+    });
+    ASSERT_EQ(matrixd(0,0), e);
+    ASSERT_EQ(matrixd(0,1), f);
+    ASSERT_EQ(matrixd(1,0), g);
+    ASSERT_EQ(matrixd(1,1), h);
+}
+
+TEST_F(DynamicMatrixFixture, FillElementsFloat)
+{
+    float e = 1.0f;
+    float f = 2.0f;
+    float g = 3.0f;
+    float h = 4.0f;
+
+    matrixf.fill({
+        {e, f},
+        {g, h}
+    });
+    ASSERT_EQ(matrixf(0,0), e);
+    ASSERT_EQ(matrixf(0,1), f);
+    ASSERT_EQ(matrixf(1,0), g);
+    ASSERT_EQ(matrixf(1,1), h);
+}
+
 TEST_F(DynamicMatrixFixture, GetSize)
 {
     ASSERT_EQ(matrix.length(), length[0]);
@@ -224,6 +318,36 @@ class DynamicTensorFixture: public ::testing::Test
         DynamicTensorFixture()
         : tensor(shape[0], shape[1], shape[2]) {};
 };
+
+TEST_F(DynamicTensorFixture, FillElementsInt)
+{
+    int b = 1;
+    int c = 2;
+    int d = 3;
+    int e = 4;
+    int f = 5;
+    int g = 6;
+    int h = 7;
+    tensor.fill({
+        {
+            {a, b},
+            {c, d}
+        },
+        {
+            {e, f},
+            {g, h}
+        }
+    });
+
+    ASSERT_EQ(tensor(0,0,0), a);
+    ASSERT_EQ(tensor(0,0,1), b);
+    ASSERT_EQ(tensor(0,1,0), c);
+    ASSERT_EQ(tensor(0,1,1), d);
+    ASSERT_EQ(tensor(1,0,0), e);
+    ASSERT_EQ(tensor(1,0,1), f);
+    ASSERT_EQ(tensor(1,1,0), g);
+    ASSERT_EQ(tensor(1,1,1), h);
+}
 
 TEST_F(DynamicTensorFixture, GetSize)
 {
