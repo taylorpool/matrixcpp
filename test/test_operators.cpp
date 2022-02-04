@@ -177,10 +177,11 @@ class DynamicOperatorFixture: public ::testing::Test
 {
     protected:
         int length = 3;
-        math::DynamicVectori vectori{(length)};
-        math::DynamicVectori vectori2{(length)};
+        math::DynamicVectori vectori;
+        math::DynamicVectori vectori2;
         
         DynamicOperatorFixture()
+        : vectori(length), vectori2(length)
         {
             vectori(0) = 0;
             vectori(1) = 1;

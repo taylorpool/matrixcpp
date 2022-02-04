@@ -212,6 +212,17 @@ class Array<T, false, 1>
             fill(array);
         }
 
+        Array(const InitializerList& values)
+        : length_(values.size()), data_(new T[length_])
+        {
+            int index = 0;
+            for(T value : values)
+            {
+                data_[index] = value;
+                ++index;
+            }
+        }
+
         void allocate(int _length)
         {
             if(length_ > 0)

@@ -1,12 +1,55 @@
 #include "matrix/dynamic.hpp"
 #include <gtest/gtest.h>
 
+class InitializerListDynamicVector: public ::testing::Test
+{
+    protected:
+        int values[5] = {1, 2, 3, 4, 5};
+        math::DynamicVectori vectori{{
+            values[0],
+            values[1],
+            values[2],
+            values[3],
+            values[4]}};
+};
+
+TEST_F(InitializerListDynamicVector, Size)
+{
+    ASSERT_EQ(vectori.length(), 5);
+}
+
+TEST_F(InitializerListDynamicVector, Value0)
+{
+    ASSERT_EQ(vectori(0), values[0]);
+}
+
+TEST_F(InitializerListDynamicVector, Value1)
+{
+    ASSERT_EQ(vectori(1), values[1]);
+}
+
+TEST_F(InitializerListDynamicVector, Value2)
+{
+    ASSERT_EQ(vectori(2), values[2]);
+}
+
+TEST_F(InitializerListDynamicVector, Value3)
+{
+    ASSERT_EQ(vectori(3), values[3]);
+}
+
+TEST_F(InitializerListDynamicVector, Value4)
+{
+    ASSERT_EQ(vectori(4), values[4]);
+}
+
 class UninitializedDynamicVectorFixture: public ::testing::Test
 {
     protected:
         math::DynamicVectori vectori;
         math::DynamicVectorf vectorf;
 };
+
 
 TEST_F(UninitializedDynamicVectorFixture, VectoriLength0)
 {
