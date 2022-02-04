@@ -77,6 +77,17 @@ class Array<T, false, NumDims>
             }
         }
 
+        Array(const InitializerList& values)
+        : length_(values.size()), data_(new SubArray[length_])
+        {
+            int index = 0;
+            for(typename SubArray::InitializerList value : values)
+            {
+                data_[index].fill(value);
+                ++index;
+            }
+        }
+
         ~Array()
         {
             if(length_ > 0)
@@ -144,6 +155,14 @@ class Array<T, false, NumDims>
 
         void fill(const InitializerList& values)
         {
+            if(length_ == 0)
+            {
+                allocate(values.size());
+            }
+            if(values.size() != length_)
+            {
+                throw MismatchedLength(length_, values.size());
+            }
             int index = 0;
             for(typename SubArray::InitializerList value : values)
             {
@@ -260,6 +279,14 @@ class Array<T, false, 1>
 
         void fill(const InitializerList& values)
         {
+            if(length_ == 0)
+            {
+                allocate(values.size());
+            }
+            if(values.size() != length_)
+            {
+                throw MismatchedLength(length_, values.size());
+            }
             int index = 0;
             for(T value : values)
             {

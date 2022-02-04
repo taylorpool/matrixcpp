@@ -43,6 +43,21 @@ TEST_F(InitializerListDynamicVector, Value4)
     ASSERT_EQ(vectori(4), values[4]);
 }
 
+class InitializerListDynamicMatrix: public ::testing::Test
+{
+    protected:
+        int values[4] = {1, 2, 3, 4};
+        math::DynamicArrayi<2> matrix{{
+            {values[0], values[1]},
+            {values[2], values[3]}
+        }};
+};
+
+TEST_F(InitializerListDynamicMatrix, CorrectSize)
+{
+    // ASSERT_EQ(matrix.length(), 2);
+}
+
 class UninitializedDynamicVectorFixture: public ::testing::Test
 {
     protected:
