@@ -48,7 +48,7 @@ Array<T, IsStatic, Shape...> operator*(Array<T, IsStatic, Shape...> matrix, T va
 }
 
 template <typename T, int M>
-T dot(const Vector<T, true, M>& left, const Vector<T, true, M>& right)
+T dot(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
 {
     T dot_product = static_cast<T>(0);
     for(int index = 0; index < M; ++index)
@@ -59,9 +59,9 @@ T dot(const Vector<T, true, M>& left, const Vector<T, true, M>& right)
 }
 
 template <typename T>
-Vector<T, true, 3> cross(const Vector<T, true, 3>& left, const Vector<T, true, 3>& right)
+StaticVector<T, 3> cross(const StaticVector<T, 3>& left, const StaticVector<T, 3>& right)
 {
-    Vector<T, true, 3> result;
+    StaticVector<T, 3> result;
     result(0) = left(1)*right(2)-left(2)*right(1);
     result(1) = left(2)*right(0)-left(0)*right(2);
     result(2) = left(0)*right(1)-left(1)*right(0);
@@ -69,7 +69,7 @@ Vector<T, true, 3> cross(const Vector<T, true, 3>& left, const Vector<T, true, 3
 }
 
 template <typename T, int M>
-Array<T, true, M, M> outer(const Vector<T, true, M>& left, const Vector<T, true, M>& right)
+Array<T, true, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
 {
     Array<T, true, M, M> result;
     for(int row = 0; row < M; ++row)
@@ -83,9 +83,9 @@ Array<T, true, M, M> outer(const Vector<T, true, M>& left, const Vector<T, true,
 }
 
 template<typename T, int M, int N>
-Vector<T, true, M> operator*(const Array<T, true, M, N>& A, const Vector<T, true, N>& x)
+StaticVector<T, M> operator*(const Array<T, true, M, N>& A, const StaticVector<T, N>& x)
 {
-    Vector<T, true, M> answer;
+    StaticVector<T, M> answer;
     for(int index = 0; index < M; ++index)
     {
         answer(index) = dot(A(index), x);

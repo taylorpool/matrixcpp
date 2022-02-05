@@ -27,18 +27,6 @@ using Arrayf = Array<float, IsStatic, Shape ... >;
 template <bool IsStatic, int ... Shape>
 using Arrayd = Array<double, IsStatic, Shape ... >;
 
-template <typename T, bool IsStatic, int Size>
-using Vector = Array<T, IsStatic, Size>;
-
-template <bool IsStatic, int Size>
-using Vectori = Vector<int, IsStatic, Size>;
-
-template <bool IsStatic, int Size>
-using Vectorf = Vector<float, IsStatic, Size>;
-
-template <bool IsStatic, int Size>
-using Vectord = Vector<double, IsStatic, Size>;
-
 class OutOfRange: public std::exception
 {
     private:

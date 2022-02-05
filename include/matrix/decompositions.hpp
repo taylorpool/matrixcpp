@@ -48,7 +48,7 @@ namespace math
     {
         Array<T, true, M, M> L;
         Array<T, true, M, N> U;
-        Vectori<true, N> P;
+        StaticVectori<N> P;
 
         LUDecomposition(const Array<T, true, M, N>& A)
         : U(A), L(Identity<T, M>()), P(ARange<N>())
@@ -90,9 +90,9 @@ namespace math
     };
 
     template <typename T, int N>
-    Vector<T, true, N> forward_substitution_solve(const Array<T, true, N, N>& A, const Vector<T, true, N>& b)
+    StaticVector<T, N> forward_substitution_solve(const Array<T, true, N, N>& A, const StaticVector<T, N>& b)
     {
-        Vector<T, true, N> x(b);
+        StaticVector<T, N> x(b);
         for(int index = 0; index < N; ++index)
         {
             for(int column = 0; column < index; ++column)
@@ -105,9 +105,9 @@ namespace math
     }
 
     template <typename T, int N>
-    Vector<T, true, N> backward_substitution_solve(const Array<T, true, N, N>& A, const Vector<T, true, N>& b)
+    StaticVector<T, N> backward_substitution_solve(const Array<T, true, N, N>& A, const StaticVector<T, N>& b)
     {
-        Vector<T, true, N> x(b);
+        StaticVector<T, N> x(b);
         for(int index = N-1; index >= 0; --index)
         {
             for(int column = index+1; column < N; ++column)
@@ -120,19 +120,19 @@ namespace math
     }
 
     template <typename T, int N>
-    Vector<T, true, N> solve(const CholeskyDecomposition<T, N>& cholesky_decomp, const Vector<T, true, N>& b)
+    StaticVector<T, N> solve(const CholeskyDecomposition<T, N>& cholesky_decomp, const StaticVector<T, N>& b)
     {
-        Vector<T, true, N> y = forward_substitution_solve(cholesky_decomp.cholesky, b);
-        Vector<T, true, N> x = backward_substitution_solve(cholesky_decomp.cholesky, y);
+        StaticVector<T, N> y = forward_substitution_solve(cholesky_decomp.cholesky, b);
+        StaticVector<T, N> x = backward_substitution_solve(cholesky_decomp.cholesky, y);
         return x;
     }
 
     template <typename T, int M, int N>
-    Vector<T, true, N> solve(const LUDecomposition<T, M, N>& lu_decomp, const Vector<T, true, M>& b)
+    StaticVector<T, N> solve(const LUDecomposition<T, M, N>& lu_decomp, const StaticVector<T, M>& b)
     {
-        Vector<T, true, M> Pb = b(lu_decomp.P);
-        Vector<T, true, M> y = forward_substitution_solve(lu_decomp.L, Pb);
-        Vector<T, true, N> x = backward_substitution_solve(lu_decomp.U, y);
+        StaticVector<T, M> Pb = b(lu_decomp.P);
+        StaticVector<T, M> y = forward_substitution_solve(lu_decomp.L, Pb);
+        StaticVector<T, N> x = backward_substitution_solve(lu_decomp.U, y);
         return x;
     }
 }

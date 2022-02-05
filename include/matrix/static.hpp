@@ -315,9 +315,9 @@ StaticArray<T, N, N> Identity()
 }
 
 template <int N>
-Vectori<true, N> ARange()
+StaticVectori<N> ARange()
 {
-    Vectori<true, N> range;
+    StaticVectori<N> range;
     for(int index = 0; index < N; ++ index)
     {
         range(index) = index;
