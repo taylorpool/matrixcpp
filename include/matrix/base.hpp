@@ -16,7 +16,7 @@ struct is_same<T, T>
     static const bool value = true;
 };
 
-template <typename T, bool IsStatic, int ... Dims> class Array;
+template <typename T, bool IsStatic, int ... Shape> class Array;
 
 template <bool IsStatic, int ... Shape>
 using Arrayi = Array<int, IsStatic, Shape ... >;
