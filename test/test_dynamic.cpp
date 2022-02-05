@@ -485,3 +485,65 @@ TEST_F(DynamicTensorFixture, SetElement)
     tensor(0,0,0) = values[0];
     ASSERT_EQ(tensor(0,0,0), values[0]);
 }
+
+class EmptyLikeDynamicArray: public ::testing::Test
+{
+    protected:
+        math::DynamicVectori vectori{{1, 2, 3, 4, 5}};
+        math::DynamicArrayi<2> matrixi{{
+            {1, 2},
+            {3, 4}
+        }};
+};
+
+TEST_F(EmptyLikeDynamicArray, VectorLength)
+{
+    auto empty_vector = math::empty_like(vectori);
+    ASSERT_EQ(empty_vector.length(), vectori.length());
+}
+
+TEST_F(EmptyLikeDynamicArray, VectorTypeSame)
+{
+    auto empty_vector = math::empty_like(vectori);
+    bool is_same = math::is_same<decltype(empty_vector), decltype(vectori)>::value;
+    ASSERT_TRUE(is_same);
+}
+
+TEST_F(EmptyLikeDynamicArray, VectorTypeNotSame)
+{
+    auto empty_vector = math::empty_like(vectori);
+    bool is_same = math::is_same<decltype(empty_vector), decltype(matrixi)>::value;
+    ASSERT_FALSE(is_same);
+}
+
+TEST_F(EmptyLikeDynamicArray, MatrixLength)
+{
+    auto empty_matrix = math::empty_like(matrixi);
+    ASSERT_EQ(empty_matrix.length(), matrixi.length());
+}
+
+TEST_F(EmptyLikeDynamicArray, MatrixRow0Length)
+{
+    auto empty_matrix = math::empty_like(matrixi);
+    ASSERT_EQ(empty_matrix(0).length(), matrixi(0).length());
+}
+
+TEST_F(EmptyLikeDynamicArray, MatrixRow1Length)
+{
+    auto empty_matrix = math::empty_like(matrixi);
+    ASSERT_EQ(empty_matrix(1).length(), matrixi(1).length());
+}
+
+TEST_F(EmptyLikeDynamicArray, MatrixTypeSame)
+{
+    auto empty_matrix = math::empty_like(matrixi);
+    bool is_same = math::is_same<decltype(empty_matrix), decltype(matrixi)>::value;
+    ASSERT_TRUE(is_same);
+}
+
+TEST_F(EmptyLikeDynamicArray, MatrixTypeNotSame)
+{
+    auto empty_matrix = math::empty_like(matrixi);
+    bool is_same = math::is_same<decltype(empty_matrix), decltype(vectori)>::value;
+    ASSERT_FALSE(is_same);
+}

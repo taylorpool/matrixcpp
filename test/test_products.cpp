@@ -1,49 +1,191 @@
 #include "matrix/products.hpp"
+#include "matrix/dynamic.hpp"
 
 #include "gtest/gtest.h"
 
-TEST(ScalarProduct, ScalarVector)
+class ScalarProductVector: public ::testing::Test
 {
-    math::StaticVectori<2> vector = {1,2};
-    int factor = 10;
-    decltype(vector) answer = {factor*vector(0), factor*vector(1)};
-    ASSERT_TRUE(math::all_equal(factor*vector, answer));
+    protected:
+        int factor = 10;
+        math::DynamicVectori dynamic_vector = {1,2};
+        math::StaticVectori<2> static_vector = {1,2};
+};
+
+TEST_F(ScalarProductVector, DynamicVectorScalar)
+{
+    decltype(dynamic_vector) answer = {
+        factor*dynamic_vector(0),
+        factor*dynamic_vector(1)
+        };
+    ASSERT_TRUE(math::all_equal(dynamic_vector*factor, answer));
 }
 
-TEST(ScalarProduct, VectorScalar)
+TEST_F(ScalarProductVector, ScalarDynamicVector)
 {
-    math::StaticVectori<2> vector = {1,2};
-    int factor = 10;
-    decltype(vector) answer = {factor*vector(0), factor*vector(1)};
-    ASSERT_TRUE(math::all_equal(vector*factor, answer));
+    decltype(dynamic_vector) answer = {
+        factor*dynamic_vector(0),
+        factor*dynamic_vector(1)
+        };
+    ASSERT_TRUE(math::all_equal(factor*dynamic_vector, answer));
 }
 
-TEST(ScalarProduct, ScalarArray)
+TEST_F(ScalarProductVector, ScalarStaticVector)
 {
-    math::StaticArrayi<2,2> matrix = {
-        {1, 2},
-        {3, 4}
-    };
-    int factor = 10;
-    decltype(matrix) answer = {
-        {factor*matrix(0,0), factor*matrix(0,1)},
-        {factor*matrix(1,0), factor*matrix(1,1)}
-    };
-    ASSERT_TRUE(math::all_equal(factor*matrix, answer));
+    decltype(static_vector) answer = {
+        factor*static_vector(0),
+        factor*static_vector(1)
+        };
+    ASSERT_TRUE(math::all_equal(factor*static_vector, answer));
 }
 
-TEST(ScalarProduct, ArrayScalar)
+TEST_F(ScalarProductVector, StaticVectorScalar)
 {
-    math::StaticArrayi<2,2> matrix = {
-        {1, 2},
-        {3, 4}
+    decltype(static_vector) answer = {
+        factor*static_vector(0), factor*static_vector(1)
+        };
+    ASSERT_TRUE(math::all_equal(static_vector*factor, answer));
+}
+
+class ScalarProductMatrix: public ::testing::Test
+{
+    protected:
+        int factor = 10;
+        math::StaticArrayi<2,2> static_matrix = {
+            {1, 2},
+            {3, 4}
+        };
+        math::DynamicArrayi<2> dynamic_matrix = {
+            {1, 2},
+            {3, 4}
+        };
+};
+
+TEST_F(ScalarProductMatrix, ScalarDynamicMatrix)
+{
+    decltype(dynamic_matrix) answer = {
+        {factor*dynamic_matrix(0,0), factor*dynamic_matrix(0,1)},
+        {factor*dynamic_matrix(1,0), factor*dynamic_matrix(1,1)}
     };
-    int factor = 10;
-    decltype(matrix) answer = {
-        {factor*matrix(0,0), factor*matrix(0,1)},
-        {factor*matrix(1,0), factor*matrix(1,1)}
+    decltype(dynamic_matrix) my_answer = factor*dynamic_matrix;
+    ASSERT_TRUE(math::all_equal(my_answer, answer));
+}
+
+TEST_F(ScalarProductMatrix, DynamicMatrixScalar)
+{
+    decltype(dynamic_matrix) answer = {
+        {factor*dynamic_matrix(0,0), factor*dynamic_matrix(0,1)},
+        {factor*dynamic_matrix(1,0), factor*dynamic_matrix(1,1)}
     };
-    ASSERT_TRUE(math::all_equal(matrix*factor, answer));
+    decltype(dynamic_matrix) my_answer = dynamic_matrix*factor;
+    ASSERT_TRUE(math::all_equal(my_answer, answer));
+}
+
+TEST_F(ScalarProductMatrix, ScalarStaticMatrix)
+{
+    decltype(static_matrix) answer = {
+        {factor*static_matrix(0,0), factor*static_matrix(0,1)},
+        {factor*static_matrix(1,0), factor*static_matrix(1,1)}
+    };
+    ASSERT_TRUE(math::all_equal(factor*static_matrix, answer));
+}
+
+TEST_F(ScalarProductMatrix, StaticMatrixScalar)
+{
+    decltype(static_matrix) answer = {
+        {factor*static_matrix(0,0), factor*static_matrix(0,1)},
+        {factor*static_matrix(1,0), factor*static_matrix(1,1)}
+    };
+    ASSERT_TRUE(math::all_equal(static_matrix*factor, answer));
+}
+
+class ScalarProductTensor: public ::testing::Test
+{
+    protected:
+        math::StaticArrayi<2,2,2> static_tensor = {
+            {
+                {1, 2},
+                {3, 4}
+            },
+            {
+                {5, 6},
+                {7, 8}
+            }
+        };
+        math::DynamicArrayi<3> dynamic_tensor = {
+            {
+                {1, 2},
+                {3, 4}
+            },
+            {
+                {5, 6},
+                {7, 8}
+            }
+        };
+        int factor = 10;
+};
+
+TEST_F(ScalarProductTensor, ScalarDynamicTensor)
+{
+    decltype(dynamic_tensor) product = factor*dynamic_tensor;
+    decltype(dynamic_tensor) correct_answer = {
+        {
+            {factor*dynamic_tensor(0,0,0), factor*dynamic_tensor(0,0,1)},
+            {factor*dynamic_tensor(0,1,0), factor*dynamic_tensor(0,1,1)}
+        },
+        {
+            {factor*dynamic_tensor(1,0,0), factor*dynamic_tensor(1,0,1)},
+            {factor*dynamic_tensor(1,1,0), factor*dynamic_tensor(1,1,1)}
+        }
+    };
+    ASSERT_TRUE(math::all_equal(product, correct_answer));
+}
+
+TEST_F(ScalarProductTensor, DynamicTensorScalar)
+{
+    decltype(dynamic_tensor) product = dynamic_tensor*factor;
+    decltype(dynamic_tensor) correct_answer = {
+        {
+            {factor*dynamic_tensor(0,0,0), factor*dynamic_tensor(0,0,1)},
+            {factor*dynamic_tensor(0,1,0), factor*dynamic_tensor(0,1,1)}
+        },
+        {
+            {factor*dynamic_tensor(1,0,0), factor*dynamic_tensor(1,0,1)},
+            {factor*dynamic_tensor(1,1,0), factor*dynamic_tensor(1,1,1)}
+        }
+    };
+    ASSERT_TRUE(math::all_equal(product, correct_answer));
+}
+
+TEST_F(ScalarProductTensor, ScalarStaticTensor)
+{
+    decltype(static_tensor) product = factor*static_tensor;
+    decltype(static_tensor) correct_answer = {
+        {
+            {factor*static_tensor(0,0,0), factor*static_tensor(0,0,1)},
+            {factor*static_tensor(0,1,0), factor*static_tensor(0,1,1)}
+        },
+        {
+            {factor*static_tensor(1,0,0), factor*static_tensor(1,0,1)},
+            {factor*static_tensor(1,1,0), factor*static_tensor(1,1,1)}
+        }
+    };
+    ASSERT_TRUE(math::all_equal(product, correct_answer));
+}
+
+TEST_F(ScalarProductTensor, StaticTensorScalar)
+{
+    decltype(static_tensor) product = static_tensor*factor;
+    decltype(static_tensor) correct_answer = {
+        {
+            {factor*static_tensor(0,0,0), factor*static_tensor(0,0,1)},
+            {factor*static_tensor(0,1,0), factor*static_tensor(0,1,1)}
+        },
+        {
+            {factor*static_tensor(1,0,0), factor*static_tensor(1,0,1)},
+            {factor*static_tensor(1,1,0), factor*static_tensor(1,1,1)}
+        }
+    };
+    ASSERT_TRUE(math::all_equal(product, correct_answer));
 }
 
 class ProductFixture: public ::testing::Test
@@ -56,13 +198,13 @@ class ProductFixture: public ::testing::Test
 
 TEST_F(ProductFixture, Orthogonal_DotProduct_0)
 {
-    auto result = math::dot(e1, e2);
+    int result = math::dot(e1, e2);
     ASSERT_EQ(result, 0);
 }
 
 TEST_F(ProductFixture, SameUnitVector_DotProduct_1)
 {
-    auto result = math::dot(e1, e1);
+    int result = math::dot(e1, e1);
     ASSERT_EQ(result, 1);
 }
 
@@ -78,22 +220,22 @@ TEST_F(ProductFixture, NegE2CrossE1_E3)
 
 TEST_F(ProductFixture, DistributiveCrossProduct)
 {
-    auto left = math::cross(e1, math::cross(e2,e3));
-    auto right = math::dot(e1, e3)*e2 - math::dot(e1, e2)*e3;
+    decltype(e1) left = math::cross(e1, math::cross(e2,e3));
+    decltype(e1) right = math::dot(e1, e3)*e2 - math::dot(e1, e2)*e3;
     ASSERT_TRUE(math::all_equal(left, right));
 }
 
 TEST_F(ProductFixture, DistributiveDotOnCrossProduct1)
 {
-    auto result1 = math::dot(e1, math::cross(e2, e3));
-    auto result2 = math::dot(e3, math::cross(e1, e2));
+    int result1 = math::dot(e1, math::cross(e2, e3));
+    int result2 = math::dot(e3, math::cross(e1, e2));
     ASSERT_EQ(result1, result2);
 }
 
 TEST_F(ProductFixture, DistributiveDotOnCrossProduct2)
 {
-    auto result2 = math::dot(e3, math::cross(e1, e2));
-    auto result3 = math::dot(e2, math::cross(e3, e1));
+    int result2 = math::dot(e3, math::cross(e1, e2));
+    int result3 = math::dot(e2, math::cross(e3, e1));
     ASSERT_EQ(result2, result3);
 }
 
@@ -101,7 +243,7 @@ TEST(Multiply, ArrayVector)
 {
         auto matrix = math::StaticArray<int, 2, 2>(1);
         auto vector = math::StaticVector<int, 2>(1);
-        auto result = matrix*vector;
+        decltype(vector) result = matrix*vector;
         math::StaticVectori<2> correct = {
             matrix(0,0)*vector(0)+matrix(0,1)*vector(1),
             matrix(1,0)*vector(0)+matrix(1,1)*vector(1)
@@ -113,7 +255,7 @@ TEST(Multiply, ArrayArray)
 {
         auto A = math::StaticArray<int, 2, 2>(1);
         auto B = math::StaticArray<int, 2, 2>(1);
-        auto result = A*B;
+        decltype(A) result = A*B;
         math::StaticArray<int, 2, 2> answer = {
             {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
             {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},

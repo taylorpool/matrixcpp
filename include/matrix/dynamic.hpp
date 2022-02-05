@@ -191,6 +191,15 @@ class Array<T, false, NumDims>
                 data_[index].allocate(others...);
             }
         }
+
+        void allocate_like(const Array& array)
+        {
+            allocate(array.length());
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index].allocate_like(array(index));
+            }
+        }
 };
 
 template <typename T>
@@ -250,6 +259,11 @@ class Array<T, false, 1>
             }
             data_ = new T[_length];
             length_ = _length;
+        }
+        
+        void allocate_like(const Array& array)
+        {
+            allocate(array.length());
         }
 
         ~Array()
@@ -349,11 +363,8 @@ template <typename T, int NumDims>
 requires(NumDims > 1)
 DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims>& array)
 {
-    DynamicArray<T, NumDims> empty_array(array.length());
-    for(int index = 0; index < empty_array.length(); ++index)
-    {
-        empty_array(index) = empty_like(array(index));
-    }
+    DynamicArray<T, NumDims> empty_array;
+    empty_array.allocate_like(array);
     return empty_array;
 }
 

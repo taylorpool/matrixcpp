@@ -62,6 +62,14 @@ class Array<T, true, Dim>
             }
         }
 
+        void fill(const Array& array)
+        {
+            for(int index = 0; index < Dim; ++index)
+            {
+                data_[index] = array(index);
+            }
+        }
+
         T& operator()(int index)
         {
             index = transform_index(index);
@@ -145,6 +153,14 @@ class Array<T, true, FirstDim, OtherDim...>
             for(int i = 0; i < FirstDim; ++i)
             {
                 data_[i].fill(value);
+            }
+        }
+
+        void fill(const Array& array)
+        {
+            for(int index = 0; index < FirstDim; ++index)
+            {
+                data_[index].fill(array(index));
             }
         }
 

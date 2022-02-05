@@ -1,15 +1,27 @@
 #pragma once
 
 #include "static.hpp"
+#include "dynamic.hpp"
 #include "operators.hpp"
 
 namespace math
 {
 
-template <typename T, int Size>
-Vector<T, true, Size> operator*(T value, Vector<T, true, Size> vector)
+template <typename T>
+DynamicVector<T> operator*(T value, const DynamicVector<T>& vector)
 {
-    decltype(vector) answer;
+    DynamicVector<T> answer = math::empty_like(vector);
+    for(int index = 0; index < vector.length(); ++index)
+    {
+        answer(index) = value*vector(index);
+    }
+    return answer;
+}
+
+template <typename T, int Size>
+StaticVector<T, Size> operator*(T value, const StaticVector<T, Size>& vector)
+{
+    StaticVector<T, Size> answer;
     for(int index = 0; index < Size; ++index)
     {
         answer(index) = value*vector(index);
@@ -17,19 +29,20 @@ Vector<T, true, Size> operator*(T value, Vector<T, true, Size> vector)
     return answer;
 }
 
-template <typename T, int FirstDim, int SecondDim, int ... OtherDims>
-Array<T, true, FirstDim, SecondDim, OtherDims...> operator*(T value, Array<T, true, FirstDim, SecondDim, OtherDims...> matrix)
+template <typename T, bool IsStatic, int FirstDim, int ... OtherDims>
+requires(sizeof...(OtherDims) > 0 || FirstDim > 1)
+Array<T, IsStatic, FirstDim, OtherDims...> operator*(T value, const Array<T, IsStatic, FirstDim, OtherDims...>& array)
 {
-    decltype(matrix) answer;
-    for(int index = 0; index < FirstDim; ++index)
+    auto answer = math::empty_like(array);
+    for(int index = 0; index < array.length(); ++index)
     {
-        answer(index) = value*matrix(index);
+        answer(index).fill(value*array(index));
     }
     return answer;
 }
 
-template <typename T, int ... Shape>
-Array<T, true, Shape...> operator*(Array<T, true, Shape...> matrix, T value)
+template <typename T, bool IsStatic, int ... Shape>
+Array<T, IsStatic, Shape...> operator*(Array<T, IsStatic, Shape...> matrix, T value)
 {
     return value*matrix;
 }
