@@ -43,13 +43,6 @@ class Array<T, false, NumDims>
             }
         }
 
-        void check_length_matches(const Array& array) const
-        {
-            if(length_ != array.length())
-            {
-                throw MismatchedLength(length_, array.length());
-            }
-        }
 
     public:
         using InitializerList = std::initializer_list<typename SubArray::InitializerList>;

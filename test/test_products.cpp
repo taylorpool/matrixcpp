@@ -188,6 +188,43 @@ TEST_F(ScalarProductTensor, StaticTensorScalar)
     ASSERT_TRUE(math::all_equal(product, correct_answer));
 }
 
+class DotProductFixture: public ::testing::Test
+{
+    protected:
+        math::StaticVectori<3> e1_static = {1, 0, 0};
+        math::StaticVectori<3> e2_static = {0, 1, 0};
+        math::StaticVectori<3> e3_static = {0, 0, 1};
+        math::DynamicVectori e1_dynamic = {1, 0, 0};
+        math::DynamicVectori e2_dynamic = {0, 1, 0};
+        math::DynamicVectori e3_dynamic = {0, 0, 1};
+};
+
+TEST_F(DotProductFixture, StaticE1E2_0)
+{
+    ASSERT_EQ(math::dot(e1_static, e2_static), 0);
+}
+
+TEST_F(DotProductFixture, StaticE1E3_0)
+{
+    ASSERT_EQ(math::dot(e1_static, e3_static), 0);
+}
+
+TEST_F(DotProductFixture, DynamicE1E2_0)
+{
+    ASSERT_EQ(math::dot(e1_dynamic, e2_dynamic), 0);
+}
+
+TEST_F(DotProductFixture, DynamicE1E3_0)
+{
+    ASSERT_EQ(math::dot(e1_dynamic, e3_dynamic), 0);
+}
+
+TEST_F(DotProductFixture, DynamicE1_WrongLength_MisMatchedLength)
+{
+    math::DynamicVector<int> vector = {0,1};
+    ASSERT_THROW(math::dot(e1_dynamic, vector), math::MismatchedLength);
+}
+
 class ProductFixture: public ::testing::Test
 {
     protected:

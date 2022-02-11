@@ -47,6 +47,21 @@ Array<T, IsStatic, Shape...> operator*(Array<T, IsStatic, Shape...> matrix, T va
     return value*matrix;
 }
 
+template <typename T>
+T dot(const DynamicVector<T>& left, const DynamicVector<T>& right)
+{
+    if(left.length() != right.length())
+    {
+        throw MismatchedLength(left.length(), right.length());
+    }
+    T dot_product = static_cast<T>(0);
+    for(int index = 0; index < left.length(); ++index)
+    {
+        dot_product += left(index)*right(index);
+    }
+    return dot_product;
+}
+
 template <typename T, int M>
 T dot(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
 {
