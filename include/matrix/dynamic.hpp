@@ -200,6 +200,11 @@ class Array<T, false, NumDims>
                 data_[index].allocate_like(array(index));
             }
         }
+
+        void operator=(const Array& array)
+        {
+            fill(array);
+        }
 };
 
 template <typename T>
@@ -318,6 +323,19 @@ class Array<T, false, 1>
         }
 
         void fill(const Array& vector)
+        {
+            if(length_ == 0)
+            {
+                allocate(vector.length());
+            }
+            check_length_matches(vector);
+            for(int index = 0; index < length_; ++index)
+            {
+                data_[index] = vector(index);
+            }
+        }
+
+        void operator=(const Array& vector)
         {
             if(length_ == 0)
             {

@@ -54,6 +54,14 @@ class Array<T, true, Dim>
             }
         }
 
+        Array(const Array& array)
+        {
+            for(int index = 0; index < array.length(); ++index)
+            {
+                data_[index] = array(index);
+            }
+        }
+
         void fill(T value)
         {
             for(int i = 0; i < Dim; ++i)
@@ -93,6 +101,14 @@ class Array<T, true, Dim>
                 indexed(index) = data_[indices(index)];
             }
             return indexed;
+        }
+
+        void operator=(const Array& array)
+        {
+            for(int index = 0; index < array.length(); ++index)
+            {
+                data_[index] = array(index);
+            }
         }
 
         int length() const
@@ -145,6 +161,14 @@ class Array<T, true, FirstDim, OtherDim...>
             {
                 data_[i] = SubArray(*iter);
                 ++i;
+            }
+        }
+
+        Array(const Array& array)
+        {
+            for(int index = 0; index < array.length(); ++index)
+            {
+                data_[index] = array(index);
             }
         }
 
@@ -207,6 +231,14 @@ class Array<T, true, FirstDim, OtherDim...>
                 indexed(index) = data_[transformed_index];
             }
             return indexed;
+        }
+
+        void operator=(const Array& array)
+        {
+            for(int index = 0; index < array.length(); ++index)
+            {
+                data_[index] = array(index);
+            }
         }
 
         int length() const

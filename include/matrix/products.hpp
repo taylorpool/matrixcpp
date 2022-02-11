@@ -36,7 +36,7 @@ Array<T, IsStatic, FirstDim, OtherDims...> operator*(T value, const Array<T, IsS
     auto answer = math::empty_like(array);
     for(int index = 0; index < array.length(); ++index)
     {
-        answer(index).fill(value*array(index));
+        answer(index) = value*array(index);
     }
     return answer;
 }
