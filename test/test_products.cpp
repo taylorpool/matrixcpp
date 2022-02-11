@@ -209,6 +209,21 @@ TEST_F(DotProductFixture, StaticE1E3_0)
     ASSERT_EQ(math::dot(e1_static, e3_static), 0);
 }
 
+TEST_F(DotProductFixture, StaticE1E1_1)
+{
+    ASSERT_EQ(math::dot(e1_static, e1_static), 1);
+}
+
+TEST_F(DotProductFixture, StaticE2E2_1)
+{
+    ASSERT_EQ(math::dot(e2_static, e2_static), 1);
+}
+
+TEST_F(DotProductFixture, StaticE3E3_1)
+{
+    ASSERT_EQ(math::dot(e3_static, e3_static), 1);
+}
+
 TEST_F(DotProductFixture, DynamicE1E2_0)
 {
     ASSERT_EQ(math::dot(e1_dynamic, e2_dynamic), 0);
@@ -225,6 +240,21 @@ TEST_F(DotProductFixture, DynamicE1_WrongLength_MisMatchedLength)
     ASSERT_THROW(math::dot(e1_dynamic, vector), math::MismatchedLength);
 }
 
+TEST_F(DotProductFixture, DynamicE1E1_1)
+{
+    ASSERT_EQ(math::dot(e1_dynamic, e1_dynamic), 1);
+}
+
+TEST_F(DotProductFixture, DynamicE2E2_1)
+{
+    ASSERT_EQ(math::dot(e2_dynamic, e2_dynamic), 1);
+}
+
+TEST_F(DotProductFixture, DynamicE3E3_1)
+{
+    ASSERT_EQ(math::dot(e3_dynamic, e3_dynamic), 1);
+}
+
 class ProductFixture: public ::testing::Test
 {
     protected:
@@ -232,18 +262,6 @@ class ProductFixture: public ::testing::Test
         math::StaticVectori<3> e2{{0, 1, 0}};
         math::StaticVectori<3> e3{{0, 0, 1}};
 };
-
-TEST_F(ProductFixture, Orthogonal_DotProduct_0)
-{
-    int result = math::dot(e1, e2);
-    ASSERT_EQ(result, 0);
-}
-
-TEST_F(ProductFixture, SameUnitVector_DotProduct_1)
-{
-    int result = math::dot(e1, e1);
-    ASSERT_EQ(result, 1);
-}
 
 TEST_F(ProductFixture, E1CrossE2_E3)
 {
