@@ -179,16 +179,16 @@ class MultiDimensional: public ::testing::Test
                         {1, 2},
                         {3, 4}
                 }};
-                math::StaticArrayi<2, 2, 2> tensor{{
-                        {
-                                {1, 2},
-                                {3, 4}
-                        },
-                        {
-                                {5, 6},
-                                {7, 8}
-                        }
-                }};
+                // math::StaticArrayi<2, 2, 2> tensor{{
+                //         {
+                //                 {1, 2},
+                //                 {3, 4}
+                //         },
+                //         {
+                //                 {5, 6},
+                //                 {7, 8}
+                //         }
+                // }};
 };
 
 TEST_F(MultiDimensional, CreateVector)
@@ -197,92 +197,92 @@ TEST_F(MultiDimensional, CreateVector)
         ASSERT_EQ(vector(1), 2);
 }
 
-TEST_F(MultiDimensional, CreateArray)
-{
-        ASSERT_EQ(matrix(0,0), 1);
-        ASSERT_EQ(matrix(0,1), 2);
-        ASSERT_EQ(matrix(1,0), 3);
-        ASSERT_EQ(matrix(1,1), 4);
-        ASSERT_TRUE(math::all_equal(matrix(0), vector));
-}
+// TEST_F(MultiDimensional, CreateArray)
+// {
+//         ASSERT_EQ(matrix(0,0), 1);
+//         ASSERT_EQ(matrix(0,1), 2);
+//         ASSERT_EQ(matrix(1,0), 3);
+//         ASSERT_EQ(matrix(1,1), 4);
+//         ASSERT_TRUE(math::all_equal(matrix(0), vector));
+// }
 
-TEST_F(MultiDimensional, AssignElement)
-{
-        matrix(0,0) = 6;
-        ASSERT_EQ(matrix(0,0), 6);
-}
+// TEST_F(MultiDimensional, AssignElement)
+// {
+//         matrix(0,0) = 6;
+//         ASSERT_EQ(matrix(0,0), 6);
+// }
 
-TEST_F(MultiDimensional, AssignElementOutOfRange)
-{
-        ASSERT_THROW(matrix(2,0) = 6, math::OutOfRange);
-}
+// TEST_F(MultiDimensional, AssignElementOutOfRange)
+// {
+//         ASSERT_THROW(matrix(2,0) = 6, math::OutOfRange);
+// }
 
-TEST_F(MultiDimensional, AssignTensorElement)
-{
-        tensor(0,0,0) = 0;
-        ASSERT_EQ(tensor(0,0,0), 0);
-}
+// TEST_F(MultiDimensional, AssignTensorElement)
+// {
+//         tensor(0,0,0) = 0;
+//         ASSERT_EQ(tensor(0,0,0), 0);
+// }
 
-TEST_F(MultiDimensional, AssignTemsorElementOutofRange)
-{
-        ASSERT_THROW(tensor(0,2,0) = 0, math::OutOfRange);
-}
+// TEST_F(MultiDimensional, AssignTemsorElementOutofRange)
+// {
+//         ASSERT_THROW(tensor(0,2,0) = 0, math::OutOfRange);
+// }
 
-TEST_F(MultiDimensional, GetFirstTensorArray)
-{
-        ASSERT_TRUE(math::all_equal(tensor(0), matrix));
-}
+// TEST_F(MultiDimensional, GetFirstTensorArray)
+// {
+//         ASSERT_TRUE(math::all_equal(tensor(0), matrix));
+// }
 
-TEST_F(MultiDimensional, GetFirstTensorVector)
-{
-        ASSERT_TRUE(math::all_equal(tensor(0,0), vector));
-}
+// TEST_F(MultiDimensional, GetFirstTensorVector)
+// {
+//         ASSERT_TRUE(math::all_equal(tensor(0,0), vector));
+// }
 
-TEST_F(MultiDimensional, SetFirstTensorVector)
-{
-        math::StaticVectori<2> new_vector = {{100, 101}};
-        ASSERT_FALSE(math::all_equal(tensor(0,0), new_vector));
-        tensor(0,0) = new_vector;
-        ASSERT_TRUE(math::all_equal(tensor(0,0), new_vector));
-}
+// TEST_F(MultiDimensional, SetFirstTensorVector)
+// {
+//         math::StaticVectori<2> new_vector = {{100, 101}};
+//         ASSERT_FALSE(math::all_equal(tensor(0,0), new_vector));
+//         tensor(0,0) = new_vector;
+//         ASSERT_TRUE(math::all_equal(tensor(0,0), new_vector));
+// }
 
-TEST_F(MultiDimensional, MatrixIncrement)
-{
-        matrix(0,0) += 1;
-        ASSERT_EQ(matrix(0,0), 2);
-}
+// TEST_F(MultiDimensional, MatrixIncrement)
+// {
+//         matrix(0,0) += 1;
+//         ASSERT_EQ(matrix(0,0), 2);
+// }
 
-TEST(Identity, Matrix)
-{
-        auto matrix = math::Identity<int, 2>();
-        decltype(matrix) answer = {
-                {1, 0},
-                {0, 1}
-        };
-        ASSERT_TRUE(math::all_equal(matrix, answer));
-}
+// TEST(Identity, Matrix)
+// {
+//         auto matrix = math::Identity<int, 2>();
+//         decltype(matrix) answer = {
+//                 {1, 0},
+//                 {0, 1}
+//         };
+//         ASSERT_TRUE(math::all_equal(matrix, answer));
+// }
 
-TEST(ARange, Vector)
-{
-        auto range = math::ARange<4>();
-        math::StaticVectori<4> answer = {
-                0, 1, 2, 3
-        };
-        ASSERT_TRUE(math::all_equal(range, answer));
-}
+// TEST(ARange, Vector)
+// {
+//         auto range = math::ARange<4>();
+//         math::StaticVectori<4> answer = {
+//                 0, 1, 2, 3
+//         };
+//         ASSERT_TRUE(math::all_equal(range, answer));
+// }
 
-TEST_F(MultiDimensional, IndexingVector)
-{
-        math::StaticVectori<1> indices = {1};
-        math::StaticVectori<1> answer = {vector(indices(0))};
-        ASSERT_TRUE(math::all_equal(answer, vector(indices)));
-}
+// TEST_F(MultiDimensional, IndexingVector)
+// {
+//         math::StaticVectori<1> indices = {1};
+//         math::StaticVectori<1> answer = {vector(indices(0))};
+//         ASSERT_TRUE(math::all_equal(answer, vector(indices)));
+// }
 
-TEST_F(MultiDimensional, IndexingMatrix)
-{
-        math::StaticVectori<1> indices = {1};
-        math::StaticArrayi<1,2> answer = {
-                {3, 4}
-        };
-        ASSERT_TRUE(math::all_equal(answer, matrix(indices)));
-}
+// TEST_F(MultiDimensional, IndexingMatrix)
+// {
+//         math::StaticVectori<1> indices = {1};
+//         math::StaticArrayi<1,2> answer = {
+//                 {3, 4}
+//         };
+//         ASSERT_TRUE(math::all_equal(answer, matrix(indices)));
+// }
