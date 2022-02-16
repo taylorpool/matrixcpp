@@ -83,6 +83,24 @@ StaticVector<T, 3> cross(const StaticVector<T, 3>& left, const StaticVector<T, 3
     return result;
 }
 
+template <typename T>
+DynamicVector<T> cross(const DynamicVector<T>& left, const DynamicVector<T>& right)
+{
+    if(left.length() != 3)
+    {
+        throw MismatchedLength(left.length(), 3);
+    }
+    else if(right.length() != 3)
+    {
+        throw MismatchedLength(right.length(), 3);
+    }
+    DynamicVector<T> result = empty_like(left);
+    result(0) = left(1)*right(2)-left(2)*right(1);
+    result(1) = left(2)*right(0)-left(0)*right(2);
+    result(2) = left(0)*right(1)-left(1)*right(0);
+    return result;
+}
+
 template <typename T, int M>
 Array<T, true, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
 {
@@ -98,7 +116,7 @@ Array<T, true, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T,
 }
 
 template<typename T, int M, int N>
-StaticVector<T, M> operator*(const Array<T, true, M, N>& A, const StaticVector<T, N>& x)
+StaticVector<T, M> operator*(const StaticArray<T, M, N>& A, const StaticVector<T, N>& x)
 {
     StaticVector<T, M> answer;
     for(int index = 0; index < M; ++index)
@@ -106,6 +124,42 @@ StaticVector<T, M> operator*(const Array<T, true, M, N>& A, const StaticVector<T
         answer(index) = dot(A(index), x);
     }
     return answer;
+}
+
+template <typename T>
+DynamicVector<T> operator*(const DynamicMatrix<T>& A, const DynamicVector<T>& x)
+{
+    DynamicVector<T> answer(A.length());
+    for(int index = 0; index < answer.length(); ++index)
+    {
+        answer(index) = dot(A(index), x);
+    }
+    return answer;
+}
+
+template <typename T>
+DynamicMatrix<T> operator*(const DynamicMatrix<T>& left, const DynamicMatrix<T>& right)
+{
+    int m = left.length();
+    int n = right.length();
+    if(left(0).length() != n)
+    {
+        throw MismatchedLength(left(0).length(), n);
+    }
+    int p = right(0).length();
+    DynamicMatrix<T> result(m,p);
+    for(int row = 0; row < m; ++row)
+    {
+        for(int column = 0; column < p; ++column)
+        {
+            result(row,column) = static_cast<T>(0);
+            for(int index = 0; index < n; ++index)
+            {
+                result(row,column) += left(row,index)*right(index,column);
+            }
+        }
+    }
+    return result;
 }
 
 template <typename T, int M, int N, int P>

@@ -364,6 +364,15 @@ using DynamicVectorf = DynamicVector<float>;
 using DynamicVectord = DynamicVector<double>;
 
 template <typename T>
+using DynamicMatrix = DynamicArray<T, 2>;
+
+using DynamicMatrixi = DynamicMatrix<int>;
+
+using DynamicMatrixf = DynamicMatrix<float>;
+
+using DynamicMatrixd = DynamicMatrix<double>;
+
+template <typename T>
 DynamicVector<T> empty_like(const DynamicVector<T>& vector)
 {
     DynamicVector<T> empty_vector(vector.length());

@@ -255,55 +255,171 @@ TEST_F(DotProductFixture, DynamicE3E3_1)
     ASSERT_EQ(math::dot(e3_dynamic, e3_dynamic), 1);
 }
 
-class ProductFixture: public ::testing::Test
+class CrossProductFixture: public ::testing::Test
 {
     protected:
-        math::StaticVectori<3> e1{{1, 0, 0}};
-        math::StaticVectori<3> e2{{0, 1, 0}};
-        math::StaticVectori<3> e3{{0, 0, 1}};
+        math::StaticVectori<3> e1_static = {1, 0, 0};
+        math::StaticVectori<3> e2_static = {0, 1, 0};
+        math::StaticVectori<3> e3_static = {0, 0, 1};
+        math::DynamicVectori e1_dynamic = {1, 0, 0};
+        math::DynamicVectori e2_dynamic = {0, 1, 0};
+        math::DynamicVectori e3_dynamic = {0, 0, 1};
 };
 
-TEST_F(ProductFixture, E1CrossE2_E3)
+TEST_F(CrossProductFixture, StaticE1CrossE2_E3)
 {
-    ASSERT_TRUE(math::all_equal(math::cross(e1, e2), e3));
+    ASSERT_TRUE(math::all_equal(math::cross(e1_static, e2_static), e3_static));
 }
 
-TEST_F(ProductFixture, NegE2CrossE1_E3)
+TEST_F(CrossProductFixture, StaticE2CrossE3_E1)
 {
-    ASSERT_TRUE(math::all_equal(math::cross(-e2, e1), e3));
+    ASSERT_TRUE(math::all_equal(math::cross(e2_static, e3_static), e1_static));
 }
 
-TEST_F(ProductFixture, DistributiveCrossProduct)
+TEST_F(CrossProductFixture, StaticE3CrossE1_E2)
 {
-    decltype(e1) left = math::cross(e1, math::cross(e2,e3));
-    decltype(e1) right = math::dot(e1, e3)*e2 - math::dot(e1, e2)*e3;
+    ASSERT_TRUE(math::all_equal(math::cross(e3_static, e1_static), e2_static));
+}
+
+TEST_F(CrossProductFixture, StaticE2CrossE1_NegE3)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e2_static, e1_static), -e3_static));
+}
+
+TEST_F(CrossProductFixture, StaticE3CrossE2_NegE1)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e3_static, e2_static), -e1_static));
+}
+
+TEST_F(CrossProductFixture, StaticE1CrossE3_NegE2)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e1_static, e3_static), -e2_static));
+}
+
+TEST_F(CrossProductFixture, DynamicE1CrossE2_E3)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e1_dynamic, e2_dynamic), e3_dynamic));
+}
+
+TEST_F(CrossProductFixture, DynamicE2CrossE3_E1)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e2_dynamic, e3_dynamic), e1_dynamic));
+}
+
+TEST_F(CrossProductFixture, DynamicE3CrossE1_E2)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e3_dynamic, e1_dynamic), e2_dynamic));
+}
+
+TEST_F(CrossProductFixture, DynamicE2CrossE1_NegE3)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e2_dynamic, e1_dynamic), -e3_dynamic));
+}
+
+TEST_F(CrossProductFixture, DynamicE3CrossE2_NegE1)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e3_dynamic, e2_dynamic), -e1_dynamic));
+}
+
+TEST_F(CrossProductFixture, DynamicE1CrossE3_NegE2)
+{
+    ASSERT_TRUE(math::all_equal(math::cross(e1_dynamic, e3_dynamic), -e2_dynamic));
+}
+
+class DotCrossProductFixture: public ::testing::Test
+{
+    protected:
+        math::StaticVectori<3> e1_static = {1, 0, 0};
+        math::StaticVectori<3> e2_static = {0, 1, 0};
+        math::StaticVectori<3> e3_static = {0, 0, 1};
+        math::DynamicVectori e1_dynamic = {1, 0, 0};
+        math::DynamicVectori e2_dynamic = {0, 1, 0};
+        math::DynamicVectori e3_dynamic = {0, 0, 1};
+};
+
+TEST_F(DotCrossProductFixture, DistributiveDynamicCrossProduct)
+{
+    decltype(e1_dynamic) left = math::cross(e1_dynamic, math::cross(e2_dynamic,e3_dynamic));
+    decltype(e1_dynamic) right = math::dot(e1_dynamic, e3_dynamic)*e2_dynamic - math::dot(e1_dynamic, e2_dynamic)*e3_dynamic;
     ASSERT_TRUE(math::all_equal(left, right));
 }
 
-TEST_F(ProductFixture, DistributiveDotOnCrossProduct1)
+TEST_F(DotCrossProductFixture, DistributiveDynamicDotOnCrossProduct1)
 {
-    int result1 = math::dot(e1, math::cross(e2, e3));
-    int result2 = math::dot(e3, math::cross(e1, e2));
+    int result1 = math::dot(e1_dynamic, math::cross(e2_dynamic, e3_dynamic));
+    int result2 = math::dot(e3_dynamic, math::cross(e1_dynamic, e2_dynamic));
     ASSERT_EQ(result1, result2);
 }
 
-TEST_F(ProductFixture, DistributiveDotOnCrossProduct2)
+TEST_F(DotCrossProductFixture, DistributiveDynamicDotOnCrossProduct2)
 {
-    int result2 = math::dot(e3, math::cross(e1, e2));
-    int result3 = math::dot(e2, math::cross(e3, e1));
+    int result2 = math::dot(e3_dynamic, math::cross(e1_dynamic, e2_dynamic));
+    int result3 = math::dot(e2_dynamic, math::cross(e3_dynamic, e1_dynamic));
+    ASSERT_EQ(result2, result3);
+}
+TEST_F(DotCrossProductFixture, DistributiveStaticCrossProduct)
+{
+    decltype(e1_static) left = math::cross(e1_static, math::cross(e2_static,e3_static));
+    decltype(e1_static) right = math::dot(e1_static, e3_static)*e2_static - math::dot(e1_static, e2_static)*e3_static;
+    ASSERT_TRUE(math::all_equal(left, right));
+}
+
+TEST_F(DotCrossProductFixture, DistributiveStaticDotOnCrossProduct1)
+{
+    int result1 = math::dot(e1_static, math::cross(e2_static, e3_static));
+    int result2 = math::dot(e3_static, math::cross(e1_static, e2_static));
+    ASSERT_EQ(result1, result2);
+}
+
+TEST_F(DotCrossProductFixture, DistributiveStaticDotOnCrossProduct2)
+{
+    int result2 = math::dot(e3_static, math::cross(e1_static, e2_static));
+    int result3 = math::dot(e2_static, math::cross(e3_static, e1_static));
     ASSERT_EQ(result2, result3);
 }
 
-TEST(Multiply, ArrayVector)
+class MultiplyMatrixFixture: public ::testing::Test
 {
-        auto matrix = math::StaticArray<int, 2, 2>(1);
-        auto vector = math::StaticVector<int, 2>(1);
-        decltype(vector) result = matrix*vector;
-        math::StaticVectori<2> correct = {
-            matrix(0,0)*vector(0)+matrix(0,1)*vector(1),
-            matrix(1,0)*vector(0)+matrix(1,1)*vector(1)
+    protected:
+        math::StaticArrayi<2, 2> static_matrix = 1;
+        math::StaticVectori<2> static_vector = 1;
+        math::DynamicArrayi<2> dynamic_matrix = {
+            {1, 1},
+            {1, 1}
         };
-        ASSERT_TRUE(math::all_equal(result, correct));
+        math::DynamicVectori dynamic_vector = {1, 1};
+};
+
+TEST_F(MultiplyMatrixFixture, DynamicMatrixVector)
+{
+    math::DynamicVectori result = dynamic_matrix*dynamic_vector;
+    math::DynamicVectori answer = {
+        dynamic_matrix(0,0)*dynamic_vector(0) + dynamic_matrix(0,1)*dynamic_vector(1),
+        dynamic_matrix(1,0)*dynamic_vector(0) + dynamic_matrix(1,1)*dynamic_vector(1)
+    };
+    ASSERT_TRUE(math::all_equal(result, answer));
+}
+
+TEST_F(MultiplyMatrixFixture, DynamicMatrixMatrix)
+{
+    auto A = dynamic_matrix;
+    auto B = dynamic_matrix;
+    math::DynamicArrayi<2> result = dynamic_matrix*dynamic_matrix;
+    math::DynamicArrayi<2> answer = {
+        {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
+        {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},
+    };
+    ASSERT_TRUE(math::all_equal(answer, result));
+}
+
+TEST_F(MultiplyMatrixFixture, StaticMatrixVector)
+{
+    math::StaticVectori<2> result = static_matrix*static_vector;
+    math::StaticVectori<2> answer = {
+        static_matrix(0,0)*static_vector(0) + static_matrix(0,1)*static_vector(1),
+        static_matrix(1,0)*static_vector(0) + static_matrix(1,1)*static_vector(1)
+    };
+    ASSERT_TRUE(math::all_equal(result, answer));
 }
 
 TEST(Multiply, ArrayArray)
