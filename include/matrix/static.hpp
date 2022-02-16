@@ -334,6 +334,19 @@ struct GetFirst
     static constexpr int result = First;
 };
 
+template <int First, int ... Others>
+int GetElement(int index)
+{
+    if(index == 0)
+    {
+        return First;
+    }
+    else
+    {
+        return GetElement<Others ...>(index-1);
+    }
+}
+
 template <int FirstLength, int ... OtherLengths>
 int compute_index(int index)
 {
