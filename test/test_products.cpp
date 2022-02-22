@@ -422,25 +422,43 @@ TEST_F(MultiplyMatrixFixture, StaticMatrixVector)
     ASSERT_TRUE(math::all_equal(result, answer));
 }
 
-TEST(Multiply, ArrayArray)
+TEST_F(MultiplyMatrixFixture, StaticMatrixMatrix)
 {
-        auto A = math::StaticArray<int, 2, 2>(1);
-        auto B = math::StaticArray<int, 2, 2>(1);
-        decltype(A) result = A*B;
-        math::StaticArray<int, 2, 2> answer = {
-            {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
-            {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)},
-        };
-        ASSERT_TRUE(math::all_equal(result, answer));
+    math::StaticArrayi<2,2> result = static_matrix*static_matrix;
+    auto A = static_matrix;
+    auto B = static_matrix;
+    math::StaticArrayi<2,2> answer = {
+        {A(0,0)*B(0,0)+A(0,1)*B(1,0), A(0,0)*B(0,1)+A(0,1)*B(1,1)},
+        {A(1,0)*B(0,0)+A(1,1)*B(1,0), A(1,0)*B(0,1)+A(1,1)*B(1,1)}
+    };
+    ASSERT_TRUE(math::all_equal(result, answer));
 }
 
-TEST(OuterProduct, VectorVector)
+class OuterProductFixture: public ::testing::Test
 {
-    math::StaticVectori<2> vector1 = {1, 2};
-    math::StaticVectori<2> vector2 = {3, 4};
+    protected:
+        math::StaticVectori<2> static_vector1 = {1, 2};
+        math::StaticVectori<2> static_vector2 = {3, 4};
+        math::DynamicVectori dynamic_vector1 = {1, 2};
+        math::DynamicVectori dynamic_vector2 = {3, 4};
+};
+
+TEST_F(OuterProductFixture, StaticVectorVector)
+{
+    math::StaticArrayi<2,2> result = math::outer(static_vector1, static_vector2);
     math::StaticArrayi<2,2> answer = {
-        {vector1(0)*vector2(0), vector1(0)*vector2(1)},
-        {vector1(1)*vector2(0), vector1(1)*vector2(1)}
+        {static_vector1(0)*static_vector2(0), static_vector1(0)*static_vector2(1)},
+        {static_vector1(1)*static_vector2(0), static_vector1(1)*static_vector2(1)}
     };
-    ASSERT_TRUE(math::all_equal(math::outer(vector1, vector2), answer));
+    ASSERT_TRUE(math::all_equal(result, answer));
+}
+
+TEST_F(OuterProductFixture, DynamicVectorVector)
+{
+    math::DynamicMatrixi result = math::outer(dynamic_vector1, dynamic_vector2);
+    math::DynamicMatrixi answer = {
+        {dynamic_vector1(0)*dynamic_vector2(0), dynamic_vector1(0)*dynamic_vector2(1)},
+        {dynamic_vector1(1)*dynamic_vector2(0), dynamic_vector1(1)*dynamic_vector2(1)}
+    };
+    ASSERT_TRUE(math::all_equal(result, answer));
 }

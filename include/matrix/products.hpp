@@ -102,9 +102,9 @@ DynamicVector<T> cross(const DynamicVector<T>& left, const DynamicVector<T>& rig
 }
 
 template <typename T, int M>
-Array<T, true, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
+StaticArray<T, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T, M>& right)
 {
-    Array<T, true, M, M> result;
+    StaticArray<T, M, M> result;
     for(int row = 0; row < M; ++row)
     {
         for(int column = 0; column < M; ++column)
@@ -114,6 +114,22 @@ Array<T, true, M, M> outer(const StaticVector<T, M>& left, const StaticVector<T,
     }
     return result;
 }
+
+template <typename T>
+DynamicMatrix<T> outer(const DynamicVector<T>& left, const DynamicVector<T>& right)
+{
+    int M = left.length();
+    DynamicMatrix<T> result(M, M);
+    for(int row = 0; row < M; ++row)
+    {
+        for(int column = 0; column < M; ++column)
+        {
+            result(row,column) = left(row)*right(column);
+        }
+    }
+    return result;
+}
+
 
 template<typename T, int M, int N>
 StaticVector<T, M> operator*(const StaticArray<T, M, N>& A, const StaticVector<T, N>& x)
