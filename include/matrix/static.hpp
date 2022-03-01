@@ -350,7 +350,7 @@ template <int N>
 StaticVectori<N> ARange()
 {
     StaticVectori<N> range;
-    for(int index = 0; index < N; ++ index)
+    for(int index = 0; index < N; ++index)
     {
         range(index) = index;
     }

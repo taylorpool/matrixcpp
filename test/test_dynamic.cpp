@@ -547,3 +547,13 @@ TEST_F(EmptyLikeDynamicArray, MatrixTypeNotSame)
     bool is_same = math::is_same<decltype(empty_matrix), decltype(vectori)>::value;
     ASSERT_FALSE(is_same);
 }
+
+TEST(ARange, ARangeDynamic)
+{
+    auto vector = math::ARange(10);
+    math::DynamicVectori answer = {
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    };
+
+    ASSERT_TRUE(math::all_equal(vector, answer));
+}

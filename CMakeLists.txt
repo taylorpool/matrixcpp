@@ -8,9 +8,11 @@ add_library(arithmetic INTERFACE)
 set_property(TARGET arithmetic PROPERTY CXX_STANDARD 20)
 target_include_directories(arithmetic INTERFACE include)
 
-add_library(math-matrix INTERFACE)
+add_library(math-matrix
+src/dynamic.cpp
+)
 set_property(TARGET math-matrix PROPERTY CXX_STANDARD 20)
-target_include_directories(math-matrix INTERFACE include)
+target_include_directories(math-matrix PUBLIC include)
 
 option(ENABLE_TESTING "Enable Testing" ON)
 if(${ENABLE_TESTING})

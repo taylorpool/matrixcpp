@@ -3,7 +3,21 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
-#include <iostream>
+
+TEST(DynamicForwardSubstitution, Test1)
+{
+    math::DynamicMatrixd A = {
+        {1.0, 0.0},
+        {2.0, 1.0}
+    };
+    math::DynamicVectord b = {
+        1.0, 4.0
+    };
+    math::DynamicVectord correct_answer = {
+        1.0, 2.0
+    };
+    auto my_answer = math::forward_substitution_solve(A, b);
+}
 
 TEST(ForwardSubstitution, Test1)
 {
@@ -20,6 +34,21 @@ TEST(ForwardSubstitution, Test1)
     auto my_answer = math::forward_substitution_solve(A, b);
 }
 
+TEST(DynamicBackwardSubstitution, Test1)
+{
+    math::DynamicMatrixd A = {
+        {2.0, 1.0},
+        {0.0, 1.0}
+    };
+    math::DynamicVectord b = {
+        3.0, 1.0
+    };
+    math::DynamicVectord correct_answer = {
+        1.0, 1.0
+    };
+    math::DynamicVectord my_answer = math::backward_substitution_solve(A, b);
+}
+
 TEST(BackwardSubstitution, Test1)
 {
     math::StaticArrayd<2,2> A = {
@@ -33,6 +62,27 @@ TEST(BackwardSubstitution, Test1)
         1.0, 1.0
     };
     math::StaticVectord<2> my_answer = math::backward_substitution_solve(A, b);
+}
+
+TEST(DynamicCholesky, Test1)
+{
+    math::DynamicMatrixd A = {
+        {1.0, 0.0},
+        {0.0, 4.0}
+    };
+    math::DynamicMatrixd U_correct = {
+        {sqrt(A(0,0)), 0.0},
+        {0.0, sqrt(A(1,1))}
+    };
+    math::DynamicVectord b = {
+        1.0, 4.0
+    };
+    math::DynamicVectord x_correct = {
+        b(0)/A(0,0), b(1)/A(1,1)
+    };
+    math::DynamicCholeskyDecomposition cholesky(A);
+    ASSERT_TRUE(math::all_equal(U_correct, cholesky.cholesky));
+    ASSERT_TRUE(math::all_equal(x_correct, math::solve(cholesky, b)));
 }
 
 TEST(Cholesky, Test1)
@@ -54,6 +104,26 @@ TEST(Cholesky, Test1)
     math::CholeskyDecomposition cholesky(A);
     ASSERT_TRUE(math::all_equal(U_correct, cholesky.cholesky));
     ASSERT_TRUE(math::all_equal(x_correct, math::solve(cholesky, b)));
+}
+
+TEST(DynamicLUDecomposition, Test1)
+{
+    math::DynamicMatrixd A = {
+        {1.0, 1.0, 1.0},
+        {1.0, 4.0, 2.0},
+        {4.0, 7.0, 8.0}
+    };
+
+    math::DynamicVectord b = {
+        1.0,
+        3.0,
+        9.0
+    };
+
+    math::DynamicLUDecomposition lu(A);
+    ASSERT_TRUE(math::all_equal(A(lu.P), lu.L*lu.U));
+    auto solution = math::solve(lu, b);
+    ASSERT_TRUE(math::all_equal(A*solution, b));
 }
 
 TEST(LUDecomposition, Test1)
