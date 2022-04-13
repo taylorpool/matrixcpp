@@ -2,6 +2,7 @@
 
 #include "base.hpp"
 #include "dynamic.hpp"
+#include <cmath>
 
 namespace math
 {
@@ -65,6 +66,38 @@ Array<T, IsStatic, Shape ...> operator-(const Array<T, IsStatic, Shape ...>& lef
         summed(index) = left(index) - right(index);
     }
     return summed;
+}
+
+template <typename T, bool IsStatic, int ... Shape>
+Array<T, IsStatic, Shape ...> operator/(const Array<T, IsStatic, Shape ...>& array, T divisor)
+{
+    auto divided = empty_like(array);
+    for(int index = 0; index < divided.length(); ++index)
+    {
+        divided(index) = array(index)/divisor;
+    }
+    return divided;
+}
+
+template <typename T, bool IsStatic, int ... Shape>
+Array<T, IsStatic, Shape ...> operator/=(Array<T, IsStatic, Shape ...>& array, T divisor)
+{
+    for(int index = 0; index < array.length(); ++index)
+    {
+        array(index) /= divisor;
+    }
+    return array;
+}
+
+template <typename T, int N>
+T sum(const StaticVector<T,N>& vector)
+{
+    T summation = vector(0);
+    for(int index = 1; index < N; ++index)
+    {
+        summation += vector(index);
+    }
+    return summation;
 }
 
 }

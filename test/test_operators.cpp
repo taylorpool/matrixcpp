@@ -4,6 +4,8 @@
 #include "matrix/dynamic.hpp"
 #include "matrix/operators.hpp"
 
+#include <iostream>
+
 class StaticOperatorFixture: public ::testing::Test
 {
     protected:

@@ -4,6 +4,7 @@
 #include "dynamic.hpp"
 #include "indexing.hpp"
 #include "products.hpp"
+#include "metrics.hpp"
 
 #include <cmath>
 
@@ -164,6 +165,55 @@ namespace math
                 }
             }
         }
+    };
+
+    template <typename T, int M, int N>
+    struct QRDecomposition
+    {
+        StaticArray<T,M,N> R;
+        StaticArray<T,M,M> Q;
+
+        QRDecomposition(const StaticArray<T,M,N>& A)
+        : R(A), Q(Identity<T,M>())
+        {
+            for(int k = 0; k < N; ++k)
+            {
+                DynamicVector<T> u(M-k);
+                for(int i = k; i < u.length(); ++i)
+                {
+                    u(i-k) = R(i,k);
+                }
+                T norm_u = norm(u);
+                u(0) += norm_u*(u(0) < 0 ? static_cast<T>(-1) : static_cast<T>(1));
+                u /= norm_u;
+
+                for(int j = k; j < N; ++j)
+                {
+                    T column_value = static_cast<T>(0);
+                    for(int s = 0; s < u.length(); ++s)
+                    {
+                        column_value += u(s)*R(s+k,j);
+                    }
+                    for(int i = k; i < M; ++i)
+                    {
+                        R(i,j) -= 2*u(i-k)*column_value;
+                    }
+                }
+
+                for(int j = 0; j < N; ++j)
+                {
+                    T column_value = static_cast<T>(0);
+                    for(int s = 0; s < u.length(); ++s)
+                    {
+                        column_value += u(s)*Q(s+k,j);
+                    }
+                    for(int i = k; i < M; ++i)
+                    {
+                        Q(i,j) -= 2*u(i-k)*column_value;
+                    }
+                }
+            }
+        };
     };
 
     template <typename T, int N>

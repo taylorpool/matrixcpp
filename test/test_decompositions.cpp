@@ -1,4 +1,5 @@
 #include "matrix/decompositions.hpp"
+#include "matrix/string_representation.hpp"
 
 #include <gtest/gtest.h>
 
@@ -144,6 +145,17 @@ TEST(LUDecomposition, Test1)
     ASSERT_TRUE(math::all_equal(A(lu.P), lu.L*lu.U));
     auto solution = math::solve(lu, b);
     ASSERT_TRUE(math::all_equal(A*solution, b));
+}
+
+TEST(QRDecomposition, Static)
+{
+    auto A = math::Identity<double,3>();
+    math::QRDecomposition qr(A);
+    auto QR_ = qr.Q*qr.R;
+    std::cout << math::to_str(qr.Q);
+    std::cout << math::to_str(qr.R);
+    std::cout << math::to_str(QR_);
+    ASSERT_TRUE(math::all_equal(qr.Q*qr.R, A));
 }
 
 TEST(SwapElements, Integers)

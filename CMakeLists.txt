@@ -35,6 +35,7 @@ if(${ENABLE_TESTING})
                         test/test_operators.cpp
                         test/test_indexing.cpp
                         test/test_products.cpp
+                        test/test_metrics.cpp
                         test/test_decompositions.cpp
                         test/test_dynamic.cpp)
 
