@@ -5,6 +5,9 @@
 #include "indexing.hpp"
 #include "products.hpp"
 #include "metrics.hpp"
+#include "string_representation.hpp"
+
+#include <iostream>
 
 #include <cmath>
 
@@ -179,41 +182,39 @@ namespace math
             for(int k = 0; k < N; ++k)
             {
                 DynamicVector<T> u(M-k);
-                for(int i = k; i < u.length(); ++i)
+                for(int i = k; i < R.length(); ++i)
                 {
                     u(i-k) = R(i,k);
                 }
                 T norm_u = norm(u);
                 u(0) += norm_u*(u(0) < 0 ? static_cast<T>(-1) : static_cast<T>(1));
-                u /= norm_u;
+                u /= norm(u);
 
-                for(int j = k; j < N; ++j)
+                DynamicMatrix<T> U = outer(u, u);
+
+                for(int i = k; i < M; ++i)
                 {
-                    T column_value = static_cast<T>(0);
-                    for(int s = 0; s < u.length(); ++s)
+                    for(int j = k; j < N; ++j)
                     {
-                        column_value += u(s)*R(s+k,j);
-                    }
-                    for(int i = k; i < M; ++i)
-                    {
-                        R(i,j) -= 2*u(i-k)*column_value;
+                        for(int s = 0; s < U.length(); ++s)
+                        {
+                            R(i,j) -= 2.0*U(i-k,s)*R(s+k,j);
+                        }
                     }
                 }
 
-                for(int j = 0; j < N; ++j)
+                for(int i = k; i < M; ++i)
                 {
-                    T column_value = static_cast<T>(0);
-                    for(int s = 0; s < u.length(); ++s)
+                    for(int j = 0; j < M; ++j)
                     {
-                        column_value += u(s)*Q(s+k,j);
-                    }
-                    for(int i = k; i < M; ++i)
-                    {
-                        Q(i,j) -= 2*u(i-k)*column_value;
+                        for(int s = 0; s < U.length(); ++s)
+                        {
+                            Q(i,j) -= 2.0*U(i-k,s)*Q(s+k,j);
+                        }
                     }
                 }
             }
-        };
+        }
     };
 
     template <typename T, int N>

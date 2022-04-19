@@ -3,6 +3,7 @@
 #include "matrix/static.hpp"
 #include "matrix/dynamic.hpp"
 #include "matrix/operators.hpp"
+#include "matrix/string_representation.hpp"
 
 #include <iostream>
 
@@ -175,6 +176,16 @@ TEST_F(StaticOperatorFixture, BinaryMinusE1E2E3)
     ASSERT_TRUE(math::all_equal(my_difference, correct_difference));
 }
 
+TEST_F(StaticOperatorFixture, InPlaceDivision)
+{
+    double a = 3.0;
+    math::StaticVectord<3> vector(a);
+    vector /= a;
+    ASSERT_EQ(vector(0), a/a);
+    ASSERT_EQ(vector(1), a/a);
+    ASSERT_EQ(vector(2), a/a);
+}
+
 class DynamicOperatorFixture: public ::testing::Test
 {
     protected:
@@ -223,4 +234,14 @@ TEST_F(DynamicOperatorFixture, BinaryMinus)
         answer(index) = vectori(index)-vectori2(index);
     }
     ASSERT_TRUE(math::all_equal(vectori-vectori2, answer));
+}
+
+TEST_F(DynamicOperatorFixture, InPlaceDivision)
+{
+    double a = 3.0;
+    math::DynamicVectord vector = {a, a, a};
+    vector /= a;
+    ASSERT_EQ(vector(0), a/a);
+    ASSERT_EQ(vector(1), a/a);
+    ASSERT_EQ(vector(2), a/a);
 }
