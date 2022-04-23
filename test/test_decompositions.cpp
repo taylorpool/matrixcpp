@@ -154,6 +154,13 @@ TEST(QRDecomposition, Static)
     ASSERT_TRUE(math::all_equal(qr.Q*qr.R, A));
 }
 
+TEST(QRDecomposition, Dynamic)
+{
+    auto A = math::Identity<double>(3);
+    math::DynamicQRDecomposition qr(A);
+    ASSERT_TRUE(math::all_equal(qr.Q*qr.R, A));
+}
+
 TEST(SwapElements, Integers)
 {
     int a = 1;

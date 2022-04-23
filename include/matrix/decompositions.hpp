@@ -217,6 +217,55 @@ namespace math
         }
     };
 
+    template <typename T>
+    struct DynamicQRDecomposition
+    {
+        DynamicMatrix<T> R;
+        DynamicMatrix<T> Q;
+
+        DynamicQRDecomposition(const DynamicMatrix<T>& A)
+        : R(A), Q(Identity<T>(A.length()))
+        {
+            int m = A.length();
+            int n = A(0).length();
+            for(int k = 0; k < n; ++k)
+            {
+                DynamicVector<T> u(m-k);
+                for(int i = k; i < R.length(); ++i)
+                {
+                    u(i-k) = R(i,k);
+                }
+                T norm_u = norm(u);
+                u(0) += norm_u*(u(0) < 0 ? static_cast<T>(-1) : static_cast<T>(1));
+                u /= norm(u);
+
+                DynamicMatrix<T> U = outer(u, u);
+
+                for(int i = k; i < m; ++i)
+                {
+                    for(int j = k; j < n; ++j)
+                    {
+                        for(int s = 0; s < U.length(); ++s)
+                        {
+                            R(i,j) -= 2.0*U(i-k,s)*R(s+k,j);
+                        }
+                    }
+                }
+
+                for(int i = k; i < m; ++i)
+                {
+                    for(int j = 0; j < m; ++j)
+                    {
+                        for(int s = 0; s < U.length(); ++s)
+                        {
+                            Q(i,j) -= 2.0*U(i-k,s)*Q(s+k,j);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
     template <typename T, int N>
     StaticVector<T, N> forward_substitution_solve(const Array<T, true, N, N>& A, const StaticVector<T, N>& b)
     {
