@@ -6,11 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(arithmetic
-  INTERFACE)
-target_include_directories(arithmetic
-  INTERFACE include)
-
 add_library(sabai
   src/dynamic.cpp
 )
@@ -22,12 +17,6 @@ target_include_directories(sabai
 option(ENABLE_TESTING "Enable Testing" ON)
 if(${ENABLE_TESTING})
   find_package(GTest REQUIRED)
-
-  add_executable(arithmetic_tests
-    test/test_arithmetic.cpp)
-
-  target_link_libraries(arithmetic_tests PRIVATE
-    arithmetic GTest::GTest GTest::Main)
 
   add_executable(sabai_tests
     test/test_static.cpp
