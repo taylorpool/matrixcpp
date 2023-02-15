@@ -1,6 +1,6 @@
 cmake_policy(SET CMP0048 NEW)
 cmake_minimum_required(VERSION 3.16)
-project(matrixcpp VERSION 0.1)
+project(Sabai VERSION 0.2)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -11,12 +11,12 @@ add_library(arithmetic
 target_include_directories(arithmetic
   INTERFACE include)
 
-add_library(math-matrix
+add_library(sabai
   src/dynamic.cpp
 )
-set_property(TARGET math-matrix
+set_property(TARGET sabai
   PROPERTY CXX_STANDARD 20)
-target_include_directories(math-matrix
+target_include_directories(sabai
   PUBLIC include)
 
 option(ENABLE_TESTING "Enable Testing" ON)
@@ -29,7 +29,7 @@ if(${ENABLE_TESTING})
   target_link_libraries(arithmetic_tests PRIVATE
     arithmetic GTest::GTest GTest::Main)
 
-  add_executable(matrix_tests
+  add_executable(sabai_tests
     test/test_static.cpp
     test/test_operators.cpp
     test/test_indexing.cpp
@@ -38,8 +38,8 @@ if(${ENABLE_TESTING})
     test/test_decompositions.cpp
     test/test_dynamic.cpp)
 
-  target_link_libraries(matrix_tests PRIVATE math-matrix GTest::GTest GTest::Main)
+  target_link_libraries(sabai_tests PRIVATE sabai GTest::GTest GTest::Main)
 
   include(GoogleTest)
-  gtest_discover_tests(matrix_tests)
+  gtest_discover_tests(sabai_tests)
 endif()
