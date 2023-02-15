@@ -3,7 +3,7 @@
 
 #include <initializer_list>
 
-namespace math {
+namespace sabai {
 
 class MismatchedLength : public std::exception {
 private:
@@ -361,4 +361,4 @@ template <typename T> DynamicMatrix<T> Identity(int N) {
 
 DynamicVector<uint64_t> ARange(uint64_t N);
 
-} // namespace math
+} // namespace sabai

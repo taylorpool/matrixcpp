@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace math {
+namespace sabai {
 template <typename T> void swap(T &a, T &b) {
   T temp = a;
   a = b;
@@ -306,4 +306,4 @@ StaticVector<T, N> solve(const LUDecomposition<T, M, N> &lu_decomp,
   StaticVector<T, N> x = backward_substitution_solve(lu_decomp.U, y);
   return x;
 }
-} // namespace math
+} // namespace sabai

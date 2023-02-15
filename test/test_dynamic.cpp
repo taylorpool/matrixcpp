@@ -4,7 +4,7 @@
 class InitializerListDynamicVector : public ::testing::Test {
 protected:
   int values[5] = {1, 2, 3, 4, 5};
-  math::DynamicVectori vectori{
+  sabai::DynamicVectori vectori{
       {values[0], values[1], values[2], values[3], values[4]}};
 };
 
@@ -33,7 +33,7 @@ TEST_F(InitializerListDynamicVector, Value4) {
 class InitializerListDynamicMatrix : public ::testing::Test {
 protected:
   int values[4] = {1, 2, 3, 4};
-  math::DynamicArrayi<2> matrix{
+  sabai::DynamicArrayi<2> matrix{
       {{values[0], values[1]}, {values[2], values[3]}}};
 };
 
@@ -59,8 +59,8 @@ TEST_F(InitializerListDynamicMatrix, Element11) {
 
 class UninitializedDynamicVectorFixture : public ::testing::Test {
 protected:
-  math::DynamicVectori vectori;
-  math::DynamicVectorf vectorf;
+  sabai::DynamicVectori vectori;
+  sabai::DynamicVectorf vectorf;
 };
 
 TEST_F(UninitializedDynamicVectorFixture, VectoriLength0) {
@@ -68,7 +68,7 @@ TEST_F(UninitializedDynamicVectorFixture, VectoriLength0) {
 }
 
 TEST_F(UninitializedDynamicVectorFixture, VectoriOutOfRangeIndex) {
-  ASSERT_THROW(vectori(0), math::OutOfRange);
+  ASSERT_THROW(vectori(0), sabai::OutOfRange);
 }
 
 TEST_F(UninitializedDynamicVectorFixture, VectorfLength0) {
@@ -76,16 +76,16 @@ TEST_F(UninitializedDynamicVectorFixture, VectorfLength0) {
 }
 
 TEST_F(UninitializedDynamicVectorFixture, VectorfOutOfRangeIndex) {
-  ASSERT_THROW(vectorf(0), math::OutOfRange);
+  ASSERT_THROW(vectorf(0), sabai::OutOfRange);
 }
 
 class DynamicVectorFixture : public ::testing::Test {
 protected:
   int length = 2;
-  math::DynamicVectori vectori;
-  math::DynamicVectorf vectorf;
-  math::DynamicVectord vectord;
-  math::DynamicVector<bool> vectorb;
+  sabai::DynamicVectori vectori;
+  sabai::DynamicVectorf vectorf;
+  sabai::DynamicVectord vectord;
+  sabai::DynamicVector<bool> vectorb;
 
   DynamicVectorFixture()
       : vectori(length), vectorf(length), vectord(length), vectorb(length){};
@@ -126,8 +126,8 @@ TEST_F(DynamicVectorFixture, FillElementsInt) {
 TEST_F(DynamicVectorFixture, ArrayiAllEqual) {
   vectori(0) = 1;
   vectori(1) = 2;
-  math::DynamicVectori new_vectori = vectori;
-  ASSERT_TRUE(math::all_equal(vectori, new_vectori));
+  sabai::DynamicVectori new_vectori = vectori;
+  ASSERT_TRUE(sabai::all_equal(vectori, new_vectori));
 }
 
 TEST_F(DynamicVectorFixture, Size2TypeInt) {
@@ -189,7 +189,7 @@ TEST_F(DynamicVectorFixture, FillInt) {
 }
 
 TEST_F(DynamicVectorFixture, IntIndexOutOfRange) {
-  ASSERT_THROW(vectori(length), math::OutOfRange);
+  ASSERT_THROW(vectori(length), sabai::OutOfRange);
 }
 
 class DynamicMatrixFixture : public ::testing::Test {
@@ -200,9 +200,9 @@ protected:
   int c = 3;
   int d = 4;
 
-  math::DynamicArrayi<2> matrix;
-  math::DynamicArrayd<2> matrixd;
-  math::DynamicArrayf<2> matrixf;
+  sabai::DynamicArrayi<2> matrix;
+  sabai::DynamicArrayd<2> matrixd;
+  sabai::DynamicArrayf<2> matrixf;
 
   DynamicMatrixFixture()
       : matrix(length[0], length[1]), matrixd(length[0], length[1]),
@@ -248,8 +248,8 @@ TEST_F(DynamicMatrixFixture, MatrixIAllEqual) {
   matrix(0, 1) = b;
   matrix(1, 0) = c;
   matrix(1, 1) = d;
-  math::DynamicArrayi<2> new_matrixi = matrix;
-  ASSERT_TRUE(math::all_equal(new_matrixi, matrix));
+  sabai::DynamicArrayi<2> new_matrixi = matrix;
+  ASSERT_TRUE(sabai::all_equal(new_matrixi, matrix));
 }
 
 TEST_F(DynamicMatrixFixture, GetSize) { ASSERT_EQ(matrix.length(), length[0]); }
@@ -279,15 +279,15 @@ TEST_F(DynamicMatrixFixture, SetElementd) {
 }
 
 TEST_F(DynamicMatrixFixture, RowIndexOutOfRange) {
-  ASSERT_THROW(matrix(2), math::OutOfRange);
+  ASSERT_THROW(matrix(2), sabai::OutOfRange);
 }
 
 TEST_F(DynamicMatrixFixture, ElementIndexOutOfRange) {
-  ASSERT_THROW(matrix(0, 2), math::OutOfRange);
+  ASSERT_THROW(matrix(0, 2), sabai::OutOfRange);
 }
 
 TEST_F(DynamicMatrixFixture, RowIndexOutOfRangeElementOk) {
-  ASSERT_THROW(matrix(2, 0), math::OutOfRange);
+  ASSERT_THROW(matrix(2, 0), sabai::OutOfRange);
 }
 
 TEST_F(DynamicMatrixFixture, Filla) {
@@ -319,7 +319,7 @@ TEST_F(DynamicMatrixFixture, FillDouble) {
 class DynamicTensorFixture : public ::testing::Test {
 protected:
   int shape[3] = {2, 2, 2};
-  math::DynamicArrayi<3> tensor;
+  sabai::DynamicArrayi<3> tensor;
   int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 
   DynamicTensorFixture() : tensor(shape[0], shape[1], shape[2]){};
@@ -355,8 +355,8 @@ TEST_F(DynamicTensorFixture, AllEqualTensorInt) {
   tensor(1, 0, 1) = values[5];
   tensor(1, 1, 0) = values[6];
   tensor(1, 1, 1) = values[7];
-  math::DynamicArrayi<3> new_tensori = tensor;
-  ASSERT_TRUE(math::all_equal(new_tensori, tensor));
+  sabai::DynamicArrayi<3> new_tensori = tensor;
+  ASSERT_TRUE(sabai::all_equal(new_tensori, tensor));
 }
 
 TEST_F(DynamicTensorFixture, GetSize) { ASSERT_EQ(tensor.length(), shape[0]); }
@@ -380,61 +380,61 @@ TEST_F(DynamicTensorFixture, SetElement) {
 
 class EmptyLikeDynamicArray : public ::testing::Test {
 protected:
-  math::DynamicVectori vectori{{1, 2, 3, 4, 5}};
-  math::DynamicArrayi<2> matrixi{{{1, 2}, {3, 4}}};
+  sabai::DynamicVectori vectori{{1, 2, 3, 4, 5}};
+  sabai::DynamicArrayi<2> matrixi{{{1, 2}, {3, 4}}};
 };
 
 TEST_F(EmptyLikeDynamicArray, VectorLength) {
-  auto empty_vector = math::empty_like(vectori);
+  auto empty_vector = sabai::empty_like(vectori);
   ASSERT_EQ(empty_vector.length(), vectori.length());
 }
 
 TEST_F(EmptyLikeDynamicArray, VectorTypeSame) {
-  auto empty_vector = math::empty_like(vectori);
+  auto empty_vector = sabai::empty_like(vectori);
   bool is_same =
-      math::is_same<decltype(empty_vector), decltype(vectori)>::value;
+      sabai::is_same<decltype(empty_vector), decltype(vectori)>::value;
   ASSERT_TRUE(is_same);
 }
 
 TEST_F(EmptyLikeDynamicArray, VectorTypeNotSame) {
-  auto empty_vector = math::empty_like(vectori);
+  auto empty_vector = sabai::empty_like(vectori);
   bool is_same =
-      math::is_same<decltype(empty_vector), decltype(matrixi)>::value;
+      sabai::is_same<decltype(empty_vector), decltype(matrixi)>::value;
   ASSERT_FALSE(is_same);
 }
 
 TEST_F(EmptyLikeDynamicArray, MatrixLength) {
-  auto empty_matrix = math::empty_like(matrixi);
+  auto empty_matrix = sabai::empty_like(matrixi);
   ASSERT_EQ(empty_matrix.length(), matrixi.length());
 }
 
 TEST_F(EmptyLikeDynamicArray, MatrixRow0Length) {
-  auto empty_matrix = math::empty_like(matrixi);
+  auto empty_matrix = sabai::empty_like(matrixi);
   ASSERT_EQ(empty_matrix(0).length(), matrixi(0).length());
 }
 
 TEST_F(EmptyLikeDynamicArray, MatrixRow1Length) {
-  auto empty_matrix = math::empty_like(matrixi);
+  auto empty_matrix = sabai::empty_like(matrixi);
   ASSERT_EQ(empty_matrix(1).length(), matrixi(1).length());
 }
 
 TEST_F(EmptyLikeDynamicArray, MatrixTypeSame) {
-  auto empty_matrix = math::empty_like(matrixi);
+  auto empty_matrix = sabai::empty_like(matrixi);
   bool is_same =
-      math::is_same<decltype(empty_matrix), decltype(matrixi)>::value;
+      sabai::is_same<decltype(empty_matrix), decltype(matrixi)>::value;
   ASSERT_TRUE(is_same);
 }
 
 TEST_F(EmptyLikeDynamicArray, MatrixTypeNotSame) {
-  auto empty_matrix = math::empty_like(matrixi);
+  auto empty_matrix = sabai::empty_like(matrixi);
   bool is_same =
-      math::is_same<decltype(empty_matrix), decltype(vectori)>::value;
+      sabai::is_same<decltype(empty_matrix), decltype(vectori)>::value;
   ASSERT_FALSE(is_same);
 }
 
 TEST(ARange, ARangeDynamic) {
-  auto vector = math::ARange(10);
-  math::DynamicVector<uint64_t> answer = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  auto vector = sabai::ARange(10);
+  sabai::DynamicVector<uint64_t> answer = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-  ASSERT_TRUE(math::all_equal(vector, answer));
+  ASSERT_TRUE(sabai::all_equal(vector, answer));
 }

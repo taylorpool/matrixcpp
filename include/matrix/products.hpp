@@ -4,11 +4,11 @@
 #include "operators.hpp"
 #include "static.hpp"
 
-namespace math {
+namespace sabai {
 
 template <typename T>
 DynamicVector<T> operator*(const T &value, const DynamicVector<T> &vector) {
-  DynamicVector<T> answer = math::empty_like(vector);
+  DynamicVector<T> answer = empty_like(vector);
   for (uint64_t index = 0; index < vector.length(); ++index) {
     answer(index) = value * vector(index);
   }
@@ -178,4 +178,4 @@ Array<T, true, M, P> operator*(const Array<T, true, M, N> &left,
   }
   return answer;
 }
-} // namespace math
+} // namespace sabai

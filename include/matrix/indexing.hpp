@@ -3,7 +3,7 @@
 #include "dynamic.hpp"
 #include "static.hpp"
 
-namespace math {
+namespace sabai {
 
 template <typename T> DynamicMatrix<T> triu(const DynamicMatrix<T> &matrix) {
   const uint64_t N = matrix.length();
@@ -75,4 +75,4 @@ slice(const Array<T, true, FirstDim, OtherDims...> &array) {
   }
   return sliced;
 }
-} // namespace math
+} // namespace sabai

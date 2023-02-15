@@ -4,7 +4,7 @@
 
 #include <initializer_list>
 
-namespace math {
+namespace sabai {
 
 template <typename T, uint64_t Dim> class Array<T, true, Dim> {
 private:
@@ -248,4 +248,4 @@ template <uint64_t N> StaticVector<uint64_t, N> ARange() {
   }
   return range;
 }
-} // namespace math
+} // namespace sabai

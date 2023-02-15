@@ -5,7 +5,7 @@
 #include "static.hpp"
 #include <cmath>
 
-namespace math {
+namespace sabai {
 
 template <typename T, bool IsStatic, uint64_t... Shape>
 Array<bool, IsStatic, Shape...>
@@ -94,4 +94,4 @@ template <typename T, int N> T sum(const StaticVector<T, N> &vector) {
   return summation;
 }
 
-} // namespace math
+} // namespace sabai
