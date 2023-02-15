@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "matrix/dynamic.hpp"
-#include "matrix/operators.hpp"
-#include "matrix/static.hpp"
-#include "matrix/string_representation.hpp"
+#include "sabai/dynamic.hpp"
+#include "sabai/operators.hpp"
+#include "sabai/static.hpp"
+#include "sabai/string_representation.hpp"
 
 #include <iostream>
 

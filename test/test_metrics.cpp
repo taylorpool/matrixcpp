@@ -1,4 +1,4 @@
-#include "matrix/metrics.hpp"
+#include "sabai/metrics.hpp"
 #include <gtest/gtest.h>
 
 TEST(Metric, Norm_ZeroVectorStatic) {

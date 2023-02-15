@@ -1,8 +1,8 @@
 #pragma once
 
-#include "base.hpp"
-#include "dynamic.hpp"
-#include "static.hpp"
+#include "sabai/base.hpp"
+#include "sabai/dynamic.hpp"
+#include "sabai/static.hpp"
 #include <cmath>
 
 namespace sabai {

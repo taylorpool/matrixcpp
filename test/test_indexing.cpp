@@ -1,5 +1,5 @@
-#include "matrix/indexing.hpp"
-#include "matrix/operators.hpp"
+#include "sabai/indexing.hpp"
+#include "sabai/operators.hpp"
 
 #include <gtest/gtest.h>
 

@@ -1,5 +1,5 @@
-#include "matrix/dynamic.hpp"
-#include "matrix/products.hpp"
+#include "sabai/dynamic.hpp"
+#include "sabai/products.hpp"
 
 #include "gtest/gtest.h"
 

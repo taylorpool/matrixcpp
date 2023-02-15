@@ -1,11 +1,11 @@
 #pragma once
 
-#include "dynamic.hpp"
-#include "indexing.hpp"
-#include "metrics.hpp"
-#include "products.hpp"
-#include "static.hpp"
-#include "string_representation.hpp"
+#include "sabai/dynamic.hpp"
+#include "sabai/indexing.hpp"
+#include "sabai/metrics.hpp"
+#include "sabai/products.hpp"
+#include "sabai/static.hpp"
+#include "sabai/string_representation.hpp"
 
 #include <iostream>
 

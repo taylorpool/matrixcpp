@@ -1,4 +1,4 @@
-#include "matrix/dynamic.hpp"
+#include "sabai/dynamic.hpp"
 
 namespace sabai {
 DynamicVector<uint64_t> ARange(uint64_t N) {

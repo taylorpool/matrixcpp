@@ -1,5 +1,5 @@
-#include "matrix/decompositions.hpp"
-#include "matrix/string_representation.hpp"
+#include "sabai/decompositions.hpp"
+#include "sabai/string_representation.hpp"
 
 #include <gtest/gtest.h>
 

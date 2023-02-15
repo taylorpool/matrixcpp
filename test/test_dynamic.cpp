@@ -1,4 +1,4 @@
-#include "matrix/dynamic.hpp"
+#include "sabai/dynamic.hpp"
 #include <gtest/gtest.h>
 
 class InitializerListDynamicVector : public ::testing::Test {

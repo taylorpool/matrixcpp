@@ -1,7 +1,7 @@
 #pragma once
 
-#include "dynamic.hpp"
-#include "static.hpp"
+#include "sabai/dynamic.hpp"
+#include "sabai/static.hpp"
 
 namespace sabai {
 

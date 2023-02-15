@@ -1,6 +1,6 @@
 #pragma once
 
-#include "products.hpp"
+#include "sabai/products.hpp"
 
 namespace sabai {
 
