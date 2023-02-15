@@ -4,356 +4,248 @@
 
 #include <initializer_list>
 
-namespace math
-{
+namespace math {
 
-template <typename T, int Dim>
-requires(Dim > 0)
-class Array<T, true, Dim>
-{
-    private:
-        T data_[Dim];
+template <typename T, uint64_t Dim> class Array<T, true, Dim> {
+private:
+  T data_[Dim];
 
-        void check_input(int index) const
-        {
-            if(index >= Dim || index < 0)
-            {
-                throw OutOfRange(index, Dim);
-            }
-        }
+  void check_input(uint64_t index) const {
+    if (index >= Dim) {
+      throw OutOfRange(index, Dim);
+    }
+  }
 
-        int transform_index(int index) const
-        {
-            int transformed_index = index;
-            while(transformed_index < 0)
-            {
-                transformed_index += Dim;
-            }
-            return transformed_index;
-        }
+public:
+  using InitializerList = std::initializer_list<T>;
 
-    public:
-        using InitializerList = std::initializer_list<T>;
+  Array(){};
 
-        Array()
-        {
-        };
+  Array(T initial_value) { fill(initial_value); }
 
-        Array(T initial_value)
-        {
-            fill(initial_value);
-        }
+  Array(InitializerList values) {
+    auto iter = values.begin();
+    for (uint64_t index = 0; index < values.size(); ++index) {
+      data_[index] = *iter;
+      ++iter;
+    }
+  }
 
-        Array(InitializerList values)
-        {
-            auto iter = values.begin();
-            for(int index = 0; index < values.size(); ++index)
-            {
-                data_[index] = *iter;
-                ++iter;
-            }
-        }
+  Array(const Array &array) {
+    for (uint64_t index = 0; index < array.length(); ++index) {
+      data_[index] = array(index);
+    }
+  }
 
-        Array(const Array& array)
-        {
-            for(int index = 0; index < array.length(); ++index)
-            {
-                data_[index] = array(index);
-            }
-        }
+  void fill(T value) {
+    for (int i = 0; i < Dim; ++i) {
+      data_[i] = value;
+    }
+  }
 
-        void fill(T value)
-        {
-            for(int i = 0; i < Dim; ++i)
-            {
-                data_[i] = value;
-            }
-        }
+  T &operator()(uint64_t index) {
+    check_input(index);
+    return data_[index];
+  }
 
-        void fill(const Array& array)
-        {
-            for(int index = 0; index < Dim; ++index)
-            {
-                data_[index] = array(index);
-            }
-        }
+  T operator()(uint64_t index) const {
+    check_input(index);
+    return data_[index];
+  }
 
-        T& operator()(int index)
-        {
-            index = transform_index(index);
-            check_input(index);
-            return data_[index];
-        }
+  template <uint64_t Size>
+  Array<T, true, Size>
+  operator()(const Array<uint64_t, true, Size> &indices) const {
+    Array<T, true, Size> indexed;
+    for (uint64_t index = 0; index < Size; ++index) {
+      indexed(index) = data_[indices(index)];
+    }
+    return indexed;
+  }
 
-        T operator()(int index) const
-        {
-            index = transform_index(index);
-            check_input(index);
-            return data_[index];
-        }
+  void operator=(const Array &array) {
+    for (uint64_t index = 0; index < array.length(); ++index) {
+      data_[index] = array(index);
+    }
+  }
 
-        template <int Size>
-        Array<T, true, Size> operator()(const Array<int, true, Size>& indices) const
-        {
-            Array<T, true, Size> indexed;
-            for(int index = 0; index < Size; ++index)
-            {
-                indexed(index) = data_[indices(index)];
-            }
-            return indexed;
-        }
-
-        void operator=(const Array& array)
-        {
-            for(int index = 0; index < array.length(); ++index)
-            {
-                data_[index] = array(index);
-            }
-        }
-
-        int length() const
-        {
-            return Dim;
-        }
+  uint64_t length() const { return Dim; }
 };
 
-template <typename T, int FirstDim, int ... OtherDim>
-requires(FirstDim > 0 && sizeof...(OtherDim) > 0)
-class Array<T, true, FirstDim, OtherDim...>
-{
-    private:
-        using SubArray = Array<T, true, OtherDim...>;
-        static constexpr int NumDims = 1+sizeof...(OtherDim);
-        SubArray data_[FirstDim];
+template <typename T, uint64_t FirstDim, uint64_t SecondDim,
+          uint64_t... OtherDim>
+class Array<T, true, FirstDim, SecondDim, OtherDim...> {
+private:
+  using SubArray = Array<T, true, SecondDim, OtherDim...>;
+  static constexpr uint64_t NumDims = 2 + sizeof...(OtherDim);
+  SubArray data_[FirstDim];
 
-        void check_input(int index) const
-        {
-            if(index >= FirstDim || index < 0)
-            {
-                throw OutOfRange(index, FirstDim);
-            }
-        }
+  void check_input(uint64_t index) const {
+    if (index >= FirstDim || index < 0) {
+      throw OutOfRange(index, FirstDim);
+    }
+  }
 
-        int transform_index(int index) const
-        {
-            int transformed_index = index;
-            while(transformed_index < 0)
-            {
-                transformed_index += FirstDim;
-            }
-            return transformed_index;
-        }
+public:
+  using InitializerList =
+      std::initializer_list<typename SubArray::InitializerList>;
 
-    public:
-        using InitializerList = std::initializer_list<typename SubArray::InitializerList>;
+  Array(){};
 
-        Array() {};
+  Array(T initial_value) { fill(initial_value); }
 
-        Array(T initial_value)
-        {
-            fill(initial_value);
-        }
+  Array(InitializerList initializer_list) {
+    uint64_t i = 0;
+    for (auto iter = initializer_list.begin(); iter != initializer_list.end();
+         ++iter) {
+      data_[i] = SubArray(*iter);
+      ++i;
+    }
+  }
 
-        Array(InitializerList initializer_list)
-        {
-            int i = 0;
-            for(auto iter = initializer_list.begin(); iter != initializer_list.end(); ++iter)
-            {
-                data_[i] = SubArray(*iter);
-                ++i;
-            }
-        }
+  Array(const Array &array) {
+    for (uint64_t index = 0; index < array.length(); ++index) {
+      data_[index] = array(index);
+    }
+  }
 
-        Array(const Array& array)
-        {
-            for(int index = 0; index < array.length(); ++index)
-            {
-                data_[index] = array(index);
-            }
-        }
+  void fill(T value) {
+    for (uint64_t i = 0; i < FirstDim; ++i) {
+      data_[i].fill(value);
+    }
+  }
 
-        void fill(T value)
-        {
-            for(int i = 0; i < FirstDim; ++i)
-            {
-                data_[i].fill(value);
-            }
-        }
+  void fill(const Array &array) {
+    for (uint64_t index = 0; index < FirstDim; ++index) {
+      data_[index].fill(array(index));
+    }
+  }
 
-        void fill(const Array& array)
-        {
-            for(int index = 0; index < FirstDim; ++index)
-            {
-                data_[index].fill(array(index));
-            }
-        }
+  SubArray &operator()(uint64_t index) {
+    check_input(index);
+    return data_[index];
+  }
 
-        SubArray& operator()(int index)
-        {
-            index = transform_index(index);
-            check_input(index);
-            return data_[index];
-        }
+  SubArray operator()(uint64_t index) const {
+    check_input(index);
+    return data_[index];
+  }
 
-        SubArray operator()(int index) const
-        {
-            index = transform_index(index);
-            check_input(index);
-            return data_[index];
-        }
+  template <typename... OtherIndices>
+  auto operator()(uint64_t first, uint64_t second,
+                  OtherIndices... others) const {
+    check_input(first);
+    return data_[first](second, others...);
+  }
 
-        template <typename ... OtherIndices>
-        requires(sizeof...(OtherIndices) > 0)
-        auto operator()(int first, OtherIndices... others) const
-        {
-            first = transform_index(first);
-            check_input(first);
-            return data_[first](others...);
-        }
+  template <typename... OtherIndices>
+  auto &operator()(uint64_t first, uint64_t second, OtherIndices... others) {
+    check_input(first);
+    return data_[first](second, others...);
+  }
 
-        template <typename ... OtherIndices>
-        requires(sizeof...(OtherIndices) > 0)
-        auto& operator()(int first, OtherIndices... others)
-        {
-            first = transform_index(first);
-            check_input(first);
-            return data_[first](others...);
-        }
+  template <uint64_t Size>
+  Array<T, true, Size, SecondDim, OtherDim...>
+  operator()(const Array<uint64_t, true, Size> &indices) const {
+    Array<T, true, Size, SecondDim, OtherDim...> indexed;
+    for (uint64_t index = 0; index < Size; ++index) {
+      indexed(index) = data_[indices(index)];
+    }
+    return indexed;
+  }
 
-        template <int Size>
-        Array<T, true, Size, OtherDim...> operator()(const Array<int, true, Size>& indices) const
-        {
-            Array<T, true, Size, OtherDim...> indexed;
-            for(int index = 0; index < Size; ++index)
-            {
-                int transformed_index = transform_index(indices(index));
-                check_input(transformed_index);
-                indexed(index) = data_[transformed_index];
-            }
-            return indexed;
-        }
+  void operator=(const Array &array) {
+    for (int index = 0; index < array.length(); ++index) {
+      data_[index] = array(index);
+    }
+  }
 
-        void operator=(const Array& array)
-        {
-            for(int index = 0; index < array.length(); ++index)
-            {
-                data_[index] = array(index);
-            }
-        }
-
-        int length() const
-        {
-            return FirstDim;
-        }
+  uint64_t length() const { return FirstDim; }
 };
 
-template <typename T, int ... Shape>
+template <typename T, uint64_t... Shape>
 using StaticArray = Array<T, true, Shape...>;
 
-template <int ... Shape>
-using StaticArrayi = StaticArray<int, Shape...>;
+template <uint64_t... Shape> using StaticArrayi = StaticArray<int, Shape...>;
 
-template <int ... Shape>
-using StaticArrayf = StaticArray<float, Shape...>;
+template <uint64_t... Shape> using StaticArrayf = StaticArray<float, Shape...>;
 
-template <int ... Shape>
-using StaticArrayd = StaticArray<double, Shape...>;
+template <uint64_t... Shape> using StaticArrayd = StaticArray<double, Shape...>;
 
-template <typename T, int Size>
-using StaticVector = StaticArray<T, Size>;
+template <typename T, uint64_t Size> using StaticVector = StaticArray<T, Size>;
 
-template <int Size>
-using StaticVectori = StaticVector<int, Size>;
+template <uint64_t Size> using StaticVectori = StaticVector<int, Size>;
 
-template <int Size>
-using StaticVectorf = StaticVector<float, Size>;
+template <uint64_t Size> using StaticVectorf = StaticVector<float, Size>;
 
-template <int Size>
-using StaticVectord = StaticVector<double, Size>;
+template <uint64_t Size> using StaticVectord = StaticVector<double, Size>;
 
-template <typename T, typename V=T, int ... Shape>
-StaticArray<V, Shape...> empty_like(const StaticArray<T, Shape...>& array)
-{
-    return StaticArray<V, Shape...>();
+template <typename T, uint64_t M, uint64_t N>
+using StaticMatrix = StaticArray<T, M, N>;
+
+template <typename T, typename V = T, uint64_t... Shape>
+StaticArray<V, Shape...> empty_like(const StaticArray<T, Shape...> &array) {
+  return StaticArray<V, Shape...>();
 }
 
-template <typename T, int Length>
-bool all_equal(const StaticVector<T, Length>& left, const StaticVector<T, Length>& right)
-{
-    for(int index = 0; index < left.length(); ++index)
-    {
-        if(left(index) != right(index))
-        {
-            return false;
-        }
+template <typename T, uint64_t Length>
+bool all_equal(const StaticVector<T, Length> &left,
+               const StaticVector<T, Length> &right) {
+  for (uint64_t index = 0; index < left.length(); ++index) {
+    if (left(index) != right(index)) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
-template <typename T, int ... Lengths>
-requires(sizeof...(Lengths) > 1)
-bool all_equal(const StaticArray<T, Lengths ...>& left, const StaticArray<T, Lengths ...>& right)
-{
-    for(int index = 0; index < left.length(); ++index)
-    {
-        if(!all_equal(left(index), right(index)))
-        {
-            return false;
-        }
+template <typename T, uint64_t Length1, uint64_t Length2, uint64_t... Lengths>
+bool all_equal(const StaticArray<T, Length1, Length2, Lengths...> &left,
+               const StaticArray<T, Length1, Length2, Lengths...> &right) {
+  for (uint64_t index = 0; index < left.length(); ++index) {
+    if (!all_equal(left(index), right(index))) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
-template <int Length>
-bool all(const StaticVector<bool, Length>& vector)
-{
-    for(int index = 0; index < vector.length(); ++index)
-    {
-        if(!vector(index))
-        {
-            return false;
-        }
+template <uint64_t Length> bool all(const StaticVector<bool, Length> &vector) {
+  for (uint64_t index = 0; index < vector.length(); ++index) {
+    if (!vector(index)) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
-template <int FirstLength, int SecondLength, int ... Shape>
-bool all(const StaticArray<bool, FirstLength, SecondLength, Shape ...>& array)
-{
-    for(int index = 0; index < array.length(); ++index)
-    {
-        if(!all(array(index)))
-        {
-            return false;
-        }
+template <uint64_t FirstLength, uint64_t SecondLength, uint64_t... Shape>
+bool all(const StaticArray<bool, FirstLength, SecondLength, Shape...> &array) {
+  for (uint64_t index = 0; index < array.length(); ++index) {
+    if (!all(array(index))) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
-template <typename T, int N>
-StaticArray<T, N, N> Identity()
-{
-    StaticArray<T, N, N> matrix;
-    T identity_element = static_cast<T>(1);
-    T zero_element = static_cast<T>(0);
-    for(int row = 0; row < N; ++row)
-    {
-        for(int column = 0; column < N; ++column)
-        {
-            matrix(row,column) = (row==column ? identity_element : zero_element);
-        }
+template <typename T, uint64_t N> StaticMatrix<T, N, N> Identity() {
+  StaticMatrix<T, N, N> matrix;
+  const T identity_element = static_cast<T>(1);
+  const T zero_element = static_cast<T>(0);
+  for (uint64_t row = 0; row < N; ++row) {
+    for (uint64_t column = 0; column < N; ++column) {
+      matrix(row, column) = (row == column ? identity_element : zero_element);
     }
-    return matrix;
+  }
+  return matrix;
 }
 
-template <int N>
-StaticVectori<N> ARange()
-{
-    StaticVectori<N> range;
-    for(int index = 0; index < N; ++index)
-    {
-        range(index) = index;
-    }
-    return range;
+template <uint64_t N> StaticVector<uint64_t, N> ARange() {
+  StaticVector<uint64_t, N> range;
+  for (uint64_t index = 0; index < N; ++index) {
+    range(index) = index;
+  }
+  return range;
 }
-}
+} // namespace math

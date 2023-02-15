@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <cstdint>
 
 namespace math
 {
@@ -16,25 +17,25 @@ struct is_same<T, T>
     static const bool value = true;
 };
 
-template <typename T, bool IsStatic, int ... Shape> class Array;
+template <typename T, bool IsStatic, uint64_t ... Shape> class Array;
 
-template <bool IsStatic, int ... Shape>
+template <bool IsStatic, uint64_t ... Shape>
 using Arrayi = Array<int, IsStatic, Shape ... >;
 
-template <bool IsStatic, int ... Shape>
+template <bool IsStatic, uint64_t ... Shape>
 using Arrayf = Array<float, IsStatic, Shape ... >;
 
-template <bool IsStatic, int ... Shape>
+template <bool IsStatic, uint64_t ... Shape>
 using Arrayd = Array<double, IsStatic, Shape ... >;
 
 class OutOfRange: public std::exception
 {
     private:
-        int index_;
-        int size_;
+        uint64_t index_;
+        uint64_t size_;
 
     public:
-        OutOfRange(int index, int size)
+        OutOfRange(uint64_t index, uint64_t size)
         : index_(index), size_(size) {};
 
         ~OutOfRange() override {};
