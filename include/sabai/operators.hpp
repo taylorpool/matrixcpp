@@ -69,10 +69,20 @@ operator-(const Array<T, IsStatic, Shape...> &left,
 
 template <typename T, bool IsStatic, uint64_t... Shape>
 Array<T, IsStatic, Shape...>
-operator/(const Array<T, IsStatic, Shape...> &array, T divisor) {
-  auto divided = empty_like(array);
+operator/(const T &numerator, const Array<T, IsStatic, Shape...> &denominator) {
+  auto result = empty_like(denominator);
+  for (uint64_t index = 0; index < denominator.length(); ++index) {
+    result(index) = numerator / denominator(index);
+  }
+  return result;
+}
+
+template <typename T, bool IsStatic, uint64_t... Shape>
+Array<T, IsStatic, Shape...>
+operator/(const Array<T, IsStatic, Shape...> &numerator, T divisor) {
+  auto divided = empty_like(numerator);
   for (uint64_t index = 0; index < divided.length(); ++index) {
-    divided(index) = array(index) / divisor;
+    divided(index) = numerator(index) / divisor;
   }
   return divided;
 }

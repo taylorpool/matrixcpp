@@ -2,6 +2,7 @@
 
 #include "sabai/dynamic.hpp"
 #include "sabai/operators.hpp"
+#include "sabai/products.hpp"
 #include "sabai/static.hpp"
 #include "sabai/string_representation.hpp"
 
@@ -117,7 +118,7 @@ TEST_F(StaticOperatorFixture, BinaryMinusMatrix1Matrix2Matrix3) {
 }
 
 TEST_F(StaticOperatorFixture, BinaryMinusE1E2) {
-  sabai::StaticVectori<3> my_difference = e1 - e2;
+  const sabai::StaticVectori<3> my_difference = e1 - e2;
   sabai::StaticVectori<3> correct_difference;
   for (int index = 0; index < 3; ++index) {
     correct_difference(index) = e1(index) - e2(index);
@@ -126,7 +127,7 @@ TEST_F(StaticOperatorFixture, BinaryMinusE1E2) {
 }
 
 TEST_F(StaticOperatorFixture, BinaryMinusE1E2E3) {
-  sabai::StaticVectori<3> my_difference = e1 - e2 - e3;
+  const sabai::StaticVectori<3> my_difference = e1 - e2 - e3;
   sabai::StaticVectori<3> correct_difference;
   for (int index = 0; index < 3; ++index) {
     correct_difference(index) = e1(index) - e2(index) - e3(index);
@@ -134,8 +135,41 @@ TEST_F(StaticOperatorFixture, BinaryMinusE1E2E3) {
   ASSERT_TRUE(sabai::all_equal(my_difference, correct_difference));
 }
 
+TEST_F(StaticOperatorFixture, ScalarMultiplyByVector) {
+  const double a = 1.0;
+  const double b = 2.0;
+  const sabai::StaticVectord<3> vector(b);
+  const auto result = a * vector;
+  const auto correct_value = a * b;
+  ASSERT_NEAR(correct_value, result(0), 1e-14);
+  ASSERT_NEAR(correct_value, result(1), 1e-14);
+  ASSERT_NEAR(correct_value, result(2), 1e-14);
+}
+
+TEST_F(StaticOperatorFixture, VectorMultiplyByScalar) {
+  const double a = 1.0;
+  const double b = 2.0;
+  const sabai::StaticVectord<3> vector(a);
+  const auto result = vector * b;
+  const auto correct_value = a * b;
+  ASSERT_NEAR(correct_value, result(0), 1e-14);
+  ASSERT_NEAR(correct_value, result(1), 1e-14);
+  ASSERT_NEAR(correct_value, result(2), 1e-14);
+}
+
+TEST_F(StaticOperatorFixture, ScalarDividedByVector) {
+  const double a = 1.0;
+  const double b = 2.0;
+  const sabai::StaticVectord<3> vector(b);
+  const auto result = a / vector;
+  const auto correct_value = a / b;
+  ASSERT_NEAR(correct_value, result(0), 1e-14);
+  ASSERT_NEAR(correct_value, result(1), 1e-14);
+  ASSERT_NEAR(correct_value, result(2), 1e-14);
+}
+
 TEST_F(StaticOperatorFixture, InPlaceDivision) {
-  double a = 3.0;
+  const double a = 3.0;
   sabai::StaticVectord<3> vector(a);
   vector /= a;
   ASSERT_EQ(vector(0), a / a);
