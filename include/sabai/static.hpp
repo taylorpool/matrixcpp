@@ -6,11 +6,13 @@
 
 namespace sabai {
 
-template <typename T, uint64_t Dim> class Array<T, true, Dim> {
+template <typename T, size_t... Shape> class StaticArray;
+
+template <typename T, size_t Dim> class StaticArray<T, Dim> {
 private:
   T data_[Dim];
 
-  void check_input(uint64_t index) const {
+  void check_input(size_t index) const {
     if (index >= Dim) {
       throw OutOfRange(index, Dim);
     }
@@ -19,68 +21,71 @@ private:
 public:
   using InitializerList = std::initializer_list<T>;
 
-  constexpr Array(){};
+  constexpr StaticArray(){};
 
-  constexpr Array(T initial_value) { fill(initial_value); }
+  constexpr StaticArray(T initial_value) { fill(initial_value); }
 
-  constexpr Array(InitializerList values) {
+  constexpr StaticArray(InitializerList values) {
     auto iter = values.begin();
-    for (uint64_t index = 0; index < values.size(); ++index) {
+    for (size_t index = static_cast<size_t>(0); index < values.size();
+         ++index) {
       data_[index] = *iter;
       ++iter;
     }
   }
 
-  constexpr Array(const Array &array) {
-    for (uint64_t index = 0; index < array.length(); ++index) {
+  constexpr StaticArray(const StaticArray &array) {
+    for (size_t index = static_cast<size_t>(0); index < array.length();
+         ++index) {
       data_[index] = array(index);
     }
   }
 
   constexpr void fill(T value) {
-    for (int i = 0; i < Dim; ++i) {
+    for (size_t i = static_cast<size_t>(0); i < Dim; ++i) {
       data_[i] = value;
     }
   }
 
-  constexpr T &operator()(uint64_t index) {
+  constexpr T &operator()(size_t index) {
     check_input(index);
     return data_[index];
   }
 
-  constexpr T operator()(uint64_t index) const {
+  constexpr T operator()(size_t index) const {
     check_input(index);
     return data_[index];
   }
 
-  template <uint64_t Size>
-  constexpr Array<T, true, Size>
-  operator()(const Array<uint64_t, true, Size> &indices) const {
-    Array<T, true, Size> indexed;
-    for (uint64_t index = 0; index < Size; ++index) {
+  template <size_t Size>
+  constexpr StaticArray<T, Size>
+  operator()(const StaticArray<size_t, Size> &indices) const {
+    StaticArray<T, Size> indexed;
+    for (size_t index = static_cast<size_t>(0); index < Size; ++index) {
       indexed(index) = data_[indices(index)];
     }
     return indexed;
   }
 
-  constexpr void operator=(const Array &array) {
-    for (uint64_t index = 0; index < array.length(); ++index) {
+  constexpr void operator=(const StaticArray &array) {
+    for (size_t index = static_cast<size_t>(0); index < array.length();
+         ++index) {
       data_[index] = array(index);
     }
   }
 
-  constexpr uint64_t length() const { return Dim; }
+  constexpr size_t length() const { return Dim; }
 };
 
-template <typename T, uint64_t FirstDim, uint64_t SecondDim,
-          uint64_t... OtherDim>
-class Array<T, true, FirstDim, SecondDim, OtherDim...> {
+template <typename T, size_t FirstDim, size_t SecondDim, size_t... OtherDim>
+class StaticArray<T, FirstDim, SecondDim, OtherDim...> {
 private:
-  using SubArray = Array<T, true, SecondDim, OtherDim...>;
-  static constexpr uint64_t NumDims = 2 + sizeof...(OtherDim);
+  using SubArray = StaticArray<T, SecondDim, OtherDim...>;
+  static constexpr size_t NumDims =
+      static_cast<size_t>(2) + sizeof...(OtherDim);
   SubArray data_[FirstDim];
 
-  constexpr void check_input(uint64_t index) const {
+  constexpr void check_input(size_t index) const {
     if (index >= FirstDim || index < 0) {
       throw OutOfRange(index, FirstDim);
     }
@@ -90,12 +95,12 @@ public:
   using InitializerList =
       std::initializer_list<typename SubArray::InitializerList>;
 
-  constexpr Array(){};
+  constexpr StaticArray(){};
 
-  constexpr Array(T initial_value) { fill(initial_value); }
+  constexpr StaticArray(T initial_value) { fill(initial_value); }
 
-  constexpr Array(InitializerList initializer_list) {
-    uint64_t i = 0;
+  constexpr StaticArray(InitializerList initializer_list) {
+    size_t i = static_cast<size_t>(0);
     for (auto iter = initializer_list.begin(); iter != initializer_list.end();
          ++iter) {
       data_[i] = SubArray(*iter);
@@ -103,97 +108,102 @@ public:
     }
   }
 
-  constexpr Array(const Array &array) {
-    for (uint64_t index = 0; index < array.length(); ++index) {
+  constexpr StaticArray(const StaticArray &array) {
+    for (size_t index = static_cast<size_t>(0); index < array.length();
+         ++index) {
       data_[index] = array(index);
     }
   }
 
   constexpr void fill(T value) {
-    for (uint64_t i = 0; i < FirstDim; ++i) {
+    for (size_t i = static_cast<size_t>(0); i < FirstDim; ++i) {
       data_[i].fill(value);
     }
   }
 
-  constexpr void fill(const Array &array) {
-    for (uint64_t index = 0; index < FirstDim; ++index) {
+  constexpr void fill(const StaticArray &array) {
+    for (size_t index = static_cast<size_t>(0); index < FirstDim; ++index) {
       data_[index].fill(array(index));
     }
   }
 
-  constexpr SubArray &operator()(uint64_t index) {
+  constexpr SubArray &operator()(size_t index) {
     check_input(index);
     return data_[index];
   }
 
-  constexpr SubArray operator()(uint64_t index) const {
+  constexpr SubArray operator()(size_t index) const {
     check_input(index);
     return data_[index];
   }
 
   template <typename... OtherIndices>
-  constexpr auto operator()(uint64_t first, uint64_t second,
+  constexpr auto operator()(size_t first, size_t second,
                             OtherIndices... others) const {
     check_input(first);
     return data_[first](second, others...);
   }
 
   template <typename... OtherIndices>
-  constexpr auto &operator()(uint64_t first, uint64_t second,
+  constexpr auto &operator()(size_t first, size_t second,
                              OtherIndices... others) {
     check_input(first);
     return data_[first](second, others...);
   }
 
-  template <uint64_t Size>
-  constexpr Array<T, true, Size, SecondDim, OtherDim...>
-  operator()(const Array<uint64_t, true, Size> &indices) const {
-    Array<T, true, Size, SecondDim, OtherDim...> indexed;
-    for (uint64_t index = 0; index < Size; ++index) {
+  template <size_t Size>
+  constexpr StaticArray<T, Size, SecondDim, OtherDim...>
+  operator()(const StaticArray<size_t, Size> &indices) const {
+    StaticArray<T, Size, SecondDim, OtherDim...> indexed;
+    for (size_t index = static_cast<size_t>(0); index < Size; ++index) {
       indexed(index) = data_[indices(index)];
     }
     return indexed;
   }
 
-  constexpr void operator=(const Array &array) {
-    for (int index = 0; index < array.length(); ++index) {
+  constexpr void operator=(const StaticArray &array) {
+    for (size_t index = static_cast<size_t>(0); index < array.length();
+         ++index) {
       data_[index] = array(index);
     }
   }
 
-  constexpr uint64_t length() const { return FirstDim; }
+  constexpr size_t length() const { return FirstDim; }
 };
 
-template <typename T, uint64_t... Shape>
-using StaticArray = Array<T, true, Shape...>;
+template <size_t... Shape> using StaticArrayi = StaticArray<int, Shape...>;
 
-template <uint64_t... Shape> using StaticArrayi = StaticArray<int, Shape...>;
+template <size_t... Shape> using StaticArrayf = StaticArray<float, Shape...>;
 
-template <uint64_t... Shape> using StaticArrayf = StaticArray<float, Shape...>;
+template <size_t... Shape> using StaticArrayd = StaticArray<double, Shape...>;
 
-template <uint64_t... Shape> using StaticArrayd = StaticArray<double, Shape...>;
+template <typename T, size_t Size> using StaticVector = StaticArray<T, Size>;
 
-template <typename T, uint64_t Size> using StaticVector = StaticArray<T, Size>;
+template <size_t Size> using StaticVectori = StaticVector<int, Size>;
 
-template <uint64_t Size> using StaticVectori = StaticVector<int, Size>;
+template <size_t Size> using StaticVectorf = StaticVector<float, Size>;
 
-template <uint64_t Size> using StaticVectorf = StaticVector<float, Size>;
+template <size_t Size> using StaticVectord = StaticVector<double, Size>;
 
-template <uint64_t Size> using StaticVectord = StaticVector<double, Size>;
-
-template <typename T, uint64_t M, uint64_t N>
+template <typename T, size_t M, size_t N>
 using StaticMatrix = StaticArray<T, M, N>;
 
-template <typename T, typename V = T, uint64_t... Shape>
+template <size_t M, size_t N> using StaticMatrixi = StaticMatrix<int, M, N>;
+
+template <size_t M, size_t N> using StaticMatrixf = StaticMatrix<float, M, N>;
+
+template <size_t M, size_t N> using StaticMatrixd = StaticMatrix<double, M, N>;
+
+template <typename T, typename V = T, size_t... Shape>
 constexpr StaticArray<V, Shape...>
 empty_like(const StaticArray<T, Shape...> &array) {
   return StaticArray<V, Shape...>();
 }
 
-template <typename T, uint64_t Length>
+template <typename T, size_t Length>
 constexpr bool all_equal(const StaticVector<T, Length> &left,
                          const StaticVector<T, Length> &right) {
-  for (uint64_t index = 0; index < left.length(); ++index) {
+  for (size_t index = static_cast<size_t>(0); index < left.length(); ++index) {
     if (left(index) != right(index)) {
       return false;
     }
@@ -201,11 +211,11 @@ constexpr bool all_equal(const StaticVector<T, Length> &left,
   return true;
 }
 
-template <typename T, uint64_t Length1, uint64_t Length2, uint64_t... Lengths>
+template <typename T, size_t Length1, size_t Length2, size_t... Lengths>
 constexpr bool
 all_equal(const StaticArray<T, Length1, Length2, Lengths...> &left,
           const StaticArray<T, Length1, Length2, Lengths...> &right) {
-  for (uint64_t index = 0; index < left.length(); ++index) {
+  for (size_t index = static_cast<size_t>(0); index < left.length(); ++index) {
     if (!all_equal(left(index), right(index))) {
       return false;
     }
@@ -213,9 +223,9 @@ all_equal(const StaticArray<T, Length1, Length2, Lengths...> &left,
   return true;
 }
 
-template <uint64_t Length>
+template <size_t Length>
 constexpr bool all(const StaticVector<bool, Length> &vector) {
-  for (uint64_t index = 0; index < vector.length(); ++index) {
+  for (size_t index = 0; index < vector.length(); ++index) {
     if (!vector(index)) {
       return false;
     }
@@ -223,10 +233,10 @@ constexpr bool all(const StaticVector<bool, Length> &vector) {
   return true;
 }
 
-template <uint64_t FirstLength, uint64_t SecondLength, uint64_t... Shape>
+template <size_t FirstLength, size_t SecondLength, size_t... Shape>
 constexpr bool
 all(const StaticArray<bool, FirstLength, SecondLength, Shape...> &array) {
-  for (uint64_t index = 0; index < array.length(); ++index) {
+  for (size_t index = static_cast<size_t>(0); index < array.length(); ++index) {
     if (!all(array(index))) {
       return false;
     }
@@ -234,21 +244,21 @@ all(const StaticArray<bool, FirstLength, SecondLength, Shape...> &array) {
   return true;
 }
 
-template <typename T, uint64_t N> constexpr StaticMatrix<T, N, N> Identity() {
+template <typename T, size_t N> constexpr StaticMatrix<T, N, N> Identity() {
   StaticMatrix<T, N, N> matrix;
   const T identity_element = static_cast<T>(1);
   const T zero_element = static_cast<T>(0);
-  for (uint64_t row = 0; row < N; ++row) {
-    for (uint64_t column = 0; column < N; ++column) {
+  for (size_t row = static_cast<size_t>(0); row < N; ++row) {
+    for (size_t column = static_cast<size_t>(0); column < N; ++column) {
       matrix(row, column) = (row == column ? identity_element : zero_element);
     }
   }
   return matrix;
 }
 
-template <uint64_t N> constexpr StaticVector<uint64_t, N> ARange() {
-  StaticVector<uint64_t, N> range;
-  for (uint64_t index = 0; index < N; ++index) {
+template <size_t N> constexpr StaticVector<size_t, N> ARange() {
+  StaticVector<size_t, N> range;
+  for (size_t index = static_cast<size_t>(0); index < N; ++index) {
     range(index) = index;
   }
   return range;

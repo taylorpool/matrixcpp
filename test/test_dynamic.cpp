@@ -434,7 +434,7 @@ TEST_F(EmptyLikeDynamicArray, MatrixTypeNotSame) {
 
 TEST(ARange, ARangeDynamic) {
   auto vector = sabai::ARange(10);
-  sabai::DynamicVector<uint64_t> answer = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  sabai::DynamicVector<size_t> answer = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
   ASSERT_TRUE(sabai::all_equal(vector, answer));
 }

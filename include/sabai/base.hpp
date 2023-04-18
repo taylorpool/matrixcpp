@@ -11,24 +11,13 @@ template <typename T, typename U> struct is_same {
 
 template <typename T> struct is_same<T, T> { static const bool value = true; };
 
-template <typename T, bool IsStatic, uint64_t... Shape> class Array;
-
-template <bool IsStatic, uint64_t... Shape>
-using Arrayi = Array<int, IsStatic, Shape...>;
-
-template <bool IsStatic, uint64_t... Shape>
-using Arrayf = Array<float, IsStatic, Shape...>;
-
-template <bool IsStatic, uint64_t... Shape>
-using Arrayd = Array<double, IsStatic, Shape...>;
-
 class OutOfRange : public std::exception {
 private:
-  uint64_t index_;
-  uint64_t size_;
+  size_t index_;
+  size_t size_;
 
 public:
-  OutOfRange(uint64_t index, uint64_t size) : index_(index), size_(size){};
+  OutOfRange(size_t index, size_t size) : index_(index), size_(size){};
 
   ~OutOfRange() override{};
 

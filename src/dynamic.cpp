@@ -1,9 +1,9 @@
 #include "sabai/dynamic.hpp"
 
 namespace sabai {
-DynamicVector<uint64_t> ARange(uint64_t N) {
-  DynamicVector<uint64_t> range(N);
-  for (uint64_t index = 0; index < N; ++index) {
+DynamicVector<size_t> ARange(size_t N) {
+  DynamicVector<size_t> range(N);
+  for (size_t index = static_cast<size_t>(0); index < N; ++index) {
     range(index) = index;
   }
   return range;

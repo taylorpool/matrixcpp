@@ -210,18 +210,18 @@ TEST(Identity, Matrix) {
 
 TEST(ARange, Vector) {
   auto range = sabai::ARange<4>();
-  sabai::StaticVector<uint64_t, 4> answer = {0, 1, 2, 3};
+  sabai::StaticVector<size_t, 4> answer = {0, 1, 2, 3};
   ASSERT_TRUE(sabai::all_equal(range, answer));
 }
 
 TEST_F(MultiDimensional, IndexingVector) {
-  sabai::StaticVector<uint64_t, 1> indices = {1};
+  sabai::StaticVector<size_t, 1> indices = {1};
   sabai::StaticVectori<1> answer = {vector(indices(0))};
   ASSERT_TRUE(sabai::all_equal(answer, vector(indices)));
 }
 
 TEST_F(MultiDimensional, IndexingMatrix) {
-  sabai::StaticVector<uint64_t, 1> indices = {1};
+  sabai::StaticVector<size_t, 1> indices = {1};
   sabai::StaticArrayi<1, 2> answer = {{3, 4}};
   ASSERT_TRUE(sabai::all_equal(answer, matrix(indices)));
 }
