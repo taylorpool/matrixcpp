@@ -41,16 +41,17 @@ private:
 public:
   using InitializerList = std::initializer_list<T>;
 
-  DynamicArray() : length_(static_cast<size_t>(0)) {}
+  constexpr DynamicArray() : length_(static_cast<size_t>(0)) {}
 
-  DynamicArray(size_t _length) : length_(_length), data_(new T[length_]) {}
+  constexpr DynamicArray(size_t _length)
+      : length_(_length), data_(new T[length_]) {}
 
-  DynamicArray(const DynamicArray &array)
+  constexpr DynamicArray(const DynamicArray &array)
       : length_(array.length()), data_(new T[length_]) {
     fill(array);
   }
 
-  DynamicArray(const InitializerList &values)
+  constexpr DynamicArray(const InitializerList &values)
       : length_(values.size()), data_(new T[length_]) {
     size_t index = 0;
     for (const T &value : values) {
@@ -59,7 +60,7 @@ public:
     }
   }
 
-  void allocate(size_t _length) {
+  constexpr void allocate(size_t _length) {
     if (length_ > static_cast<size_t>(0)) {
       delete[] data_;
     }
@@ -67,27 +68,29 @@ public:
     length_ = _length;
   }
 
-  void allocate_like(const DynamicArray &array) { allocate(array.length()); }
+  constexpr void allocate_like(const DynamicArray &array) {
+    allocate(array.length());
+  }
 
-  ~DynamicArray() {
+  constexpr ~DynamicArray() {
     if (length_ > static_cast<size_t>(0)) {
       delete[] data_;
     }
   }
 
-  T operator()(size_t index) const {
+  constexpr T operator()(size_t index) const {
     check_input(index);
     return data_[index];
   }
 
-  T &operator()(size_t index) {
+  constexpr T &operator()(size_t index) {
     check_input(index);
     return data_[index];
   }
 
-  size_t length() const { return length_; }
+  constexpr size_t length() const { return length_; }
 
-  void fill(const InitializerList &values) {
+  constexpr void fill(const InitializerList &values) {
     if (length_ == static_cast<size_t>(0)) {
       allocate(values.size());
     }
@@ -101,13 +104,13 @@ public:
     }
   }
 
-  void fill(T value) {
+  constexpr void fill(T value) {
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index] = value;
     }
   }
 
-  void fill(const DynamicArray &vector) {
+  constexpr void fill(const DynamicArray &vector) {
     if (length_ == static_cast<size_t>(0)) {
       allocate(vector.length());
     }
@@ -117,7 +120,7 @@ public:
     }
   }
 
-  void operator=(const DynamicArray &vector) {
+  constexpr void operator=(const DynamicArray &vector) {
     if (length_ == static_cast<size_t>(0)) {
       allocate(vector.length());
     }
@@ -127,7 +130,8 @@ public:
     }
   }
 
-  DynamicArray operator()(const DynamicArray<size_t, 1> &indices) const {
+  constexpr DynamicArray
+  operator()(const DynamicArray<size_t, 1> &indices) const {
     DynamicArray indexed(indices.length());
     for (size_t index = static_cast<size_t>(0); index < indexed.length();
          ++index) {
@@ -147,7 +151,7 @@ private:
   size_t length_;
   SubArray *data_;
 
-  void check_input(size_t index) const {
+  constexpr void check_input(size_t index) const {
     if (index >= length_) {
       throw OutOfRange(index, length_);
     }
@@ -157,25 +161,26 @@ public:
   using InitializerList =
       std::initializer_list<typename SubArray::InitializerList>;
 
-  DynamicArray() : length_(static_cast<size_t>(0)) {}
+  constexpr DynamicArray() : length_(static_cast<size_t>(0)) {}
 
   template <typename... OtherDims>
-  requires(sizeof...(OtherDims) == (NumDims - 1))
-      DynamicArray(size_t _length, OtherDims... others)
+  requires(sizeof...(OtherDims) ==
+           (NumDims - 1)) constexpr DynamicArray(size_t _length,
+                                                 OtherDims... others)
       : length_(_length), data_(new SubArray[length_]) {
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index].allocate(others...);
     }
   }
 
-  DynamicArray(const DynamicArray &array)
+  constexpr DynamicArray(const DynamicArray &array)
       : length_(array.length()), data_(new SubArray[length_]) {
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index].fill(array(index));
     }
   }
 
-  DynamicArray(const InitializerList &values)
+  constexpr DynamicArray(const InitializerList &values)
       : length_(values.size()), data_(new SubArray[length_]) {
     size_t index = static_cast<size_t>(0);
     for (typename SubArray::InitializerList value : values) {
@@ -184,13 +189,13 @@ public:
     }
   }
 
-  ~DynamicArray() {
+  constexpr ~DynamicArray() {
     if (length_ > static_cast<size_t>(0)) {
       delete[] data_;
     }
   }
 
-  void fill(const DynamicArray &array) {
+  constexpr void fill(const DynamicArray &array) {
     if (length_ == static_cast<size_t>(0)) {
       allocate(array.length());
     } else if (length_ != array.length()) {
@@ -201,39 +206,39 @@ public:
     }
   }
 
-  SubArray operator()(size_t index) const {
+  constexpr SubArray operator()(size_t index) const {
     check_input(index);
     return data_[index];
   }
 
-  SubArray &operator()(size_t index) {
+  constexpr SubArray &operator()(size_t index) {
     check_input(index);
     return data_[index];
   }
 
   template <typename... OtherIndices>
-  requires(sizeof...(OtherIndices) > 0) auto
+  requires(sizeof...(OtherIndices) > 0) constexpr auto
   operator()(size_t index, OtherIndices... others) const {
     check_input(index);
     return data_[index](others...);
   }
 
   template <typename... OtherIndices>
-  requires(sizeof...(OtherIndices) > 0) auto &
+  requires(sizeof...(OtherIndices) > 0) constexpr auto &
   operator()(size_t index, OtherIndices... others) {
     check_input(index);
     return data_[index](others...);
   }
 
-  size_t length() const { return length_; }
+  constexpr size_t length() const { return length_; }
 
-  void fill(T value) {
+  constexpr void fill(T value) {
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index].fill(value);
     }
   }
 
-  void fill(const InitializerList &values) {
+  constexpr void fill(const InitializerList &values) {
     if (length_ == static_cast<size_t>(0)) {
       allocate(values.size());
     }
@@ -247,7 +252,7 @@ public:
     }
   }
 
-  void allocate(size_t _length) {
+  constexpr void allocate(size_t _length) {
     if (length_ > static_cast<size_t>(0)) {
       delete[] data_;
     }
@@ -257,24 +262,25 @@ public:
 
   template <typename... OtherLengths>
   requires(sizeof...(OtherLengths) ==
-           (NumDims - 1)) void allocate(size_t _length,
-                                        OtherLengths... others) {
+           (NumDims - 1)) constexpr void allocate(size_t _length,
+                                                  OtherLengths... others) {
     allocate(_length);
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index].allocate(others...);
     }
   }
 
-  void allocate_like(const DynamicArray &array) {
+  constexpr void allocate_like(const DynamicArray &array) {
     allocate(array.length());
     for (size_t index = static_cast<size_t>(0); index < length_; ++index) {
       data_[index].allocate_like(array(index));
     }
   }
 
-  void operator=(const DynamicArray &array) { fill(array); }
+  constexpr void operator=(const DynamicArray &array) { fill(array); }
 
-  DynamicArray operator()(const DynamicArray<size_t, 1> &indices) const {
+  constexpr DynamicArray
+  operator()(const DynamicArray<size_t, 1> &indices) const {
     DynamicArray indexed;
     indexed.allocate(indices.length());
     for (size_t index = static_cast<size_t>(0); index < indices.length();
@@ -308,20 +314,22 @@ using DynamicMatrixf = DynamicMatrix<float>;
 using DynamicMatrixd = DynamicMatrix<double>;
 
 template <typename T>
-DynamicVector<T> empty_like(const DynamicVector<T> &vector) {
+constexpr DynamicVector<T> empty_like(const DynamicVector<T> &vector) {
   DynamicVector<T> empty_vector(vector.length());
   return empty_vector;
 };
 
 template <typename T, size_t NumDims>
-DynamicArray<T, NumDims> empty_like(const DynamicArray<T, NumDims> &array) {
+constexpr DynamicArray<T, NumDims>
+empty_like(const DynamicArray<T, NumDims> &array) {
   DynamicArray<T, NumDims> empty_array;
   empty_array.allocate_like(array);
   return empty_array;
 };
 
 template <typename T>
-bool all_equal(const DynamicVector<T> &left, const DynamicVector<T> &right) {
+constexpr bool all_equal(const DynamicVector<T> &left,
+                         const DynamicVector<T> &right) {
   if (left.length() != right.length()) {
     throw MismatchedLength(left.length(), right.length());
   }
@@ -335,8 +343,8 @@ bool all_equal(const DynamicVector<T> &left, const DynamicVector<T> &right) {
 };
 
 template <typename T, size_t NumDims>
-bool all_equal(const DynamicArray<T, NumDims> &left,
-               const DynamicArray<T, NumDims> &right) {
+constexpr bool all_equal(const DynamicArray<T, NumDims> &left,
+                         const DynamicArray<T, NumDims> &right) {
   if (left.length() != right.length()) {
     throw MismatchedLength(left.length(), right.length());
   }
@@ -349,7 +357,7 @@ bool all_equal(const DynamicArray<T, NumDims> &left,
   return true;
 };
 
-template <typename T> DynamicMatrix<T> Identity(size_t N) {
+template <typename T> constexpr DynamicMatrix<T> Identity(size_t N) {
   DynamicMatrix<T> matrix(N, N);
   const auto identity_element = static_cast<T>(1);
   const auto zero_element = static_cast<T>(0);
@@ -361,6 +369,12 @@ template <typename T> DynamicMatrix<T> Identity(size_t N) {
   return matrix;
 };
 
-DynamicVector<size_t> ARange(size_t N);
+constexpr DynamicVector<size_t> ARange(size_t N) {
+  DynamicVector<size_t> range(N);
+  for (size_t index = static_cast<size_t>(0); index < N; ++index) {
+    range(index) = index;
+  }
+  return range;
+}
 
 } // namespace sabai
