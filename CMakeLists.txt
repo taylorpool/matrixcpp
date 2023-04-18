@@ -12,9 +12,18 @@ target_include_directories(sabai
   include
 )
 
-option(BUILD_Sabai_TESTS "Build Sabai Tests" ON)
+option(BUILD_Sabai_TESTS "Build Sabai Tests" OFF)
 if(BUILD_Sabai_TESTS)
-  find_package(GTest REQUIRED)
+
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.13.0
+  )
+  FetchContent_MakeAvailable(googletest)
+
+  enable_testing()
 
   add_executable(sabai_tests
     test/test_static.cpp
@@ -25,8 +34,9 @@ if(BUILD_Sabai_TESTS)
     test/test_decompositions.cpp
     test/test_dynamic.cpp)
 
-  target_link_libraries(sabai_tests PRIVATE sabai GTest::GTest GTest::Main)
+  target_link_libraries(sabai_tests PRIVATE sabai GTest::gtest_main)
 
   include(GoogleTest)
   gtest_discover_tests(sabai_tests)
+
 endif()

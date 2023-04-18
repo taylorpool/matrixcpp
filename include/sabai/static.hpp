@@ -9,7 +9,7 @@ namespace sabai {
 template <typename T, size_t... Shape> class StaticArray;
 
 template <typename T, size_t Dim> class StaticArray<T, Dim> {
-private:
+protected:
   T data_[Dim];
 
   void check_input(size_t index) const {
@@ -79,7 +79,7 @@ public:
 
 template <typename T, size_t FirstDim, size_t SecondDim, size_t... OtherDim>
 class StaticArray<T, FirstDim, SecondDim, OtherDim...> {
-private:
+protected:
   using SubArray = StaticArray<T, SecondDim, OtherDim...>;
   static constexpr size_t NumDims =
       static_cast<size_t>(2) + sizeof...(OtherDim);

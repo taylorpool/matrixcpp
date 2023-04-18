@@ -22,7 +22,7 @@ public:
 template <typename T, size_t... Shape> class DynamicArray;
 
 template <typename T> class DynamicArray<T, 1> {
-private:
+protected:
   size_t length_;
   T *data_;
 
@@ -147,7 +147,7 @@ requires(NumDims > static_cast<size_t>(1)) class DynamicArray<T, NumDims> {
 public:
   using SubArray = DynamicArray<T, NumDims - 1>;
 
-private:
+protected:
   size_t length_;
   SubArray *data_;
 
