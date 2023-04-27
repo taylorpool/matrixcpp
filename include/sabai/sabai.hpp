@@ -28,72 +28,76 @@ VectorIterator<T, N> &operator--(VectorIterator<T, N> &);
 template <typename T, size_t N>
 VectorIterator<T, N> operator--(VectorIterator<T, N> &, int);
 
-template <typename T>
-bool operator==(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator==(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-bool operator!=(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator!=(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-bool operator<(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator<(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-bool operator>(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator>(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-bool operator<=(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator<=(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-bool operator>=(const VectorIterator<T> &, const VectorIterator<T> &);
+template <typename T, size_t N>
+bool operator>=(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-VectorIterator<T> &
-operator+=(VectorIterator<T> &,
-           const std::iter_difference_t<VectorIterator<T>> &);
+template <typename T, size_t N>
+VectorIterator<T, N> &
+operator+=(VectorIterator<T, N> &,
+           const std::iter_difference_t<VectorIterator<T, N>> &);
 
-template <typename T>
-VectorIterator<T> operator+(const VectorIterator<T> &,
-                            const std::iter_difference_t<VectorIterator<T>> &);
+template <typename T, size_t N>
+VectorIterator<T, N>
+operator+(const VectorIterator<T, N> &,
+          const std::iter_difference_t<VectorIterator<T, N>> &);
 
-template <typename T>
-VectorIterator<T> operator+(const std::iter_difference_t<VectorIterator<T>> &,
-                            const VectorIterator<T> &);
+template <typename T, size_t N>
+VectorIterator<T, N>
+operator+(const std::iter_difference_t<VectorIterator<T, N>> &,
+          const VectorIterator<T, N> &);
 
-template <typename T>
-VectorIterator<T> &
-operator-=(VectorIterator<T> &,
-           const std::iter_difference_t<VectorIterator<T>> &);
+template <typename T, size_t N>
+VectorIterator<T, N> &
+operator-=(VectorIterator<T, N> &,
+           const std::iter_difference_t<VectorIterator<T, N>> &);
 
-template <typename T>
-std::iter_difference_t<VectorIterator<T>> operator-(const VectorIterator<T> &,
-                                                    const VectorIterator<T> &);
+template <typename T, size_t N>
+std::iter_difference_t<VectorIterator<T, N>>
+operator-(const VectorIterator<T, N> &, const VectorIterator<T, N> &);
 
-template <typename T>
-VectorIterator<T> operator-(const VectorIterator<T> &,
-                            const std::iter_difference_t<VectorIterator<T>> &);
+template <typename T, size_t N>
+VectorIterator<T, N>
+operator-(const VectorIterator<T, N> &,
+          const std::iter_difference_t<VectorIterator<T, N>> &);
 
 template <typename T, size_t N> class Vector {
 public:
   T m_data[N];
 };
 
-template <typename T, size_t N> VectorIterator<T> begin(const Vector<T, N> &) {
-  VectorIterator<T> iterator;
+template <typename T, size_t N>
+VectorIterator<T, N> begin(const Vector<T, N> &) {
+  VectorIterator<T, N> iterator;
   return iterator;
 }
 
-template <typename T, size_t N> VectorIterator<T> end(const Vector<T, N> &) {
-  VectorIterator<T> iterator;
+template <typename T, size_t N> VectorIterator<T, N> end(const Vector<T, N> &) {
+  VectorIterator<T, N> iterator;
   return iterator;
 }
 
-template <typename T, size_t N> VectorIterator<T> begin(const Vector<T, N>) {
-  VectorIterator<T> iterator;
+template <typename T, size_t N> VectorIterator<T, N> begin(const Vector<T, N>) {
+  VectorIterator<T, N> iterator;
   return iterator;
 }
 
-template <typename T, size_t N> VectorIterator<T> end(const Vector<T, N>) {
-  VectorIterator<T> iterator;
+template <typename T, size_t N> VectorIterator<T, N> end(const Vector<T, N>) {
+  VectorIterator<T, N> iterator;
   return iterator;
 }
 
