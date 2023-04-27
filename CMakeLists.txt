@@ -2,14 +2,22 @@ cmake_policy(SET CMP0048 NEW)
 cmake_minimum_required(VERSION 3.16)
 project(sabai VERSION 0.2)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(sabai INTERFACE)
 target_include_directories(sabai
   INTERFACE
   include
+)
+
+add_executable(main
+  src/main.cpp
+)
+target_link_libraries(main
+  sabai
 )
 
 option(BUILD_Sabai_TESTS "Build Sabai Tests" OFF)
