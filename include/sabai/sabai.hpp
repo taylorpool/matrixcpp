@@ -20,9 +20,10 @@ public:
 
   constexpr iterator begin() { return iterator(m_data); }
   constexpr iterator end() { return iterator(m_data + N); }
+  constexpr const_iterator cbegin() { return const_iterator(m_data); }
+  constexpr const_iterator cend() { return const_iterator(m_data + N); }
 
   constexpr T &operator[](size_type index) { return m_data[index]; }
-
   constexpr T &operator[](size_type index) const { return m_data[index]; }
 };
 
