@@ -22,50 +22,63 @@ public:
 
   T m_data[N];
 
-  constexpr iterator begin() { return iterator(m_data); }
-  constexpr iterator end() { return iterator(m_data + N); }
-  constexpr const_iterator cbegin() { return const_iterator(m_data); }
-  constexpr const_iterator cend() { return const_iterator(m_data + N); }
+  constexpr iterator begin() noexcept { return iterator(m_data); }
+  constexpr iterator end() noexcept { return iterator(m_data + N); }
+  constexpr size_t size() const noexcept { return N; }
+  constexpr const_iterator cbegin() const noexcept {
+    return const_iterator(m_data);
+  }
+  constexpr const_iterator cend() const noexcept {
+    return const_iterator(m_data + N);
+  }
 
   constexpr T &operator[](size_type index) { return m_data[index]; }
   constexpr T &operator[](size_type index) const { return m_data[index]; }
 
-  Vector(){};
-
-  template <input_range_of<T> R> Vector(R &&range) {
-    for (auto my_data = begin(), range_data = range.begin(); my_data != end();
+  constexpr Vector() noexcept {};
+  template <input_range_of<T> R> constexpr Vector(R &&range) {
+    for (auto my_data = begin(), range_data = range.begin();
+         my_data != end() && range_data != range.end();
          ++my_data, ++range_data) {
       *my_data = *range_data;
     }
   }
 };
 
-template <typename T, size_t N> constexpr auto operator+(Vector<T, N> &x, T y) {
+template <size_t N> using Vectori = Vector<int, N>;
+
+template <typename T, input_range_of<T> R>
+constexpr auto operator+(R &&x, T y) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return value + y; });
 }
 
-template <typename T, size_t N> constexpr auto operator+(T y, Vector<T, N> &x) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator+(T y, R &&x) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return y + value; });
 }
 
-template <typename T, size_t N> constexpr auto operator-(Vector<T, N> &x, T y) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator-(R &&x, T y) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return value - y; });
 }
 
-template <typename T, size_t N> constexpr auto operator-(T y, Vector<T, N> &x) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator-(T y, R &&x) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return y - value; });
 }
 
-template <typename T, size_t N> constexpr auto operator*(Vector<T, N> &x, T y) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator*(R &&x, T y) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return value * y; });
 }
 
-template <typename T, size_t N> constexpr auto operator*(T y, Vector<T, N> &x) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator*(T y, R &&x) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return y * value; });
 }
@@ -75,12 +88,14 @@ template <typename T, size_t N> constexpr auto operator-(Vector<T, N> &x) {
          std::ranges::views::transform([](const T &value) { return -value; });
 }
 
-template <typename T, size_t N> constexpr auto operator/(Vector<T, N> &x, T y) {
-  return x | std::ranges::views::transform(
-                 [y](const T &value) { return value / y; });
+template <typename T, input_range_of<T> R>
+constexpr auto operator/(R &&range, T y) {
+  return range | std::ranges::views::transform(
+                     [y](const T &value) { return value / y; });
 }
 
-template <typename T, size_t N> constexpr auto operator/(T y, Vector<T, N> &x) {
+template <typename T, input_range_of<T> R>
+constexpr auto operator/(T y, R &&x) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return y / value; });
 }

@@ -55,5 +55,10 @@ int main(int argc, char *argv[]) {
   std::cout << vec_y[1] << std::endl;
   std::cout << vec_y[2] << std::endl;
 
+  sabai::Vector<int, 3> vec_compose = (x + 2) / 2;
+  std::cout << vec_compose[0] << std::endl;
+  std::cout << vec_compose[1] << std::endl;
+  std::cout << vec_compose[2] << std::endl;
+
   return 0;
 }
