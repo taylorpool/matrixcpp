@@ -32,4 +32,9 @@ template <typename T, size_t N> constexpr auto operator+(Vector<T, N> &x, T y) {
                  [y](const T &value) { return value + y; });
 }
 
+template <typename T, size_t N> constexpr auto operator-(Vector<T, N> &x, T y) {
+  return x | std::ranges::views::transform(
+                 [y](const T &value) { return value - y; });
+}
+
 } // namespace sabai
