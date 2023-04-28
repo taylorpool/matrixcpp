@@ -9,16 +9,43 @@ int main(int argc, char *argv[]) {
 
   auto y = x + 1;
   auto z = x - 1;
+  auto a = 1 + x;
+  auto b = 1 - x;
+  auto c = x * 2;
+  auto d = 2 * x;
+  auto e = -x;
+  auto f = x / 2;
+  auto g = 2 / x;
 
   x[0] = -2;
-  std::cout << x[0] << std::endl;
-  std::cout << y[0] << std::endl;
-  std::cout << z[0] << std::endl;
+  x[1] = -3;
+  x[2] = -4;
+  std::cout << "x: " << x[0] << std::endl;
+  std::cout << "x + 1: " << y[0] << std::endl;
+  std::cout << "x - 1: " << z[0] << std::endl;
+  std::cout << "1 + x: " << a[0] << std::endl;
+  std::cout << "1 - x: " << b[0] << std::endl;
+  std::cout << "x * 2: " << c[0] << std::endl;
+  std::cout << "2 * x: " << d[0] << std::endl;
+  std::cout << "-x: " << e[0] << std::endl;
+  std::cout << "x / 2: " << f[0] << std::endl;
+  std::cout << "2 / x: " << g[0] << std::endl;
 
-  x[0] = 0;
-  std::cout << x[0] << std::endl;
-  std::cout << y[0] << std::endl;
-  std::cout << z[0] << std::endl;
+  std::cout << std::endl;
+
+  x[0] = 2;
+  x[1] = 3;
+  x[2] = 4;
+  std::cout << "x: " << x[0] << std::endl;
+  std::cout << "x + 1: " << y[0] << std::endl;
+  std::cout << "x - 1: " << z[0] << std::endl;
+  std::cout << "1 + x: " << a[0] << std::endl;
+  std::cout << "1 - x: " << b[0] << std::endl;
+  std::cout << "x * 2: " << c[0] << std::endl;
+  std::cout << "2 * x: " << d[0] << std::endl;
+  std::cout << "-x: " << e[0] << std::endl;
+  std::cout << "x / 2: " << f[0] << std::endl;
+  std::cout << "2 / x: " << g[0] << std::endl;
 
   return 0;
 }
