@@ -47,5 +47,13 @@ int main(int argc, char *argv[]) {
   std::cout << "x / 2: " << f[0] << std::endl;
   std::cout << "2 / x: " << g[0] << std::endl;
 
+  sabai::Vector<int, 3> vec_y = x + 1;
+
+  static_assert(std::same_as<decltype(vec_y), decltype(x)>);
+
+  std::cout << vec_y[0] << std::endl;
+  std::cout << vec_y[1] << std::endl;
+  std::cout << vec_y[2] << std::endl;
+
   return 0;
 }

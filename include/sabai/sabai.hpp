@@ -4,6 +4,10 @@
 
 namespace sabai {
 
+template <typename R, typename T>
+concept input_range_of = std::ranges::input_range<R> &&
+                         std::same_as<std::ranges::range_value_t<R>, T>;
+
 template <typename T, size_t N> class Vector {
 public:
   using value_type = T;
@@ -25,6 +29,15 @@ public:
 
   constexpr T &operator[](size_type index) { return m_data[index]; }
   constexpr T &operator[](size_type index) const { return m_data[index]; }
+
+  Vector(){};
+
+  template <input_range_of<T> R> Vector(R &&range) {
+    for (auto my_data = begin(), range_data = range.begin(); my_data != end();
+         ++my_data, ++range_data) {
+      *my_data = *range_data;
+    }
+  }
 };
 
 template <typename T, size_t N> constexpr auto operator+(Vector<T, N> &x, T y) {
