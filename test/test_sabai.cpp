@@ -71,3 +71,27 @@ TEST_F(VectorFixture, PreAdditionToVector) {
   decltype(x) y = increment + x;
   ASSERT_EQ(y[0], increment + x[0]);
 }
+
+TEST_F(VectorFixture, AddTwice) {
+  int increment = 2;
+  decltype(x) y = x + increment + increment;
+  ASSERT_EQ(y[0], x[0] + increment + increment);
+}
+
+TEST_F(VectorFixture, SubtractTwice) {
+  int decrement = 2;
+  decltype(x) y = x - decrement - decrement;
+  ASSERT_EQ(y[0], x[0] - decrement - decrement);
+}
+
+TEST_F(VectorFixture, MultiplyTwice) {
+  int multiple = 2;
+  decltype(x) y = multiple * x * multiple;
+  ASSERT_EQ(y[0], multiple * x[0] * multiple);
+}
+
+TEST_F(VectorFixture, DivideTwice) {
+  int divisor = 2;
+  decltype(x) y = (x / divisor) / divisor;
+  ASSERT_EQ(y[0], (x[0] / divisor) / divisor);
+}
