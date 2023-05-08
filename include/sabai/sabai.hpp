@@ -22,8 +22,11 @@ concept input_range_of = std::ranges::input_range<R> &&
 template <typename R, typename T>
 concept range_of = std::same_as<std::ranges::range_value_t<R>, T>;
 
+template <typename R>
+concept VectorConcept = R::isVector;
+
 template <typename R, typename T>
-concept VectorConcept = range_of<R, T> && R::isVector;
+concept TypedVectorConcept = range_of<R, T> && VectorConcept<R>;
 
 template <typename R> struct Range : public R {
   static constexpr bool isVector = true;
@@ -95,96 +98,112 @@ public:
 
 template <size_t N> using Vectori = Vector<int, N>;
 
-template <typename T, VectorConcept<T> X> constexpr auto operator+(X &x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator+(X &x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value + y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator+(X &&x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator+(X &&x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value + y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator+(T y, X &x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator+(T y, X &x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y + value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator+(T y, X &&x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator+(T y, X &&x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y + value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator-(X &x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator-(X &x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value - y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator-(X &&x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator-(X &&x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value - y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator-(T y, X &x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator-(T y, X &x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y - value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator-(T y, X &&x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator-(T y, X &&x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y - value; })};
 }
 
-template <typename X> constexpr auto operator-(X &x) {
+template <VectorConcept X> constexpr auto operator-(X &x) {
   return Range{x | std::ranges::views::transform(
                        [](const std::ranges::range_value_t<X> &value) {
                          return -value;
                        })};
 }
 
-template <typename X> constexpr auto operator-(X &&x) {
+template <VectorConcept X> constexpr auto operator-(X &&x) {
   return Range{x | std::ranges::views::transform(
                        [](const std::ranges::range_value_t<X> &value) {
                          return -value;
                        })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator*(X &x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator*(X &x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value * y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator*(X &&x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator*(X &&x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value * y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator*(T y, X &x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator*(T y, X &x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y * value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator*(T y, X &&x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator*(T y, X &&x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y * value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator/(X &x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator/(X &x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value / y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator/(X &&x, T y) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator/(X &&x, T y) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return value / y; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator/(T y, X &x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator/(T y, X &x) {
   return Range{x | std::ranges::views::transform(
                        [y](const T &value) { return y / value; })};
 }
 
-template <typename T, VectorConcept<T> X> constexpr auto operator/(T y, X &&x) {
+template <typename T, TypedVectorConcept<T> X>
+constexpr auto operator/(T y, X &&x) {
   return x | std::ranges::views::transform(
                  [y](const T &value) { return y / value; });
 }

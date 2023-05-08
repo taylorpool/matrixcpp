@@ -6,7 +6,8 @@ int main(int argc, char *argv[]) {
   sabai::Vector<int, 3> x;
   static_assert(std::contiguous_iterator<sabai::Vector<int, 3>::iterator>);
   static_assert(std::ranges::contiguous_range<decltype(x)>);
-  static_assert(sabai::VectorConcept<decltype(x), int>);
+  static_assert(sabai::VectorConcept<decltype(x)>);
+  static_assert(sabai::TypedVectorConcept<decltype(x), int>);
 
   auto y = x + 1;
   auto z = x - 1;
