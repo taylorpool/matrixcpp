@@ -6,6 +6,7 @@ int main(int argc, char *argv[]) {
   sabai::Vector<int, 3> x;
   static_assert(std::contiguous_iterator<sabai::Vector<int, 3>::iterator>);
   static_assert(std::ranges::contiguous_range<decltype(x)>);
+  static_assert(sabai::VectorConcept<decltype(x), int>);
 
   auto y = x + 1;
   auto z = x - 1;
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
   std::cout << "1 - x: " << b[0] << std::endl;
   std::cout << "x * 2: " << c[0] << std::endl;
   std::cout << "2 * x: " << d[0] << std::endl;
-  std::cout << "-x: " << e[0] << std::endl;
+  // std::cout << "-x: " << e[0] << std::endl;
   std::cout << "x / 2: " << f[0] << std::endl;
   std::cout << "2 / x: " << g[0] << std::endl;
 
